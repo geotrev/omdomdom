@@ -1,0 +1,16 @@
+{
+  "semi": false,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "arrowParens": "always",
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "options": {
+        "printWidth": 120
+      }
+    }
+  ]
+}

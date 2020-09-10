@@ -1,0 +1,4 @@
+node_modules/ 
+demo/bundle.js
+lib/
+dist/
