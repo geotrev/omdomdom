@@ -256,7 +256,7 @@ const childListToVNode = (template, vNode) => {
   // In the case of no template.key or there was no key on the last node,
   // rebuild the tree using the template.
 
-  vNode.forEach((child) => vNode.node.removeChild(child.node))
+  vNode.children.forEach((child) => vNode.node.removeChild(child.node))
   vNode.node.appendChild(template.node)
   vNode.children = template.children
 }
