@@ -11,10 +11,10 @@
     "build": "BABEL_ENV=build rollup -c",
     "build:publish": "BABEL_ENV=publish rollup -c",
     "lint": "eslint . --ext .js -c .eslintrc.json --ignore-path .eslintignore",
+    "postversion": "npm run build:publish",
     "node:prepare": "node build/prepare-metadata.js && node build/prepare-cdn-tags.js",
     "git:update-origin": "git add . && git commit -m 'version %s - update metadata & cdn tags' && git push && git push --tags",
-    "prepublishOnly": "node:prepare && npm run git:update-origin",
-    "postversion": "npm run build:publish"
+    "prepublishOnly": "npm run node:prepare && npm run git:update-origin"
   },
   "homepage": "https://github.com/geotrev/omdomdom",
   "author": "George Treviranus <hello@geotrev.com>",

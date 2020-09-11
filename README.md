@@ -24,16 +24,16 @@ $ npm i omdomdom
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.0.1/dist/omdomdom.js"
-  integrity="sha256-On1Jl0Fi3lM6d4AGMSkQ9W2RZfijMa62SgWX4ksapZQ="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.2/dist/omdomdom.js"
+  integrity="sha256-e32PjVascpR0aAOd7k6EI7Mef5k0I9oppa8vY3PjUSg="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.0.1/dist/omdomdom.min.js"
-  integrity="sha256-9CWAxuFq05jun+p1IbPOMsYswhV7eclbvqu1H8AzUvA="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.2/dist/omdomdom.min.js"
+  integrity="sha256-xINaB3IOlhEwZbJPmoeAd7ccUFIk+Mz4Y9CkmPK5ELo="
   crossorigin="anonymous"
 ></script>
 ```
