@@ -74,11 +74,12 @@ const removeStyles = (element, styles) => {
  * @param {HTMLElement} element
  * @param {Attribute[]} styles
  */
-const updateStyles = (element, properties, styleMap) => {
-  forEach(properties, (property) => {
-    if (element.style[property] === styleMap[property]) return
-    element.style[property] = styleMap[property]
-  })
+const updateStyles = (element, styleMap) => {
+  for (let property in styleMap) {
+    if (element.style[property] !== styleMap[property]) {
+      element.style[property] = styleMap[property]
+    }
+  }
 }
 
 /**
@@ -88,7 +89,6 @@ const updateStyles = (element, properties, styleMap) => {
  */
 const diffStyles = (element, styles) => {
   const styleMap = styleStringToMap(styles)
-  const styleProps = Object.keys(styleMap)
 
   // Get styles to remove
   const staleStyles = Array.prototype.filter.call(
@@ -98,7 +98,7 @@ const diffStyles = (element, styles) => {
 
   // Remove + update changes
   removeStyles(element, staleStyles)
-  updateStyles(element, styleProps, styleMap)
+  updateStyles(element, styleMap)
 }
 
 /**
@@ -134,7 +134,7 @@ const removeAttributes = (vNode, attributes) => {
  * @param {Object.<string, string>} attributes
  */
 const addAttributes = (vNode, attributes) => {
-  forEach(Object.keys(attributes), (attribute) => {
+  for (let attribute in attributes) {
     const value = attributes[attribute]
     vNode.attributes[attribute] = value
 
@@ -150,7 +150,7 @@ const addAttributes = (vNode, attributes) => {
       }
       vNode.node.setAttribute(attribute, value || "")
     }
-  })
+  }
 }
 
 /**
@@ -202,30 +202,24 @@ const getAttributes = (element) => {
 const diffAttributes = (nextVNode, vNode) => {
   let removedAttributes = []
   let changedAttributes = {}
-  const vNodeAttributeNames = Object.keys(vNode.attributes)
-  const nextVNodeAttributeNames = Object.keys(nextVNode.attributes)
 
   // Get stale attributes
-  forEach(vNodeAttributeNames, (attr) => {
-    const oldValue = vNode.attributes[attr]
-    const nextValue = nextVNode.attributes[attr]
-    if (oldValue === nextValue) return
-
-    if (typeof nextValue === "undefined") {
-      removedAttributes.push(attr)
+  for (let attribute in vNode.attributes) {
+    const oldValue = vNode.attributes[attribute]
+    const nextValue = nextVNode.attributes[attribute]
+    if (oldValue !== nextValue && typeof nextValue === "undefined") {
+      removedAttributes.push(attribute)
     }
-  })
+  }
 
   // Get changed or new attributes
-  forEach(nextVNodeAttributeNames, (attr) => {
-    const oldValue = vNode.attributes[attr]
-    const nextValue = nextVNode.attributes[attr]
-    if (oldValue === nextValue) return
-
-    if (typeof nextValue !== "undefined") {
-      changedAttributes[attr] = nextValue
+  for (let attribute in nextVNode.attributes) {
+    const oldValue = vNode.attributes[attribute]
+    const nextValue = nextVNode.attributes[attribute]
+    if (oldValue !== nextValue && typeof nextValue !== "undefined") {
+      changedAttributes[attribute] = nextValue
     }
-  })
+  }
 
   // Add and remove attributes
   removeAttributes(vNode, removedAttributes)
