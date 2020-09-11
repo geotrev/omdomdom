@@ -1,6 +1,6 @@
 {
   "name": "omdomdom",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "main": "lib/omdomdom.cjs.js",
   "module": "lib/omdomdom.es.js",
