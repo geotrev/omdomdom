@@ -25,7 +25,7 @@ $ npm i omdomdom
 <script
   type="text/javascript"
   src="https://cdn.jsdelivr.net/npm/omdomdom@0.0.1/dist/omdomdom.js"
-  integrity="sha256-G/tIiIcqSiKFeq2X7DlA6laZGBuVCdig96KCAOIT6ks="
+  integrity="sha256-On1Jl0Fi3lM6d4AGMSkQ9W2RZfijMa62SgWX4ksapZQ="
   crossorigin="anonymous"
 ></script>
 
@@ -33,7 +33,7 @@ $ npm i omdomdom
 <script
   type="text/javascript"
   src="https://cdn.jsdelivr.net/npm/omdomdom@0.0.1/dist/omdomdom.min.js"
-  integrity="sha256-waCWKicYMCJic4tBKdkV54qhuGsq8J9JWQY+QmFVjj8="
+  integrity="sha256-9CWAxuFq05jun+p1IbPOMsYswhV7eclbvqu1H8AzUvA="
   crossorigin="anonymous"
 ></script>
 ```
