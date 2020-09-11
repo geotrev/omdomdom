@@ -43,7 +43,7 @@ const dynamicAttributes = ["checked", "selected", "value"]
  * Takes an inline style string and reduces it to
  * an array of objects per prop/value pair.
  * @param {string} styles
- * @returns {Attribute[]}
+ * @returns {Object.<string, string>}
  */
 const styleStringToMap = (styles) => {
   return styles.split(";").reduce((allStyles, style) => {
@@ -131,7 +131,7 @@ const removeAttributes = (vNode, attributes) => {
 /**
  * Adds attributes to the element.
  * @param {VirtualNode} vNode
- * @param {Attribute[]} attributes
+ * @param {Object.<string, string>} attributes
  */
 const addAttributes = (vNode, attributes) => {
   forEach(Object.keys(attributes), (attribute) => {
@@ -234,6 +234,8 @@ const diffAttributes = (nextVNode, vNode) => {
 
 /**
  * Removes extra nodes from a root that previously had more than one virtual node.
+ * @param {VirtualNode} template - new virtual node tree.
+ * @param {VirtualNode} vNode - existing virtual node tree.
  */
 const childListToVNode = (template, vNode) => {
   if (template.key) {
@@ -263,6 +265,8 @@ const childListToVNode = (template, vNode) => {
 
 /**
  * Builds a list of sibling nodes from a root previously containing one node.
+ * @param {VirtualNode} template - new virtual node tree.
+ * @param {VirtualNode} vNode - existing virtual node tree.
  */
 const vNodeToChildList = (template, vNode) => {
   // If vNode has a key, search template.children for
@@ -299,6 +303,8 @@ const vNodeToChildList = (template, vNode) => {
 
 /**
  * Both template and vNode have arrays of virtual nodes. Diff them.
+ * @param {VirtualNode} template - new virtual node tree.
+ * @param {VirtualNode} vNode - existing virtual node tree.
  */
 const diffChildList = (template, vNode) => {
   const keyNodeMap = {}
@@ -354,16 +360,11 @@ const diffChildList = (template, vNode) => {
 }
 
 /**
- * One or both of template.children and vNode.children are an array of nodes.
- * Checklist:
- * 1. If template.children is null, all children are removed
- * 2. If vNode.children is null, all new children were added
- * 3. If both template.children and vNode.children are arrays, teardown and rebuild,
- *    but keep nodes with keys
- * 4. If template.children is an array but vNode.children is null, build up to an
- *    array, and keep vNode.node if a key is present.
- * 5. If vNode.children is an array but template.children is null, teardown the array,
- *    and keep the node if there was a matching key was in vNode's children.
+ * Diffs one or both of template.children and vNode.children that are an array of nodes.
+ * @param {VirtualNode} template - new virtual node tree.
+ * @param {VirtualNode} vNode - existing virtual node tree.
+ * @param {boolean} templateChildrenIsList
+ * @param {boolean} vNodeChildrenIsList
  */
 const diffChildren = (
   template,
@@ -396,13 +397,13 @@ const diffChildren = (
 }
 
 /**
- * Export utilities
+ * Exports
  */
 
 /**
  * Reconcile differences between a virtual DOM tree, starting from least complex to most complex.
- * @param {VirtualNode[]|VirtualNode} templateTree - new tree or array of trees
- * @param {VirtualNode[]|VirtualNode} nodeTree - old tree or array of trees
+ * @param {VirtualNode} template - new virtual node tree.
+ * @param {VirtualNode} vNode - existing virtual node tree.
  * @param {HTMLElement} rootNode - the HTML element containing the current virtual node context
  */
 export const diff = (template, vNode, rootNode) => {
@@ -458,11 +459,11 @@ export const diff = (template, vNode, rootNode) => {
 }
 
 /**
- * Renders a vDOM into the given root context. This happens one time,
+ * Renders a node into the given root context. This happens one time,
  * when a component is first rendered.
  * All subsequent renders are the result of reconciliation.
- * @param {VirtualNode[]} vDOM
- * @param {ShadowRoot} context
+ * @param {VirtualNode} vDOM
+ * @param {ShadowRoot|HTMLElement} root
  */
 export const render = (vNode, root) => {
   root.appendChild(vNode.node)
@@ -491,17 +492,10 @@ export const createHTML = (stringToRender) => {
 }
 
 /**
- * 1. Detect if children is flat
- *    - If childNodes.length > 1, use an array
- *    - If childNodes.length === 1, use object to directly access node
- * 2. Set attributes as key: value instead of array of {name, type}.
- */
-
-/**
  * Creates a new virtual DOM from a root node.
- * @param {HTMLElement|ShadowRoot|HTMLBodyElement} element
+ * @param {HTMLElement|ShadowRoot|HTMLBodyElement} node
  * @param {boolean} isSVGContext
- * @returns {VirtualNode[]}
+ * @returns {VirtualNode}
  */
 export const createNode = (node, isSVGContext = false) => {
   const isRoot = node.tagName === "BODY"
