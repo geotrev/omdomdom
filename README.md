@@ -1,12 +1,8 @@
-# OmDomDom
+# 👾 OmDomDom
 
-OmDomDom eats your stringy HTML and outputs real HTML.
+OmDomDom renders HTML from strings, and can reconcile changes to those strings, updating nodes in-place. 🎉
 
-**Features:**
-
-- Write HTML as a string. Get HTML.
-- Dynamically update your existing OmDomDom-rendered HTML.
-- Satisfies the hunger.
+Issues and PRs welcome.
 
 ## Install
 
@@ -16,6 +12,12 @@ Use either npm or from CDN.
 
 ```sh
 $ npm i omdomdom
+```
+
+Import its helpers:
+
+```js
+import { render, diff, createHTML, createNode } from "omdomdom"
 ```
 
 **CDN**
@@ -49,16 +51,15 @@ const view = `
   <div>
     <p style="color: pink">Things I like doing:</p>
     <ul>
-      <li key="budget">No budget</li>
-      <li key="angular">Using angular</li>
-      <li key="nap">Napping during work</li>
+      <li>No budget</li>
+      <li>Using angular</li>
+      <li>Napping during work</li>
     </ul>
   </div>
 `
-const toHTML = omDomDom.createHTML(view)
-const node = omDomDom.createNode(toHTML)
-const root = document.getElementById("om-root")
-omDomDom.render(node, root)
+window.omDomDomNode = createNode(createHTML(view))
+window.omDomDomRoot = document.getElementById("om-root")
+render(node, root)
 ```
 
 Then update your HTML:
@@ -67,24 +68,14 @@ Then update your HTML:
 const nextView = `
   <div>
     <p style="color: steelblue">Things I like doing:</p>
-    <ul>
-      <li key="pizza">Eating pizza</li>
-      <li key="kirby">Hanging with Kirby</li>
-      <li key="guitar">Playing guitar</li>
-      <li key="gameboy">Fixing Game Boys</li>
-    </ul>
+    <p>Playing a lot of Pokemon.</p>
     <p style="font-weight: bold">Now that's more like it!</p>
   </div>
 `
-const nextHTML = omDomDom.createHTML(nextView)
-const nextNode = omDomDom.createNode(nextHTML)
-omDomDom.diff(nextNode, node, root)
+const nextNode = createNode(createHTML(nextView))
+diff(nextNode, omDomDomNode)
 ```
-
-### Caveats
-
-The main caveat to keep in mind is that you must render from a single HTML root node, similar to React.
 
 ## Support
 
-OmDomDom works in all modern browsers and IE11.
+OmDomDom works in all modern browsers and IE11. It requires no polyfills or external dependencies.

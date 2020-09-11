@@ -404,9 +404,9 @@ const diffChildren = (
  * Reconcile differences between a virtual DOM tree, starting from least complex to most complex.
  * @param {VirtualNode} template - new virtual node tree.
  * @param {VirtualNode} vNode - existing virtual node tree.
- * @param {HTMLElement} rootNode - the HTML element containing the current virtual node context
+ * @param {Node} rootNode - the HTML element containing the current virtual node context
  */
-export const diff = (template, vNode, rootNode) => {
+export const diff = (template, vNode, rootNode = vNode.node.parentNode) => {
   // Node nodes to compare, exit
   if (!template && !vNode) return
 
