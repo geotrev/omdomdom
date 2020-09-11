@@ -21,31 +21,31 @@ const terserPlugin = terser({
       }
     },
   },
-  mangle: { reserved: ["UpgradedElement"] },
+  mangle: { reserved: ["omDomDom"] },
 })
 
 const baseOutput = (format) => ({
   banner,
   format,
-  name: "UpgradedElement",
+  name: "omDomDom",
   sourcemap: true,
 })
 
 const moduleOutputs = [Formats.ES, Formats.CJS].map((format) => ({
   ...baseOutput(format),
   plugins: process.env.BABEL_ENV === "publish" ? [terserPlugin] : undefined,
-  file: path.resolve(__dirname, `lib/upgraded-element.${format}.js`),
+  file: path.resolve(__dirname, `lib/omdomdom.${format}.js`),
 }))
 
 const umdOutputs = [
   {
     ...baseOutput(Formats.UMD),
-    file: path.resolve(__dirname, `dist/upgraded-element.js`),
+    file: path.resolve(__dirname, `dist/omdomdom.js`),
   },
   {
     ...baseOutput(Formats.UMD),
     plugins: [terserPlugin],
-    file: path.resolve(__dirname, `dist/upgraded-element.min.js`),
+    file: path.resolve(__dirname, `dist/omdomdom.min.js`),
   },
 ]
 

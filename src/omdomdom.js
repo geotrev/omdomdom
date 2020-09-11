@@ -249,7 +249,7 @@ const childListToVNode = (template, vNode) => {
     // Diff the matching child, if we found it
     if (nodeIdx) {
       vNode.children = vNode.children[nodeIdx]
-      return diffVNode(template, vNode.children, vNode.node)
+      return diff(template, vNode.children, vNode.node)
     }
   }
 
@@ -293,7 +293,7 @@ const vNodeToChildList = (template, vNode) => {
 
   // Diff the matching child, if we found one
   if (matchIdx > -1) {
-    diffVNode(template.children[matchIdx], vNode.children[matchIdx], vNode.node)
+    diff(template.children[matchIdx], vNode.children[matchIdx], vNode.node)
   }
 }
 
@@ -348,7 +348,7 @@ const diffChildList = (template, vNode) => {
   // Update the matching children, if we found any
   if (preservedChildren.length) {
     forEach(preservedChildren, ([templateChild, preservedChild]) =>
-      diffVNode(templateChild, preservedChild, vNode.node)
+      diff(templateChild, preservedChild, vNode.node)
     )
   }
 }
@@ -405,7 +405,7 @@ const diffChildren = (
  * @param {VirtualNode[]|VirtualNode} nodeTree - old tree or array of trees
  * @param {HTMLElement} rootNode - the HTML element containing the current virtual node context
  */
-export const diffVNode = (template, vNode, rootNode) => {
+export const diff = (template, vNode, rootNode) => {
   // Node nodes to compare, exit
   if (!template && !vNode) return
 
@@ -443,7 +443,7 @@ export const diffVNode = (template, vNode, rootNode) => {
 
   // Diff child nodes recursively
   if (!templateChildrenIsList && !vNodeChildrenIsList) {
-    return diffVNode(template.children, vNode.children, vNode.node)
+    return diff(template.children, vNode.children, vNode.node)
   }
 
   // If any children are arrays of nodes, we need to do a deeper compare
@@ -464,7 +464,7 @@ export const diffVNode = (template, vNode, rootNode) => {
  * @param {VirtualNode[]} vDOM
  * @param {ShadowRoot} context
  */
-export const renderToDOM = (vNode, root) => {
+export const render = (vNode, root) => {
   root.appendChild(vNode.node)
 }
 
@@ -472,7 +472,7 @@ export const renderToDOM = (vNode, root) => {
  * Convert stringified HTML into valid HTML, stripping all extra spaces.
  * @param {string} stringToRender
  */
-export const stringToHTML = (stringToRender) => {
+export const createHTML = (stringToRender) => {
   /**
    * Remove all extraneous whitespace:
    * - From the beginning + end of the document fragment
@@ -503,7 +503,7 @@ export const stringToHTML = (stringToRender) => {
  * @param {boolean} isSVGContext
  * @returns {VirtualNode[]}
  */
-export const createVNode = (node, isSVGContext = false) => {
+export const createNode = (node, isSVGContext = false) => {
   const isRoot = node.tagName === "BODY"
   const childNodes = node.childNodes
   const numChildNodes = childNodes ? childNodes.length : 0
@@ -518,7 +518,7 @@ export const createVNode = (node, isSVGContext = false) => {
         "[omDomDom]: Your element should have at least one shadow root node."
       )
     } else {
-      return createVNode(childNodes[0])
+      return createNode(childNodes[0])
     }
   }
 
@@ -546,10 +546,10 @@ export const createVNode = (node, isSVGContext = false) => {
   if (numChildNodes > 1) {
     children = Array(numChildNodes)
     for (let idx = 0; idx < numChildNodes; idx++) {
-      children[idx] = createVNode(childNodes[idx], isSVG)
+      children[idx] = createNode(childNodes[idx], isSVG)
     }
   } else if (numChildNodes === 1) {
-    children = createVNode(childNodes[0])
+    children = createNode(childNodes[0])
   }
 
   return { type, attributes, key, children, content, isSVGContext: isSVG }
