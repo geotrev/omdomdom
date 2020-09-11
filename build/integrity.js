@@ -80,5 +80,5 @@ console.log(`
 
 -> Content hashes updated in README.md
     - Bundle: ${formattedBundleSHA}
-    - Bundle (minified): ${nextBundleMinSHA}
+    - Bundle (minified): ${formattedBundleMinSHA}
 `)
