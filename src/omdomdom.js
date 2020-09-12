@@ -229,10 +229,10 @@ const diffAttributes = (nextVNode, vNode) => {
  * @param {VirtualNode} vNode - existing virtual node tree.
  */
 const childListToVNode = (template, vNode) => {
-  if (template.key) {
+  if (template.children.key) {
     let nodeIdx = -1
     forEach(vNode.children, (child, idx) => {
-      if (template.key === child.key) {
+      if (template.children.key === child.key) {
         nodeIdx = idx
       } else {
         vNode.node.removeChild(child.node)
@@ -242,7 +242,7 @@ const childListToVNode = (template, vNode) => {
     // Diff the matching child, if we found it
     if (nodeIdx) {
       vNode.children = vNode.children[nodeIdx]
-      return diff(template, vNode.children, vNode.node)
+      return diff(template.children, vNode.children, vNode.node)
     }
   }
 
@@ -250,7 +250,7 @@ const childListToVNode = (template, vNode) => {
   // rebuild the tree using the template.
 
   vNode.children.forEach((child) => vNode.node.removeChild(child.node))
-  vNode.node.appendChild(template.node)
+  vNode.node.appendChild(template.children.node)
   vNode.children = template.children
 }
 
@@ -260,16 +260,14 @@ const childListToVNode = (template, vNode) => {
  * @param {VirtualNode} vNode - existing virtual node tree.
  */
 const vNodeToChildList = (template, vNode) => {
-  // If vNode has a key, search template.children for
-  // a match and store its position
   const templateChildrenLength = template.children.length
   const nextChildren = Array(templateChildrenLength)
-  let matchIdx = -1
+  let nodeIdx = -1
 
   forEach(template.children, (child, idx) => {
     if (vNode.children.key && child.key === vNode.children.key) {
       nextChildren[idx] = vNode.children
-      matchIdx = idx
+      nodeIdx = idx
     } else {
       nextChildren[idx] = child
     }
@@ -280,15 +278,15 @@ const vNodeToChildList = (template, vNode) => {
   nextChildren.forEach((vChild) => fragment.appendChild(vChild.node))
 
   // Remove existing node
-  vNode.node.removeChild(vNode.node)
+  vNode.node.removeChild(vNode.children.node)
 
   // Append the updated children
   vNode.node.appendChild(fragment)
   vNode.children = nextChildren
 
   // Diff the matching child, if we found one
-  if (matchIdx > -1) {
-    diff(template.children[matchIdx], vNode.children[matchIdx], vNode.node)
+  if (nodeIdx > -1) {
+    diff(template.children[nodeIdx], vNode.children[nodeIdx], vNode.node)
   }
 }
 
@@ -298,18 +296,24 @@ const vNodeToChildList = (template, vNode) => {
  * @param {VirtualNode} vNode - existing virtual node tree.
  */
 const diffChildList = (template, vNode) => {
+  if (template.children.length === vNode.children.length) {
+    forEach(template.children, (child, idx) => {
+      diff(child, vNode.children[idx], vNode.node)
+    })
+  }
+
   const keyNodeMap = {}
 
   // Collect nodes with keys
   forEach(vNode.children, (child) => {
-    if (!Object.prototype.hasOwnProperty.call(child, "key")) return
+    if (!child.key) return
 
     if (Object.prototype.hasOwnProperty.call(keyNodeMap, child.key)) {
       // eslint-disable-next-line no-console
       console.warn(
         "[omDomDom]: Children with duplicate keys detected. Children with duplicate keys will be skipped, resulting in dropped node references. Keys must be unique and non-indexed."
       )
-    } else if (Object.prototype.hasOwnProperty.call(child, "key")) {
+    } else {
       keyNodeMap[child.key] = child
     }
   })
@@ -336,7 +340,7 @@ const diffChildList = (template, vNode) => {
   nextChildren.forEach((child) => fragment.appendChild(child.node))
 
   // Remove existing nodes
-  vNode.children.forEach((child) => vNode.node.removeChild(child))
+  vNode.children.forEach((child) => vNode.node.removeChild(child.node))
 
   // Append the updated children
   vNode.node.appendChild(fragment)
@@ -387,6 +391,11 @@ const diffChildren = (
   }
 }
 
+/**
+ * Transfers properties from one virtual node to another.
+ * @param {VirtualNode} template
+ * @param {VirtualNode} vNode
+ */
 const rebuildNode = (template, vNode) => {
   for (let property in template) {
     vNode[property] = template[property]

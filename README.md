@@ -76,6 +76,11 @@ const nextNode = createNode(createHTML(nextView))
 diff(nextNode, omDomDomNode)
 ```
 
+## Gotchas
+
+1. If you expect the number of children to change within an element, you should add a unique `key` to those elements to ensure they are tracked between renders.
+2. Always render to a single root element. Any more than 1, or 0 elements, will throw an error.
+
 ## Support
 
 OmDomDom works in all modern browsers and IE11. It requires no polyfills or external dependencies.
