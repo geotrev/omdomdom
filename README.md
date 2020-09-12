@@ -55,6 +55,7 @@ const view = `
       <li>Using angular</li>
       <li>Napping during work</li>
     </ul>
+    <p>Booooo.</p>
   </div>
 `
 window.omDomDomNode = createNode(createHTML(view))
@@ -68,8 +69,8 @@ Then update your HTML:
 const nextView = `
   <div>
     <p style="color: steelblue">Things I like doing:</p>
-    <p>Playing a lot of Pokemon.</p>
-    <p style="font-weight: bold">Now that's more like it!</p>
+    <p>Playing Pokemon Red.</p>
+    <p>Yay!</p>
   </div>
 `
 const nextNode = createNode(createHTML(nextView))
@@ -78,8 +79,8 @@ diff(nextNode, omDomDomNode)
 
 ## Gotchas
 
-1. If you expect the number of children to change within an element, you should add a unique `key` to those elements to ensure they are tracked between renders.
-2. Always render to a single root element. Any more than 1, or 0 elements, will throw an error.
+1. The root of your tree should be a single node, similar to in React.
+2. When elements are in a sibling context (e.g., two or more elements side-by-side), add a `key` attribute to apply any HTML changes to the node in-place.
 
 ## Support
 
