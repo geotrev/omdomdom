@@ -23,6 +23,19 @@ const forEach = (items, fn) => {
 }
 
 /**
+ * forEach in reverse.
+ * If `false` is explicitly returned, break the loop.
+ * @param {[]} items
+ * @param fn
+ */
+const forEachReverse = (items, fn) => {
+  let idx = items.length
+  while (--idx >= 0) {
+    if (fn(items[idx], idx) === false) break
+  }
+}
+
+/**
  * Object representation of a DOM element.
  * @typedef VirtualNode
  * @type {Object}
@@ -260,7 +273,7 @@ const childListToVNode = (template, vNode) => {
  * @param {VirtualNode} vNode - existing virtual node tree.
  */
 const vNodeToChildList = (template, vNode) => {
-  const nextChildren = Array(template.children.length)
+  let nextChildren = Array(template.children.length)
   let nodeIdx = -1
 
   forEach(template.children, (child, idx) => {
@@ -273,7 +286,7 @@ const vNodeToChildList = (template, vNode) => {
   })
 
   // Use a fragment to insert the nodes to prevent unnecessary reflows.
-  const fragment = document.createDocumentFragment()
+  let fragment = document.createDocumentFragment()
   nextChildren.forEach((child) => fragment.appendChild(child.node))
 
   // Remove existing node
@@ -289,6 +302,9 @@ const vNodeToChildList = (template, vNode) => {
   if (nodeIdx > -1) {
     diff(template.children[nodeIdx], vNode.children[nodeIdx], vNode.node)
   }
+
+  nextChildren = null
+  fragment = null
 }
 
 /**
@@ -297,13 +313,7 @@ const vNodeToChildList = (template, vNode) => {
  * @param {VirtualNode} vNode - existing virtual node tree.
  */
 const diffChildList = (template, vNode) => {
-  if (template.children.length === vNode.children.length) {
-    forEach(template.children, (child, idx) => {
-      diff(child, vNode.children[idx], vNode.node)
-    })
-  }
-
-  const keyNodeMap = {}
+  let keyNodeMap = {}
 
   // Collect nodes with keys
   forEach(vNode.children, (child) => {
@@ -319,28 +329,29 @@ const diffChildList = (template, vNode) => {
     }
   })
 
-  const nextChildren = Array(template.children.length)
-  const preservedChildren = []
+  let nextChildren = Array(template.children.length)
+  let preservedChildren = []
 
   // Iterate through template children, and if a child
   // has a node with a key, see if we previously collected it
   // and add it to the next list of children
   forEach(template.children, (child, idx) => {
-    const preservedChild = keyNodeMap[child.key]
-    if (preservedChild) {
-      nextChildren[idx] = preservedChild
-      preservedChildren.push([child, preservedChild])
+    const hasKey = Object.prototype.hasOwnProperty.call(keyNodeMap, child.key)
+    if (hasKey) {
+      nextChildren[idx] = keyNodeMap[child.key]
+      preservedChildren.push([child, keyNodeMap[child.key]])
     } else {
       nextChildren[idx] = child
     }
   })
 
   // Use a fragment to insert the nodes to prevent unnecessary reflows.
-  const fragment = document.createDocumentFragment()
+  // This will also pull nodes with keys from vNode.children
+  let fragment = document.createDocumentFragment()
   nextChildren.forEach((child) => fragment.appendChild(child.node))
 
-  // Remove existing nodes
-  vNode.node.childNodes.forEach((child) => vNode.node.removeChild(child.node))
+  // Remove non-key nodes.
+  forEachReverse(vNode.node.childNodes, (node) => vNode.node.removeChild(node))
 
   // Append the updated children
   vNode.node.appendChild(fragment)
@@ -352,6 +363,11 @@ const diffChildList = (template, vNode) => {
       diff(templateChild, preservedChild, vNode.node)
     )
   }
+
+  preservedChildren = null
+  fragment = null
+  nextChildren = null
+  keyNodeMap = null
 }
 
 /**
