@@ -129,17 +129,25 @@ document.querySelector("#test7").onclick = () => {
 }
 
 /**
- * Diff: no nodes to list of nodes
+ * No nodes to list of nodes
  */
 
 /**
- * Diff: list of nodes to no nodes
+ * List of nodes to no nodes
  */
 
 /**
- * Diff: list of nodes
+ * List of nodes to one node
  */
 
 /**
- * Diff: list of nodes with keys + event listeners
+ * One node to list of nodes
+ */
+
+/**
+ * List of nodes
+ */
+
+/**
+ * Key + event listener
  */
