@@ -113,18 +113,15 @@ const removeAttributes = (vNode, attributes) => {
     // If the attribute is `class` or `style`, unset the properties.
     // else if the attribute is also a property, unset it
     if (attribute === "class") {
-      vNode.element.className = ""
+      vNode.node.className = ""
     } else if (attribute === "style") {
-      removeStyles(
-        vNode.element,
-        Array.prototype.slice.call(vNode.element.style)
-      )
-    } else if (attribute in vNode.element) {
-      vNode.element[attribute] = ""
+      removeStyles(vNode.node, Array.prototype.slice.call(vNode.node.style))
+    } else if (attribute in vNode.node) {
+      vNode.node[attribute] = ""
     }
 
     // Clean up the DOM attribute, if it exists
-    vNode.element.removeAttribute(attribute)
+    vNode.node.removeAttribute(attribute)
   })
 }
 
@@ -390,6 +387,12 @@ const diffChildren = (
   }
 }
 
+const rebuildNode = (template, vNode) => {
+  for (let property in template) {
+    vNode[property] = template[property]
+  }
+}
+
 /**
  * Exports
  */
@@ -421,11 +424,11 @@ export const diff = (template, vNode, rootNode = vNode.node.parentNode) => {
   // If the type changed, replace the node completely
   if (template.type !== vNode.type) {
     rootNode.replaceChild(template.node, vNode.node)
-    return (vNode.node = template.node)
+    return rebuildNode(template, vNode)
   }
 
   // If content changed, update it
-  if (template.content !== vNode.content) {
+  if (template.content && template.content !== vNode.content) {
     rootNode.textContent = template.content
     return (vNode.content = template.content)
   }
@@ -499,11 +502,11 @@ export const createNode = (node, isSVGContext = false) => {
   if (isRoot) {
     if (numChildNodes > 1) {
       throw new Error(
-        "[omDomDom]: Your element should not have more than one shadow root view node."
+        "[omDomDom]: Your element should not have more than one root node."
       )
     } else if (numChildNodes === 0) {
       throw new Error(
-        "[omDomDom]: Your element should have at least one shadow root node."
+        "[omDomDom]: Your element should have at least one root node."
       )
     } else {
       return createNode(childNodes[0])
@@ -540,5 +543,5 @@ export const createNode = (node, isSVGContext = false) => {
     children = createNode(childNodes[0])
   }
 
-  return { type, attributes, key, children, content, isSVGContext: isSVG }
+  return { type, attributes, key, children, content, node, isSVGContext: isSVG }
 }

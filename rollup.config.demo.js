@@ -4,7 +4,7 @@ import serve from "rollup-plugin-serve"
 import livereload from "rollup-plugin-livereload"
 
 const DEMO_PATH = path.resolve(__dirname, "demo")
-const SOURCE_PATH = path.resolve(DEMO_PATH, "demo/test-cases.js")
+const SOURCE_PATH = path.resolve(DEMO_PATH, "test-cases.js")
 const OUTPUT_PATH = path.resolve(DEMO_PATH, "bundle.js")
 
 export default {
