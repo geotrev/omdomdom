@@ -302,20 +302,96 @@ const logNode = (node) => console.log("Node:", node)
  * Diff: List of nodes to one node with key
  */
 
+{
+  const testView13 = `
+    <ul style="padding: 8px; background: red; color: white" id="test13">
+      <li>Totodile!</li>
+      <li key="chik">Chikorita!</li>
+      <li>Cyndaquil!</li>
+    </ul>
+  `
+
+  const testNode13 = createNode(createHTML(testView13))
+  render(testNode13, document.getElementById("om-root13"))
+
+  document.querySelector("#test13").onclick = () => {
+    const nextView = `
+      <ul style="padding: 8px; background: red; color: white" id="test13">
+        <li key="chik">Chikorita!</li>
+      </ul>
+    `
+
+    const nextNode = createNode(createHTML(nextView))
+    diff(nextNode, testNode13)
+    logNode(testNode13)
+  }
+}
+
 /**
  * Diff: One node to list of nodes with key
  */
+
+{
+  const testView14 = `
+    <ul style="padding: 8px; background: red; color: white" id="test14">
+      <li key="chik">Chikorita!</li>
+    </ul>
+  `
+
+  const testNode14 = createNode(createHTML(testView14))
+  render(testNode14, document.getElementById("om-root14"))
+
+  document.querySelector("#test14").onclick = () => {
+    const nextView = `
+      <ul style="padding: 8px; background: red; color: white" id="test14">
+        <li key="toto">Totodile!</li>
+        <li key="cyndi">Cyndaquil!</li>
+        <li key="chik">Chikorita!</li>
+      </ul>
+    `
+
+    const nextNode = createNode(createHTML(nextView))
+    diff(nextNode, testNode14)
+    logNode(testNode14)
+  }
+}
 
 /**
  * Diff: List of nodes with one key
  */
 
 /**
- * Diff: List of nodes with multiple key
+ * Diff: List of nodes with multiple keys
  */
 
+{
+  const testView16 = `
+    <ul style="padding: 8px; background: red; color: white" id="test16">
+      <li key="toto">Totodile!</li>
+      <li key="chik">Chikorita!</li>
+    </ul>
+  `
+
+  const testNode16 = createNode(createHTML(testView16))
+  render(testNode16, document.getElementById("om-root16"))
+
+  document.querySelector("#test16").onclick = () => {
+    const nextView = `
+      <ul style="padding: 8px; background: red; color: white" id="test16">
+        <li key="toto">Totodile!</li>
+        <li key="cyndi">Cyndaquil!</li>
+        <li key="chik">Chikorita!</li>
+      </ul>
+    `
+
+    const nextNode = createNode(createHTML(nextView))
+    diff(nextNode, testNode16)
+    logNode(testNode16)
+  }
+}
+
 /**
- * Diff: List of nodes with all key
+ * Diff: List of nodes with all keys
  */
 
 /**

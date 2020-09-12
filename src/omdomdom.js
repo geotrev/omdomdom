@@ -260,8 +260,7 @@ const childListToVNode = (template, vNode) => {
  * @param {VirtualNode} vNode - existing virtual node tree.
  */
 const vNodeToChildList = (template, vNode) => {
-  const templateChildrenLength = template.children.length
-  const nextChildren = Array(templateChildrenLength)
+  const nextChildren = Array(template.children.length)
   let nodeIdx = -1
 
   forEach(template.children, (child, idx) => {
@@ -275,10 +274,12 @@ const vNodeToChildList = (template, vNode) => {
 
   // Use a fragment to insert the nodes to prevent unnecessary reflows.
   const fragment = document.createDocumentFragment()
-  nextChildren.forEach((vChild) => fragment.appendChild(vChild.node))
+  nextChildren.forEach((child) => fragment.appendChild(child.node))
 
   // Remove existing node
-  vNode.node.removeChild(vNode.children.node)
+  if (nodeIdx === -1) {
+    vNode.node.removeChild(vNode.children.node)
+  }
 
   // Append the updated children
   vNode.node.appendChild(fragment)
@@ -318,8 +319,7 @@ const diffChildList = (template, vNode) => {
     }
   })
 
-  const nextChildrenLength = template.children.length
-  const nextChildren = Array(nextChildrenLength)
+  const nextChildren = Array(template.children.length)
   const preservedChildren = []
 
   // Iterate through template children, and if a child
@@ -340,7 +340,7 @@ const diffChildList = (template, vNode) => {
   nextChildren.forEach((child) => fragment.appendChild(child.node))
 
   // Remove existing nodes
-  vNode.children.forEach((child) => vNode.node.removeChild(child.node))
+  vNode.node.childNodes.forEach((child) => vNode.node.removeChild(child.node))
 
   // Append the updated children
   vNode.node.appendChild(fragment)
