@@ -26,16 +26,16 @@ import { render, diff, createHTML, createNode } from "omdomdom"
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.2/dist/omdomdom.js"
-  integrity="sha256-e32PjVascpR0aAOd7k6EI7Mef5k0I9oppa8vY3PjUSg="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.3/dist/omdomdom.js"
+  integrity="sha256-a6B9CIh9dsyo1o8XQ1j87u3iYo1sFVlvapxTW/Gt50w="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.2/dist/omdomdom.min.js"
-  integrity="sha256-xINaB3IOlhEwZbJPmoeAd7ccUFIk+Mz4Y9CkmPK5ELo="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.3/dist/omdomdom.min.js"
+  integrity="sha256-cl93dFa8IWfjt15FlQpHa97hoU4zxiUeZBMPWtaY7Jk="
   crossorigin="anonymous"
 ></script>
 ```
