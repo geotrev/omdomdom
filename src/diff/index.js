@@ -201,16 +201,6 @@ export const diff = (template, vNode, rootNode = vNode.node.parentNode) => {
   // Node nodes to compare, exit
   if (!template && !vNode) return
 
-  // Element was removed
-  if (!template) {
-    return rootNode.removeChild(vNode.node)
-  }
-
-  // Element was added
-  if (!vNode) {
-    return rootNode.appendChild(template.node)
-  }
-
   // If the type changed, replace the node completely
   if (template.type !== vNode.type) {
     rootNode.replaceChild(template.node, vNode.node)
@@ -228,6 +218,28 @@ export const diff = (template, vNode, rootNode = vNode.node.parentNode) => {
 
   const templateChildrenIsList = isArray(template.children)
   const vNodeChildrenIsList = isArray(vNode.children)
+
+  // If template has no children when there previously were children
+  if (!template.children && vNode.children) {
+    if (vNodeChildrenIsList) {
+      vNode.children.forEach((child) => vNode.node.removeChild(child.node))
+    } else {
+      vNode.node.removeChild(vNode.children.node)
+    }
+    return (vNode.children = null)
+  }
+
+  // If template has  children when there previously were no children
+  if (template.children && !vNode.children) {
+    if (templateChildrenIsList) {
+      const fragment = document.createDocumentFragment()
+      template.children.forEach((child) => fragment.appendChild(child.node))
+      vNode.node.appendChild(fragment)
+    } else {
+      vNode.node.appendChild(template.children.node)
+    }
+    return (vNode.children = template.children)
+  }
 
   // Diff child nodes recursively
   if (!templateChildrenIsList && !vNodeChildrenIsList) {

@@ -48,13 +48,16 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root3"))
 
+  let activeView = view
   document.querySelector("#test3").onclick = () => {
     const nextView = `
       <p data-chillin="in" style="background: blue">
         <button id="test3">Click to update</button>
       </p>
     `
-    const nextNode = createNode(createHTML(nextView))
+
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -90,19 +93,22 @@ const logNode = (node) => console.log("Node:", node)
 
 {
   const view = `
-    <p style="padding: 8px; background: red">
-      <button id="test5">Click to remove</button>
-    </p>
+    <div style="padding: 8px; background: red" id="test5">
+      <button>Click to change</button>
+    </div>
   `
 
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root5"))
 
+  let activeView = view
   document.querySelector("#test5").onclick = () => {
     const nextView = `
-      <p style="padding: 8px; background: red"></p>
+      <div id="test5" style="padding: 8px; background: red"></div>
     `
-    const nextNode = createNode(createHTML(nextView))
+
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -118,13 +124,16 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root6"))
 
+  let activeView = view
   document.querySelector("#test6").onclick = () => {
     const nextView = `
       <p style="padding: 8px; background: red" id="test6">
         <span style="color: white">henlo</span>
       </p>
     `
-    const nextNode = createNode(createHTML(nextView))
+
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -138,21 +147,24 @@ const logNode = (node) => console.log("Node:", node)
 
 {
   const view = `
-    <p style="padding: 8px; background: red">
-      <button id="test7">Click to remove</button>
+    <p style="padding: 8px; background: red" id="test7">
+      <button>Click to change</button>
     </p>
   `
 
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root7"))
 
+  let activeView = view
   document.querySelector("#test7").onclick = () => {
     const nextView = `
-      <div style="padding: 8px; background: red">
-        <button id="test7">Click to remove</button>
-      </div>
+      <p style="padding: 8px; background: red" id="test7">
+        <span style="background: white; color: black">Click to change</span>
+      </p>
     `
-    const nextNode = createNode(createHTML(nextView))
+
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -168,6 +180,7 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root8"))
 
+  let activeView = view
   document.querySelector("#test8").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test8">
@@ -177,7 +190,8 @@ const logNode = (node) => console.log("Node:", node)
       </ul>
     `
 
-    const nextNode = createNode(createHTML(nextView))
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -199,12 +213,14 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root9"))
 
+  let activeView = view
   document.querySelector("#test9").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test9"></ul>
     `
 
-    const nextNode = createNode(createHTML(nextView))
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -226,6 +242,7 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root10"))
 
+  let activeView = view
   document.querySelector("#test10").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test10">
@@ -233,7 +250,8 @@ const logNode = (node) => console.log("Node:", node)
       </ul>
     `
 
-    const nextNode = createNode(createHTML(nextView))
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -253,6 +271,7 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root11"))
 
+  let activeView = view
   document.querySelector("#test11").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test11">
@@ -262,7 +281,8 @@ const logNode = (node) => console.log("Node:", node)
       </ul>
     `
 
-    const nextNode = createNode(createHTML(nextView))
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -283,6 +303,7 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root12"))
 
+  let activeView = view
   document.querySelector("#test12").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test12">
@@ -292,7 +313,8 @@ const logNode = (node) => console.log("Node:", node)
       </ul>
     `
 
-    const nextNode = createNode(createHTML(nextView))
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -314,6 +336,7 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root13"))
 
+  let activeView = view
   document.querySelector("#test13").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test13">
@@ -321,7 +344,8 @@ const logNode = (node) => console.log("Node:", node)
       </ul>
     `
 
-    const nextNode = createNode(createHTML(nextView))
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -341,6 +365,7 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root14"))
 
+  let activeView = view
   document.querySelector("#test14").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test14">
@@ -350,7 +375,8 @@ const logNode = (node) => console.log("Node:", node)
       </ul>
     `
 
-    const nextNode = createNode(createHTML(nextView))
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -372,6 +398,7 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root15"))
 
+  let activeView = view
   document.querySelector("#test15").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test15">
@@ -381,7 +408,8 @@ const logNode = (node) => console.log("Node:", node)
       </ul>
     `
 
-    const nextNode = createNode(createHTML(nextView))
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -403,6 +431,7 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root16"))
 
+  let activeView = view
   document.querySelector("#test16").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test16">
@@ -412,7 +441,8 @@ const logNode = (node) => console.log("Node:", node)
       </ul>
     `
 
-    const nextNode = createNode(createHTML(nextView))
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
@@ -434,6 +464,7 @@ const logNode = (node) => console.log("Node:", node)
   const node = createNode(createHTML(view))
   render(node, document.getElementById("om-root17"))
 
+  let activeView = view
   document.querySelector("#test17").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test17">
@@ -443,7 +474,8 @@ const logNode = (node) => console.log("Node:", node)
       </ul>
     `
 
-    const nextNode = createNode(createHTML(nextView))
+    activeView = activeView === view ? nextView : view
+    const nextNode = createNode(createHTML(activeView))
     diff(nextNode, node)
     logNode(node)
   }
