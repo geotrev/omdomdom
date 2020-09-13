@@ -257,7 +257,7 @@ const logNode = (node) => console.log("Node:", node)
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test11">
         <li>New item!</li>
-        <li>New item!</li>
+        <li>New item two!</li>
         <li>New item!</li>
       </ul>
     `
@@ -328,7 +328,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: One node to list of nodes with key
+ * Diff: One node with key to list of nodes
  */
 
 {
@@ -344,9 +344,9 @@ const logNode = (node) => console.log("Node:", node)
   document.querySelector("#test14").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test14">
-        <li key="toto">Totodile!</li>
-        <li key="cyndi">Cyndaquil!</li>
+        <li>Totodile!</li>
         <li key="chik">Chikorita!</li>
+        <li>Cyndaquil!</li>
       </ul>
     `
 

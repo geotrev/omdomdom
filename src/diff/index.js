@@ -39,37 +39,45 @@ const childListToVNode = (template, vNode) => {
  */
 const vNodeToChildList = (template, vNode) => {
   let nextChildren = Array(template.children.length)
-  let nodeIdx = -1
 
-  forEach(template.children, (child, idx) => {
-    if (vNode.children.key && child.key === vNode.children.key) {
-      nextChildren[idx] = vNode.children
-      nodeIdx = idx
-    } else {
+  // There is no key, diff the existing child and add the rest of the template
+  if (!vNode.children.key) {
+    forEach(template.children, (child, idx) => {
+      if (idx === 0) {
+        return (nextChildren[idx] = vNode.children)
+      }
+
+      vNode.node.appendChild(child.node)
       nextChildren[idx] = child
-    }
-  })
+    })
 
-  // Use a fragment to insert the nodes to prevent unnecessary reflows.
-  let fragment = document.createDocumentFragment()
-  nextChildren.forEach((child) => fragment.appendChild(child.node))
+    vNode.children = nextChildren
+    return diff(template.children[0], vNode.children[0])
+  } else {
+    let nodeIdx = -1
 
-  // Remove existing node
-  if (nodeIdx === -1) {
-    vNode.node.removeChild(vNode.children.node)
+    forEach(template.children, (child, idx) => {
+      if (child.key === vNode.children.key) {
+        nodeIdx = idx
+        return false
+      }
+    })
+
+    forEach(template.children, (child, idx) => {
+      if (idx === nodeIdx) {
+        return (nextChildren[idx] = vNode.children)
+      } else if (idx < nodeIdx) {
+        vNode.node.insertBefore(child.node, vNode.node.childNodes[idx])
+      } else {
+        vNode.node.appendChild(child.node)
+      }
+
+      nextChildren[idx] = child
+    })
+
+    vNode.children = nextChildren
+    return diff(template.children[nodeIdx], vNode.children[nodeIdx])
   }
-
-  // Append the updated children
-  vNode.node.appendChild(fragment)
-  vNode.children = nextChildren
-
-  // Diff the matching child, if we found one
-  if (nodeIdx > -1) {
-    diff(template.children[nodeIdx], vNode.children[nodeIdx], vNode.node)
-  }
-
-  nextChildren = null
-  fragment = null
 }
 
 /**

@@ -17,7 +17,9 @@ const removeAttributes = (vNode, attributes) => {
 
     // If the attribute is `class` or `style`, unset the properties.
     // else if the attribute is also a property, unset it
-    if (attribute === "class") {
+    if (attribute === "key") {
+      return
+    } else if (attribute === "class") {
       vNode.node.className = ""
     } else if (attribute === "style") {
       removeStyles(vNode.node, Array.prototype.slice.call(vNode.node.style))
@@ -40,15 +42,20 @@ const addAttributes = (vNode, attributes) => {
     const value = attributes[attribute]
     vNode.attributes[attribute] = value
 
-    // If the attribute is `class` or `style`, apply those as properties.
-    if (attribute === "class") {
+    // - Do nothing for keys.
+    // - Assign class and style as properties
+    // Otherwise
+    if (attribute === "key") {
+      return
+    } else if (attribute === "class") {
       vNode.node.className = value
     } else if (attribute === "style") {
       diffStyles(vNode.node, value)
     } else {
       // If the attribute is also a property, set it
       if (attribute in vNode.node) {
-        vNode.node[attribute] = value || attribute
+        vNode.node[attribute] =
+          !vNode.node[attribute] && vNode.node[attribute] !== 0 ? true : value
       }
       vNode.node.setAttribute(attribute, value || "")
     }
