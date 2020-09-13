@@ -17,20 +17,16 @@ export const isArray = (value) => {
 export const forEach = (items, fn) => {
   let idx = -1
   const length = items.length
+  if (!length) return
   while (++idx < length) {
     if (fn(items[idx], idx) === false) break
   }
 }
 
 /**
- * forEach in reverse.
- * If `false` is explicitly returned, break the loop.
- * @param {[]} items
- * @param fn
+ * Checks if the object property exists.
+ * @param {Object.<string, string>} obj
+ * @param {string} prop
  */
-export const forEachReverse = (items, fn) => {
-  let idx = items.length
-  while (--idx >= 0) {
-    if (fn(items[idx], idx) === false) break
-  }
-}
+export const hasProperty = (obj, prop) =>
+  Object.prototype.hasOwnProperty.call(obj, prop)

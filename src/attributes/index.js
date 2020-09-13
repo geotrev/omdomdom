@@ -15,11 +15,11 @@ const removeAttributes = (vNode, attributes) => {
   forEach(attributes, (attribute) => {
     delete vNode.attributes[attribute]
 
+    if (attribute === "key") return
+
     // If the attribute is `class` or `style`, unset the properties.
     // else if the attribute is also a property, unset it
-    if (attribute === "key") {
-      return
-    } else if (attribute === "class") {
+    if (attribute === "class") {
       vNode.node.className = ""
     } else if (attribute === "style") {
       removeStyles(vNode.node, Array.prototype.slice.call(vNode.node.style))
@@ -42,12 +42,11 @@ const addAttributes = (vNode, attributes) => {
     const value = attributes[attribute]
     vNode.attributes[attribute] = value
 
-    // - Do nothing for keys.
+    if (attribute === "key") return
+
     // - Assign class and style as properties
-    // Otherwise
-    if (attribute === "key") {
-      return
-    } else if (attribute === "class") {
+    // else unset the attribute and remove its property, if it exists
+    if (attribute === "class") {
       vNode.node.className = value
     } else if (attribute === "style") {
       diffStyles(vNode.node, value)

@@ -1,4 +1,4 @@
-import { forEach, forEachReverse, isArray } from "../utilities"
+import { forEach, isArray, hasProperty } from "../utilities"
 import { diffAttributes } from "../attributes"
 
 /**
@@ -80,67 +80,96 @@ const vNodeToChildList = (template, vNode) => {
   }
 }
 
+const keyIsValid = (map, key) => {
+  if (!key) return false
+
+  if (hasProperty(map, key)) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "[omDomDom]: Children with duplicate keys detected. Children with duplicate keys will be skipped, resulting in dropped node references. Keys must be unique and non-indexed."
+    )
+    return false
+  }
+
+  return true
+}
+
 /**
  * Both template and vNode have arrays of virtual nodes. Diff them.
  * @param {VirtualNode} template - new virtual node tree.
  * @param {VirtualNode} vNode - existing virtual node tree.
  */
 const diffChildList = (template, vNode) => {
-  let keyNodeMap = {}
+  // Dictionaries used to track which keys have been modified.
+  let vNodeKeyMap = {}
+  let templateKeyMap = {}
+  const templateChildrenLength = template.children.length
 
-  // Collect nodes with keys
+  // Remove extra nodes if template.children is smaller
+  let delta = vNode.children.length - templateChildrenLength
+  if (delta > 0) {
+    while (delta-- > 0) {
+      // length isn't stored; this is intentional so we get
+      // the right value every time the delta changes.
+      const child = vNode.children.pop()
+      if (child.key) {
+        vNodeKeyMap[child.key] = child
+      }
+      vNode.node.removeChild(child.node)
+    }
+  }
+
+  // Get keys so we can update nodes in-place
   forEach(vNode.children, (child) => {
     if (!child.key) return
 
-    if (Object.prototype.hasOwnProperty.call(keyNodeMap, child.key)) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        "[omDomDom]: Children with duplicate keys detected. Children with duplicate keys will be skipped, resulting in dropped node references. Keys must be unique and non-indexed."
-      )
-    } else {
-      keyNodeMap[child.key] = child
+    if (keyIsValid(vNodeKeyMap, child.key)) {
+      vNodeKeyMap[child.key] = child
     }
   })
 
-  let nextChildren = Array(template.children.length)
-  let preservedChildren = []
+  forEach(template.children, (child) => {
+    if (!child.key) return
 
-  // Iterate through template children, and if a child
-  // has a node with a key, see if we previously collected it
-  // and add it to the next list of children
-  forEach(template.children, (child, idx) => {
-    const hasKey = Object.prototype.hasOwnProperty.call(keyNodeMap, child.key)
-    if (hasKey) {
-      nextChildren[idx] = keyNodeMap[child.key]
-      preservedChildren.push([child, keyNodeMap[child.key]])
-    } else {
-      nextChildren[idx] = child
+    if (keyIsValid(templateKeyMap, child.key)) {
+      vNodeKeyMap[child.key] = child
     }
   })
 
-  // Use a fragment to insert the nodes to prevent unnecessary reflows.
-  // This will also pull nodes with keys from vNode.children
-  let fragment = document.createDocumentFragment()
-  nextChildren.forEach((child) => fragment.appendChild(child.node))
+  // Diff children + lookup any keys as we encounter them
+  forEach(template.children, (templateChild, idx) => {
+    const vNodeHasKey = hasProperty(vNodeKeyMap, templateChild.key)
+    const templateHasKey = hasProperty(templateKeyMap, templateChild.key)
+    const vNodeChild = vNode.children[idx]
 
-  // Remove non-key nodes.
-  forEachReverse(vNode.node.childNodes, (node) => vNode.node.removeChild(node))
+    if (vNodeHasKey && templateHasKey) {
+      let keyChild = vNodeKeyMap[templateChild.key]
+      const childNodes = vNode.node.childNodes
+      let formerIdx = Array.prototype.indexOf.call(childNodes, keyChild.node)
 
-  // Append the updated children
-  vNode.node.appendChild(fragment)
-  vNode.children = nextChildren
+      diff(templateChild, keyChild)
 
-  // Update the matching children, if we found any
-  if (preservedChildren.length) {
-    forEach(preservedChildren, ([templateChild, preservedChild]) =>
-      diff(templateChild, preservedChild, vNode.node)
-    )
-  }
+      // Update nodes and vNode children to the new state
+      if (
+        vNode.node.contains(keyChild.node) &&
+        formerIdx > -1 &&
+        formerIdx !== idx
+      ) {
+        vNode.node.insertBefore(keyChild.node, childNodes[idx])
+        vNode.children.splice(formerIdx, 1)
+        vNode.children.splice(idx, 0, keyChild)
+      }
 
-  preservedChildren = null
-  fragment = null
-  nextChildren = null
-  keyNodeMap = null
+      // Remove the entry so we don't accidentally overwrite a node later.
+      delete vNodeKeyMap[templateChild.key]
+      delete templateKeyMap[templateChild.key]
+    } else if (typeof vNodeChild !== "undefined") {
+      diff(templateChild, vNodeChild)
+    } else {
+      vNode.node.appendChild(templateChild.node)
+      vNode.children.push(templateChild)
+    }
+  })
 }
 
 /**
