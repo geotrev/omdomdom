@@ -115,31 +115,6 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: no node to single node
- */
-
-{
-  const view = `<p style="padding: 8px; background: red" id="test6"></p>`
-
-  const node = createNode(createHTML(view))
-  render(node, document.getElementById("test-root-6"))
-
-  let activeView = view
-  document.querySelector("#test6").onclick = () => {
-    const nextView = `
-      <p style="padding: 8px; background: red" id="test6">
-        <span style="color: white">henlo</span>
-      </p>
-    `
-
-    activeView = activeView === view ? nextView : view
-    const nextNode = createNode(createHTML(activeView))
-    diff(nextNode, node)
-    logNode(node)
-  }
-}
-
-/**
  * Diff: node type
  */
 
@@ -161,33 +136,6 @@ const logNode = (node) => console.log("Node:", node)
       <p style="padding: 8px; background: red" id="test7">
         <span style="background: white; color: black">Click to change</span>
       </p>
-    `
-
-    activeView = activeView === view ? nextView : view
-    const nextNode = createNode(createHTML(activeView))
-    diff(nextNode, node)
-    logNode(node)
-  }
-}
-
-/**
- * Diff: No nodes to list of nodes
- */
-
-{
-  const view = `<ul style="padding: 8px; background: red; color: white" id="test8"></ul>`
-
-  const node = createNode(createHTML(view))
-  render(node, document.getElementById("test-root-8"))
-
-  let activeView = view
-  document.querySelector("#test8").onclick = () => {
-    const nextView = `
-      <ul style="padding: 8px; background: red; color: white" id="test8">
-        <li>New item!</li>
-        <li>New item!</li>
-        <li>New item!</li>
-      </ul>
     `
 
     activeView = activeView === view ? nextView : view
@@ -258,37 +206,6 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: One node to list of nodes
- */
-
-{
-  const view = `
-    <ul style="padding: 8px; background: red; color: white" id="test11">
-      <li>New item!</li>
-    </ul>
-  `
-
-  const node = createNode(createHTML(view))
-  render(node, document.getElementById("test-root-11"))
-
-  let activeView = view
-  document.querySelector("#test11").onclick = () => {
-    const nextView = `
-      <ul style="padding: 8px; background: red; color: white" id="test11">
-        <li>New item!</li>
-        <li>New item two!</li>
-        <li>New item!</li>
-      </ul>
-    `
-
-    activeView = activeView === view ? nextView : view
-    const nextNode = createNode(createHTML(activeView))
-    diff(nextNode, node)
-    logNode(node)
-  }
-}
-
-/**
  * Diff: List of nodes
  */
 
@@ -326,11 +243,13 @@ const logNode = (node) => console.log("Node:", node)
 
 {
   const view = `
-    <ul style="padding: 8px; background: red; color: white" id="test13">
-      <li>Totodile!</li>
-      <li key="chik">Chikorita!</li>
-      <li>Cyndaquil!</li>
-    </ul>
+    <div style="padding: 8px; background: red; color: white">
+      <p>Totodile!</p>
+      <p>Cyndaquil!</p>
+      <p>Chikorita!</p>
+      <button key="chik" id="test13">Chikorita!</button>
+      <p>Bulbasaur!</p>
+    </div>
   `
 
   const node = createNode(createHTML(view))
@@ -339,40 +258,9 @@ const logNode = (node) => console.log("Node:", node)
   let activeView = view
   document.querySelector("#test13").onclick = () => {
     const nextView = `
-      <ul style="padding: 8px; background: red; color: white" id="test13">
-        <li key="chik">Chikorita!</li>
-      </ul>
-    `
-
-    activeView = activeView === view ? nextView : view
-    const nextNode = createNode(createHTML(activeView))
-    diff(nextNode, node)
-    logNode(node)
-  }
-}
-
-/**
- * Diff: One node with key to list of nodes
- */
-
-{
-  const view = `
-    <ul style="padding: 8px; background: red; color: white" id="test14">
-      <li key="chik">Chikorita!</li>
-    </ul>
-  `
-
-  const node = createNode(createHTML(view))
-  render(node, document.getElementById("test-root-14"))
-
-  let activeView = view
-  document.querySelector("#test14").onclick = () => {
-    const nextView = `
-      <ul style="padding: 8px; background: red; color: white" id="test14">
-        <li>Totodile!</li>
-        <li key="chik">Chikorita!</li>
-        <li>Cyndaquil!</li>
-      </ul>
+      <div style="padding: 8px; background: red; color: white">
+        <button key="chik" id="test13">Chikorita!</button>
+      </div>
     `
 
     activeView = activeView === view ? nextView : view
