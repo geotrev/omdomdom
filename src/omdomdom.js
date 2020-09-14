@@ -87,7 +87,7 @@ export const createNode = (node, isSVGContext = false) => {
   // it from attributes to prevent reflection into the real DOM.
   if (attributes.key) {
     key = attributes.key
-    node.removeAttribute("key")
+    // node.removeAttribute("key")
   }
 
   // Recursively build children, if any.

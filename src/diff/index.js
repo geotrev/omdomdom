@@ -101,8 +101,6 @@ const keyIsValid = (map, key) => {
  */
 const diffChildList = (template, vNode) => {
   // Dictionaries used to track which keys have been modified.
-  let vNodeKeyMap = {}
-  let templateKeyMap = {}
   const templateChildrenLength = template.children.length
 
   // Remove extra nodes if template.children is smaller
@@ -112,58 +110,15 @@ const diffChildList = (template, vNode) => {
       // length isn't stored; this is intentional so we get
       // the right value every time the delta changes.
       const child = vNode.children.pop()
-      if (child.key) {
-        vNodeKeyMap[child.key] = child
-      }
       vNode.node.removeChild(child.node)
     }
   }
 
-  // Get keys so we can update nodes in-place
-  forEach(vNode.children, (child) => {
-    if (!child.key) return
-
-    if (keyIsValid(vNodeKeyMap, child.key)) {
-      vNodeKeyMap[child.key] = child
-    }
-  })
-
-  forEach(template.children, (child) => {
-    if (!child.key) return
-
-    if (keyIsValid(templateKeyMap, child.key)) {
-      vNodeKeyMap[child.key] = child
-    }
-  })
-
   // Diff children + lookup any keys as we encounter them
   forEach(template.children, (templateChild, idx) => {
-    const vNodeHasKey = hasProperty(vNodeKeyMap, templateChild.key)
-    const templateHasKey = hasProperty(templateKeyMap, templateChild.key)
     const vNodeChild = vNode.children[idx]
 
-    if (vNodeHasKey && templateHasKey) {
-      let keyChild = vNodeKeyMap[templateChild.key]
-      const childNodes = vNode.node.childNodes
-      let formerIdx = Array.prototype.indexOf.call(childNodes, keyChild.node)
-
-      diff(templateChild, keyChild)
-
-      // Update nodes and vNode children to the new state
-      if (
-        vNode.node.contains(keyChild.node) &&
-        formerIdx > -1 &&
-        formerIdx !== idx
-      ) {
-        vNode.node.insertBefore(keyChild.node, childNodes[idx])
-        vNode.children.splice(formerIdx, 1)
-        vNode.children.splice(idx, 0, keyChild)
-      }
-
-      // Remove the entry so we don't accidentally overwrite a node later.
-      delete vNodeKeyMap[templateChild.key]
-      delete templateKeyMap[templateChild.key]
-    } else if (typeof vNodeChild !== "undefined") {
+    if (typeof vNodeChild !== "undefined") {
       diff(templateChild, vNodeChild)
     } else {
       vNode.node.appendChild(templateChild.node)
