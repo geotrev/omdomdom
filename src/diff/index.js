@@ -1,4 +1,4 @@
-import { forEach, isArray, hasProperty } from "../utilities"
+import { forEach, isArray, createKeyMap, insertNode } from "../utilities"
 import { diffAttributes } from "../attributes"
 
 /**
@@ -80,20 +80,6 @@ const vNodeToChildList = (template, vNode) => {
   }
 }
 
-const keyIsValid = (map, key) => {
-  if (!key) return false
-
-  if (hasProperty(map, key)) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "[omDomDom]: Children with duplicate keys detected. Children with duplicate keys will be skipped, resulting in dropped node references. Keys must be unique and non-indexed."
-    )
-    return false
-  }
-
-  return true
-}
-
 /**
  * Both template and vNode have arrays of virtual nodes. Diff them.
  * @param {VirtualNode} template - new virtual node tree.
@@ -102,29 +88,64 @@ const keyIsValid = (map, key) => {
 const diffChildList = (template, vNode) => {
   // Dictionaries used to track which keys have been modified.
   const templateChildrenLength = template.children.length
+  let nextChildren = Array(templateChildrenLength)
+  const vNodeKeyMap = createKeyMap(vNode.children)
 
-  // Remove extra nodes if template.children is smaller
-  let delta = vNode.children.length - templateChildrenLength
-  if (delta > 0) {
-    while (delta-- > 0) {
-      // length isn't stored; this is intentional so we get
-      // the right value every time the delta changes.
-      const child = vNode.children.pop()
-      vNode.node.removeChild(child.node)
+  // There are no keys detected
+  if (!Object.keys(vNodeKeyMap).length) {
+    // Remove extra nodes if template.children is smaller
+    let delta = vNode.children.length - templateChildrenLength
+    if (delta > 0) {
+      while (delta-- > 0) {
+        const child = vNode.children.pop()
+        vNode.node.removeChild(child.node)
+      }
     }
+
+    return forEach(template.children, (templateChild, idx) => {
+      const vNodeChild = vNode.children[idx]
+
+      if (typeof vNodeChild !== "undefined") {
+        diff(templateChild, vNodeChild)
+      } else {
+        vNode.node.appendChild(templateChild.node)
+        vNode.children.push(templateChild)
+      }
+    })
   }
 
-  // Diff children + lookup any keys as we encounter them
-  forEach(template.children, (templateChild, idx) => {
-    const vNodeChild = vNode.children[idx]
+  // Match keys and update/move children in-place
+  forEach(template.children, (child, idx) => {
+    const childNodes = vNode.node.childNodes
 
-    if (typeof vNodeChild !== "undefined") {
-      diff(templateChild, vNodeChild)
+    if (Object.prototype.hasOwnProperty.call(vNodeKeyMap, child.key)) {
+      if (
+        Array.prototype.indexOf.call(
+          childNodes,
+          vNodeKeyMap[child.key].node
+        ) !== idx
+      ) {
+        insertNode(vNode, vNodeKeyMap[child.key], childNodes[idx])
+      }
+      nextChildren[idx] = vNodeKeyMap[child.key]
+      delete vNodeKeyMap[child.key]
+      diff(child, nextChildren[idx])
     } else {
-      vNode.node.appendChild(templateChild.node)
-      vNode.children.push(templateChild)
+      insertNode(vNode, child, childNodes[idx])
+      nextChildren[idx] = child
     }
   })
+
+  vNode.children = nextChildren
+
+  // Remove any real nodes that are left over from the diff
+  let delta = vNode.node.childNodes.length - templateChildrenLength
+  if (delta > 0) {
+    while (delta-- > 0) {
+      const length = vNode.node.childNodes.length
+      vNode.node.removeChild(vNode.node.childNodes[length - 1])
+    }
+  }
 }
 
 /**

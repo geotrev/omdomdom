@@ -1,4 +1,33 @@
 /**
+ * Checks if the object property exists.
+ * @param {Object.<string, any>} obj
+ * @param {string} prop
+ * @returns {boolean}
+ */
+const hasProperty = (obj, prop) =>
+  Object.prototype.hasOwnProperty.call(obj, prop)
+
+/**
+ * Checks if a property in a keyMap is unique. if not, it's skipped.
+ * @param {Object.<string, VirtualNode>} map
+ * @param {string} key
+ * @returns {boolean}
+ */
+const keyIsValid = (map, key) => {
+  if (!key) return false
+
+  if (hasProperty(map, key)) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "[omDomDom]: Children with duplicate keys detected. Children with duplicate keys will be skipped, resulting in dropped node references. Keys must be unique and non-indexed."
+    )
+    return false
+  }
+
+  return true
+}
+
+/**
  * Checks if the value is an array literal.
  * @param {*} value
  * @returns {boolean}
@@ -24,9 +53,18 @@ export const forEach = (items, fn) => {
 }
 
 /**
- * Checks if the object property exists.
- * @param {Object.<string, string>} obj
- * @param {string} prop
+ * Generates a <key: vNode> map of a virtual node list.
+ * @param {VirtualNode[]} children
+ * @returns {Object.<string, VirtualNode>}
  */
-export const hasProperty = (obj, prop) =>
-  Object.prototype.hasOwnProperty.call(obj, prop)
+export const createKeyMap = (children) => {
+  const map = {}
+  forEach(children, (child) => {
+    if (keyIsValid(map, child.key)) map[child.key] = child
+  })
+  return map
+}
+
+export const insertNode = (parent, child, refNode) => {
+  return parent.node.insertBefore(child.node, refNode)
+}
