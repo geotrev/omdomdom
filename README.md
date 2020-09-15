@@ -26,19 +26,21 @@ import { render, diff, createHTML, createNode } from "omdomdom"
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.2/dist/omdomdom.js"
-  integrity="sha256-e32PjVascpR0aAOd7k6EI7Mef5k0I9oppa8vY3PjUSg="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.6/dist/omdomdom.js"
+  integrity="sha256-eEOZpNShBVFE1hEEDISk3T6TOJ0nHQmN9kMnPJamNjI="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.2/dist/omdomdom.min.js"
-  integrity="sha256-xINaB3IOlhEwZbJPmoeAd7ccUFIk+Mz4Y9CkmPK5ELo="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.6/dist/omdomdom.min.js"
+  integrity="sha256-g+loPjC8HxcQ90Pk1NDU14Dn3bj+Joy92G5xszxEa3Q="
   crossorigin="anonymous"
 ></script>
 ```
+
+The CDN will make `omDomDom` a global variable on the page.
 
 ## Usage
 
@@ -55,11 +57,12 @@ const view = `
       <li>Using angular</li>
       <li>Napping during work</li>
     </ul>
+    <p>Booooo.</p>
   </div>
 `
 window.omDomDomNode = createNode(createHTML(view))
-window.omDomDomRoot = document.getElementById("om-root")
-render(node, root)
+const root = document.getElementById("om-root")
+render(omDomDomNode, root)
 ```
 
 Then update your HTML:
@@ -68,13 +71,18 @@ Then update your HTML:
 const nextView = `
   <div>
     <p style="color: steelblue">Things I like doing:</p>
-    <p>Playing a lot of Pokemon.</p>
-    <p style="font-weight: bold">Now that's more like it!</p>
+    <p>Playing Pokemon Red.</p>
+    <p>Yay!</p>
   </div>
 `
 const nextNode = createNode(createHTML(nextView))
 diff(nextNode, omDomDomNode)
 ```
+
+## Gotchas
+
+1. The root of your tree should be a single node, similar to in React.
+2. When elements are in a sibling context (e.g., two or more elements side-by-side), add a `key` attribute to apply any HTML changes to the node in-place.
 
 ## Support
 

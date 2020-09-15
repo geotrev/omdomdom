@@ -1,6 +1,6 @@
 {
   "name": "omdomdom",
-  "version": "0.1.2",
+  "version": "0.1.6",
   "description": "",
   "main": "lib/omdomdom.cjs.js",
   "module": "lib/omdomdom.es.js",
@@ -13,7 +13,7 @@
     "lint": "eslint . --ext .js -c .eslintrc.json --ignore-path .eslintignore",
     "postversion": "npm run build:publish",
     "node:prepare": "node build/prepare-metadata.js && node build/prepare-cdn-tags.js",
-    "git:update-origin": "git add . && git commit -m 'version %s - update metadata & cdn tags' && git push && git push --tags",
+    "git:update-origin": "git add . && git commit -m 'update metadata & cdn tags' && git push && git push --tags",
     "prepublishOnly": "npm run node:prepare && npm run git:update-origin"
   },
   "homepage": "https://github.com/geotrev/omdomdom",
