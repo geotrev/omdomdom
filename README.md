@@ -40,6 +40,8 @@ import { render, diff, createHTML, createNode } from "omdomdom"
 ></script>
 ```
 
+The CDN will make `omDomDom` a global variable on the page.
+
 ## Usage
 
 You can do two main things with OmDomDom: Render HTML to a page, and update that HTML.
