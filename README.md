@@ -59,8 +59,8 @@ const view = `
   </div>
 `
 window.omDomDomNode = createNode(createHTML(view))
-window.omDomDomRoot = document.getElementById("om-root")
-render(node, root)
+const root = document.getElementById("om-root")
+render(omDomDomNode, root)
 ```
 
 Then update your HTML:
