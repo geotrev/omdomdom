@@ -393,12 +393,12 @@ const logNode = (node) => console.log("Node:", node)
   document.querySelector("#test18").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test18">
-        <li key="toto">Totodile</li>
-        <li key="cyn">Cyndaquil</li>
         <li key="bulb">Bulbasaur</li>
         <li key="squirt">Squirtle</li>
         <li key="char">Charmander</li>
+        <li>Totodile</li>
         <li key="tree">Treecko</li>
+        <li>Cyndaquil</li>
         <li key="mud">Mudkip</li>
         <li key="chi">Chikorita</li>
         <li key="tor">Torchic</li>

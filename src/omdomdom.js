@@ -71,7 +71,7 @@ export const createNode = (node, isSVGContext = false) => {
     }
   }
 
-  // Get basic node data.
+  // Get basic node data
   const type =
     node.nodeType === 3
       ? "text"
@@ -81,25 +81,16 @@ export const createNode = (node, isSVGContext = false) => {
   const isSVG = isSVGContext || type === "svg"
   const attributes = node.nodeType === 1 ? getAttributes(node) : {}
   const content = numChildNodes > 0 ? null : node.textContent
-  let key
 
-  // Retrieve key from attributes if they were created, then delete
-  // it from attributes to prevent reflection into the real DOM.
-  if (attributes.key) {
-    key = attributes.key
-    // node.removeAttribute("key")
+  if (Object.prototype.hasOwnProperty.call(attributes, "key")) {
+    node.removeAttribute("key")
   }
 
-  // Recursively build children, if any.
-  let children = null
-  if (numChildNodes > 1) {
-    children = Array(numChildNodes)
-    forEach(childNodes, (child, idx) => {
-      children[idx] = createNode(child, isSVG)
-    })
-  } else if (numChildNodes === 1) {
-    children = createNode(childNodes[0])
-  }
+  // Recursively build children
+  const children = Array(numChildNodes)
+  forEach(childNodes, (child, idx) => {
+    children[idx] = createNode(child, isSVG)
+  })
 
-  return { type, attributes, key, children, content, node, isSVGContext: isSVG }
+  return { type, attributes, children, content, node, isSVGContext: isSVG }
 }

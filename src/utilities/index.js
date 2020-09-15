@@ -28,17 +28,7 @@ const keyIsValid = (map, key) => {
 }
 
 /**
- * Checks if the value is an array literal.
- * @param {*} value
- * @returns {boolean}
- */
-export const isArray = (value) => {
-  const type = typeof value
-  return type !== "null" && type !== "undefined" && Array.isArray(value)
-}
-
-/**
- * Simplified lodash implementation.
+ * lodash forEach, basically.
  * If `false` is explicitly returned, break the loop.
  * @param {[]} items
  * @param fn
@@ -60,11 +50,22 @@ export const forEach = (items, fn) => {
 export const createKeyMap = (children) => {
   const map = {}
   forEach(children, (child) => {
-    if (keyIsValid(map, child.key)) map[child.key] = child
+    if (keyIsValid(map, child.attributes.key)) map[child.attributes.key] = child
   })
   return map
 }
 
 export const insertNode = (parent, child, refNode) => {
   return parent.node.insertBefore(child.node, refNode)
+}
+
+/**
+ * Transfers properties from one virtual node to another.
+ * @param {VirtualNode} template
+ * @param {VirtualNode} vNode
+ */
+export const patchNode = (template, vNode) => {
+  for (let property in template) {
+    vNode[property] = template[property]
+  }
 }
