@@ -1,4 +1,5 @@
 import { forEach } from "./utilities"
+import { toHTML } from "./parsers"
 import { getAttributes } from "./attributes"
 
 /**
@@ -25,38 +26,22 @@ export const render = (vNode, root) => {
 }
 
 /**
- * Convert stringified HTML into valid HTML, stripping all extra spaces.
- * @param {string} stringToRender
- */
-export const createHTML = (stringToRender) => {
-  /**
-   * Remove all extraneous whitespace:
-   * - From the beginning + end of the document fragment
-   * - If there's more than one space before a left tag bracket, replace them with one
-   * - If there's more than one space before a right tag bracket, replace them with one
-   */
-  const processedDOMString = stringToRender
-    .trim()
-    .replace(/\s+</g, "<")
-    .replace(/>\s+/g, ">")
-
-  const parser = new DOMParser()
-  const context = parser.parseFromString(processedDOMString, "text/html")
-
-  return context.body
-}
-
-/**
  * Creates a new virtual DOM from a root node.
  * @param {HTMLElement|ShadowRoot|HTMLBodyElement} node
  * @param {boolean} isSVGContext
  * @returns {VirtualNode}
  */
 export const createNode = (node, isSVGContext = false) => {
+  if (typeof node === "string") {
+    node = toHTML(node)
+  }
+
   const isRoot = node.tagName === "BODY"
   const childNodes = node.childNodes
   const numChildNodes = childNodes ? childNodes.length : 0
 
+  // toHTML returns a `body` tag as its root node, but we want the first child
+  // only
   if (isRoot) {
     if (numChildNodes > 1) {
       throw new Error(
@@ -71,7 +56,6 @@ export const createNode = (node, isSVGContext = false) => {
     }
   }
 
-  // Get basic node data
   const type =
     node.nodeType === 3
       ? "text"

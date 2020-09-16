@@ -1,6 +1,8 @@
 # 👾 OmDomDom
 
-OmDomDom renders HTML from strings, and can reconcile changes to those strings, updating nodes in-place. 🎉
+OmDomDom renders DOM strings to HTML. It can also reconcile changes to those strings.
+
+The bundle is very small at 2.4kb minified + gzipped.
 
 Issues and PRs welcome.
 
@@ -17,7 +19,7 @@ $ npm i omdomdom
 Import its helpers:
 
 ```js
-import { render, diff, createHTML, createNode } from "omdomdom"
+import { render, diff, createNode } from "omdomdom"
 ```
 
 **CDN**
@@ -44,9 +46,11 @@ The CDN will make `omDomDom` a global variable on the page.
 
 ## Usage
 
-You can do two main things with OmDomDom: Render HTML to a page, and update that HTML.
+You can do two main things with OmDomDom: Render HTML to a page and patch it with updates.
 
-Render some HTML:
+### createNode
+
+To get started, pass your view to `createNode`.
 
 ```js
 const view = `
@@ -60,30 +64,87 @@ const view = `
     <p>Booooo.</p>
   </div>
 `
-window.omDomDomNode = createNode(createHTML(view))
-const root = document.getElementById("om-root")
-render(omDomDomNode, root)
+
+// Create virtual node
+const omNode = = createNode(view)
 ```
 
-Then update your HTML:
+Keeping the virtual node reference is necessary only if you intend to do updates later using [`diff`](#diff). Otherwise, you can set the variable to `null` to free up your browser memory.
+
+`createNode` will check if your value is a string, then convert it to HTML using [`DOMParser`](https://developer.mozilla.org/en-US/docs/Web/API/DOMParser). The advantage of this route is DOMParser provides some decent error output in the case of incorrect HTML.
+
+You can optionally create the HTML yourself and provide that, if you prefer:
 
 ```js
-const nextView = `
-  <div>
-    <p style="color: steelblue">Things I like doing:</p>
-    <p>Playing Pokemon Red.</p>
-    <p>Yay!</p>
-  </div>
-`
-const nextNode = createNode(createHTML(nextView))
+// The `body` tag is discarded in final input, don't worry.
+const wrapper = document.createElement("body")
+wrapper.innerHTML = view.trim()
+
+const omNode = createNode(wrapper)
+```
+
+Either way, you will receive a virtual node tree structured like this:
+
+```js
+{
+  // The tag name of the element.
+  // If the node is text, "text" is used.
+  // If the node is a comment, "comment" is used
+  type: String,
+
+  // An object whose key/value pairs are the attribute
+  // name and value, respectively.
+  attributes: Object,
+
+  // Is set to `true` if a node is an `svg`, which lets omDomDom
+  // do special rendering operations for svg children.
+  isSVGContext: Boolean,
+
+  // The content of a "text" or "comment" node.
+  content: String,
+
+  // An array of virtual node children.
+  children: Array,
+
+  // The real DOM element.
+  node: Node
+}
+```
+
+### Render
+
+Use `render` to insert your node somewhere on the page.
+
+```js
+render(omNode, document.getElementById("root"))
+```
+
+### Diff
+
+As mentioned in the `createNode` function details, using `diff` requires you to have your initial virtual node reference. Pass a new virtual node to compare and patch the DOM for the new changes to appear.
+
+```js
+const nextView = /* altered DOM string */
+const nextNode = createNode(nextView)
 diff(nextNode, omDomDomNode)
 ```
 
-## Gotchas
+## Reconciliation
 
-1. The root of your tree should be a single node, similar to in React.
-2. When elements are in a sibling context (e.g., two or more elements side-by-side), add a `key` attribute to apply any HTML changes to the node in-place.
+Reconciliation works similar to React and others, by comparing an older (live) virtual DOM tree to a new (template) one. The old tree is patched with changes from the template.
+
+### Events
+
+Since the end result is real HTML, you should be able to use events like anywhere else. Although if you do so, and your interactive elements are in a sibling context, make sure they use keys.
+
+### Keys
+
+In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations.
+
+### Performance
+
+If you think it can be improved, please contribute. :)
 
 ## Support
 
-OmDomDom works in all modern browsers and IE11. It requires no polyfills or external dependencies.
+OmDomDom works in all modern browsers and IE11. It requires no polyfills/dependencies.
