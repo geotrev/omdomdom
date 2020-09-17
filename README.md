@@ -66,7 +66,7 @@ const view = `
 `
 
 // Create virtual node
-const omNode = = createNode(view)
+const omNode = createNode(view)
 ```
 
 Keeping the virtual node reference is necessary only if you intend to do updates later using [`diff`](#diff). Otherwise, you can set the variable to `null` to free up your browser memory.
@@ -76,8 +76,7 @@ Keeping the virtual node reference is necessary only if you intend to do updates
 You can optionally create the HTML yourself and provide that, if you prefer:
 
 ```js
-// The `body` tag is discarded in final input, don't worry.
-const wrapper = document.createElement("body")
+const wrapper = document.createElement("div")
 wrapper.innerHTML = view.trim()
 
 const omNode = createNode(wrapper)
