@@ -1,2 +1,2 @@
 export { diff } from "./diff"
-export { render, createNode } from "./omdomdom"
+export { render, create } from "./omdomdom"
