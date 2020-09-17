@@ -120,12 +120,12 @@ render(omNode, document.getElementById("root"))
 
 ### Diff
 
-As mentioned in the `createNode` function details, using `diff` requires you to have your initial virtual node reference. Pass a new virtual node to compare and patch the DOM for the new changes to appear.
+As mentioned in the `createNode` method details, using `diff` requires you to have your initial virtual node reference. Pass a new virtual node to compare and patch the DOM for the new changes to appear.
 
 ```js
 const nextView = /* altered DOM string */
 const nextNode = createNode(nextView)
-diff(nextNode, omDomDomNode)
+diff(nextNode, omNode)
 ```
 
 ## Reconciliation
