@@ -48,7 +48,7 @@ const updateStyles = (element, styleMap) => {
  * @param {HTMLElement} element
  * @param {string} styles
  */
-export const diffStyles = (element, styles) => {
+export const updateStyles = (element, styles) => {
   const styleMap = styleStringToMap(styles)
 
   // Get styles to remove
