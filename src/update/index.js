@@ -1,12 +1,12 @@
-import { forEach, createKeyMap, insertNode, patchNode } from "../utilities"
-import { diffAttributes } from "../attributes"
+import { forEach, createKeyMap, insertBefore, patch } from "../utilities"
+import { updateAttributes } from "../attributes"
 
 /**
  * Both template and vNode have arrays of virtual nodes. Diff them.
  * @param {VirtualNode} template - new virtual node tree.
  * @param {VirtualNode} vNode - existing virtual node tree.
  */
-const diffChildren = (template, vNode) => {
+const updateChildren = (template, vNode) => {
   const templateChildrenLength = template.children.length
 
   if (!templateChildrenLength && !vNode.children.length) return
@@ -29,7 +29,7 @@ const diffChildren = (template, vNode) => {
       const vNodeChild = vNode.children[idx]
 
       if (typeof vNodeChild !== "undefined") {
-        diff(templateChild, vNodeChild)
+        update(templateChild, vNodeChild)
       } else {
         vNode.node.appendChild(templateChild.node)
         vNode.children.push(templateChild)
@@ -50,7 +50,7 @@ const diffChildren = (template, vNode) => {
       const keyChild = vNodeKeyMap[key]
 
       if (Array.prototype.indexOf.call(childNodes, keyChild.node) !== idx) {
-        insertNode(vNode, keyChild, childNodes[idx])
+        insertBefore(vNode, keyChild, childNodes[idx])
       }
 
       nextChildren[idx] = keyChild
@@ -58,9 +58,9 @@ const diffChildren = (template, vNode) => {
       // Prevent duplicates, remove the entry and let it insert at
       // its natural index in the `else` block.
       delete vNodeKeyMap[key]
-      diff(child, nextChildren[idx])
+      update(child, nextChildren[idx])
     } else {
-      insertNode(vNode, child, childNodes[idx])
+      insertBefore(vNode, child, childNodes[idx])
       nextChildren[idx] = child
     }
   })
@@ -84,7 +84,7 @@ const diffChildren = (template, vNode) => {
  * @param {VirtualNode} vNode - existing virtual node tree.
  * @param {Node} rootNode - the HTML element containing the current virtual node context
  */
-export const diff = (template, vNode, rootNode = vNode.node.parentNode) => {
+export const update = (template, vNode, rootNode = vNode.node.parentNode) => {
   // Node nodes to compare, exit
   if (!template && !vNode) return
   const contentChanged = template.content && template.content !== vNode.content
@@ -92,12 +92,12 @@ export const diff = (template, vNode, rootNode = vNode.node.parentNode) => {
   // If the type or content changed, replace the node completely
   if (template.type !== vNode.type || contentChanged) {
     rootNode.replaceChild(template.node, vNode.node)
-    return patchNode(template, vNode)
+    return patch(template, vNode)
   }
 
   // Update attributes, if any
-  diffAttributes(template, vNode)
+  updateAttributes(template, vNode)
 
   // Diff child nodes recursively
-  diffChildren(template, vNode)
+  updateChildren(template, vNode)
 }
