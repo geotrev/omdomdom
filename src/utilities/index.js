@@ -59,7 +59,7 @@ export const createKeyMap = (children) => {
   return [map, hasKeys]
 }
 
-export const insertNode = (parent, child, refNode) => {
+export const insertBefore = (parent, child, refNode) => {
   return parent.node.insertBefore(child.node, refNode)
 }
 
@@ -68,7 +68,7 @@ export const insertNode = (parent, child, refNode) => {
  * @param {VirtualNode} template
  * @param {VirtualNode} vNode
  */
-export const patchNode = (template, vNode) => {
+export const patch = (template, vNode) => {
   for (let property in template) {
     vNode[property] = template[property]
   }
