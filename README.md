@@ -1,14 +1,18 @@
 # 👾 OmDomDom
 
-OmDomDom renders DOM strings to HTML. It can also reconcile changes to those strings.
+OmDomDom is a small virtual DOM implementation. Use it to:
+
+- Create virtual nodes
+- Render those nodes to a page
+- Reconcile changes between virtual nodes and patch the DOM
 
 The bundle is very small at 2.4kb minified + gzipped.
 
-Issues and PRs welcome.
+Issues and PRs welcome!
 
 ## Install
 
-Use either npm or from CDN.
+Use either npm or CDN.
 
 **NPM**
 
