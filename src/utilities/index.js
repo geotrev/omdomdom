@@ -49,10 +49,14 @@ export const forEach = (items, fn) => {
  */
 export const createKeyMap = (children) => {
   const map = {}
+  let hasKeys = false
   forEach(children, (child) => {
-    if (keyIsValid(map, child.attributes.key)) map[child.attributes.key] = child
+    if (keyIsValid(map, child.attributes.key)) {
+      map[child.attributes.key] = child
+      if (!hasKeys) hasKeys = true
+    }
   })
-  return map
+  return [map, hasKeys]
 }
 
 export const insertNode = (parent, child, refNode) => {

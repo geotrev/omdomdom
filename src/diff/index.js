@@ -11,11 +11,11 @@ const diffChildren = (template, vNode) => {
 
   if (!templateChildrenLength && !vNode.children.length) return
 
-  const vNodeKeyMap = createKeyMap(vNode.children)
+  const [vNodeKeyMap, hasKeys] = createKeyMap(vNode.children)
 
   // There were no keys found:
 
-  if (!Object.keys(vNodeKeyMap).length) {
+  if (!hasKeys) {
     // Remove extra nodes if template.children is smaller
     let delta = vNode.children.length - templateChildrenLength
     if (delta > 0) {
