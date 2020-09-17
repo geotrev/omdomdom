@@ -28,16 +28,16 @@ import { render, diff, createNode } from "omdomdom"
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.7/dist/omdomdom.js"
-  integrity="sha256-dJ3ECaCb9dUGlP89e12E9qoNHLHjGldadVqjt0nTRfE="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.8/dist/omdomdom.js"
+  integrity="sha256-eXc3/dK/vJVtJrxpbDDqgbMfNhawulqoE36FSEzvhk0="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.7/dist/omdomdom.min.js"
-  integrity="sha256-wNrbG/U/zyhKGJznxPW+fecs1KPPbJQkXC/tvSlDq9Q="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.8/dist/omdomdom.min.js"
+  integrity="sha256-7JZZzuKqEBjN0B29QoG+eOiaVHCSWJymJjimFhFpQQc="
   crossorigin="anonymous"
 ></script>
 ```
