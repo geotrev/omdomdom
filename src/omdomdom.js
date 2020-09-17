@@ -31,7 +31,7 @@ export const render = (vNode, root) => {
  * @param {boolean} isSVGContext
  * @returns {VirtualNode}
  */
-export const createNode = (node, isSVGContext = false) => {
+export const create = (node, isSVGContext = false) => {
   if (typeof node === "string") {
     node = toHTML(node)
   }
@@ -40,8 +40,7 @@ export const createNode = (node, isSVGContext = false) => {
   const childNodes = node.childNodes
   const numChildNodes = childNodes ? childNodes.length : 0
 
-  // toHTML returns a `body` tag as its root node, but we want the first child
-  // only
+  // toHTML returns a `body` tag as its root node, but we want the first child only
   if (isRoot) {
     if (numChildNodes > 1) {
       throw new Error(
@@ -52,7 +51,7 @@ export const createNode = (node, isSVGContext = false) => {
         "[omDomDom]: Your element should have at least one root node."
       )
     } else {
-      return createNode(childNodes[0])
+      return create(childNodes[0])
     }
   }
 
@@ -73,7 +72,7 @@ export const createNode = (node, isSVGContext = false) => {
   // Recursively build children
   const children = Array(numChildNodes)
   forEach(childNodes, (child, idx) => {
-    children[idx] = createNode(child, isSVG)
+    children[idx] = create(child, isSVG)
   })
 
   return { type, attributes, children, content, node, isSVGContext: isSVG }
