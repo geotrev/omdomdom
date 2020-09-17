@@ -1,5 +1,5 @@
 import { forEach } from "../utilities"
-import { diffStyles, removeStyles } from "../styles"
+import { updateStyles, removeStyles } from "../styles"
 
 /**
  * @type {string[]}
@@ -49,7 +49,7 @@ const addAttributes = (vNode, attributes) => {
     if (attribute === "class") {
       vNode.node.className = value
     } else if (attribute === "style") {
-      diffStyles(vNode.node, value)
+      updateStyles(vNode.node, value)
     } else {
       // If the attribute is also a property, set it
       if (attribute in vNode.node) {
@@ -107,7 +107,7 @@ export const getAttributes = (element) => {
  * @param {VirtualNode} nextVNode
  * @param {VirtualNode} vNode
  */
-export const diffAttributes = (nextVNode, vNode) => {
+export const updateAttributes = (nextVNode, vNode) => {
   let removedAttributes = []
   let changedAttributes = {}
 
