@@ -9,7 +9,7 @@ export const dynamicAttributes = ["checked", "selected", "value"]
 /**
  * Removes stale attributes from the element.
  * @param {HTMLElement} vNode
- * @param {Object.<string, string>} attributes
+ * @param {string[]} attributes
  */
 const removeAttributes = (vNode, attributes) => {
   forEach(attributes, (attribute) => {
