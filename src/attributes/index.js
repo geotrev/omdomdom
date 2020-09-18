@@ -15,6 +15,8 @@ const removeAttributes = (vNode, attributes) => {
   forEach(attributes, (attribute) => {
     delete vNode.attributes[attribute]
 
+    if (attribute === "key") return
+
     // If the attribute is `class` or `style`, unset the properties.
     // else if the attribute is also a property, unset it
     if (attribute === "class") {
@@ -41,7 +43,8 @@ const addAttributes = (vNode, attributes) => {
     vNode.attributes[attribute] = value
 
     if (attribute === "key") {
-      return (vNode.attributes[attribute] = value)
+      vNode.attributes[attribute] = value
+      continue
     }
 
     // - Assign class and style as properties
