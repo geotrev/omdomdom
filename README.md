@@ -64,7 +64,7 @@ The CDN will make `omDomDom` a global variable on the page.
 
 You can do two main things with OmDomDom: Render HTML to a page and patch it with updates.
 
-### create
+### create()
 
 To get started, pass your view to `create`.
 
@@ -114,7 +114,7 @@ Either way, you will receive a virtual node tree structured like this:
 }
 ```
 
-### Render
+### render()
 
 Use `render` to insert your node somewhere on the page.
 
@@ -122,7 +122,7 @@ Use `render` to insert your node somewhere on the page.
 render(omNode, document.getElementById("root"))
 ```
 
-### Update
+### update()
 
 `update` requires you to have your initial virtual node tree, as that's the tree containing the document-appended nodes. Pass a new virtual node tree to compare and patch the original tree, and subsequently update the DOM.
 
