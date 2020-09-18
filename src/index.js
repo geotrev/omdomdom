@@ -1,2 +1,1 @@
-export { update } from "./update"
-export { render, create } from "./omdomdom"
+export { render, create, update } from "./omdomdom"

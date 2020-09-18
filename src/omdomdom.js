@@ -1,4 +1,4 @@
-import { forEach, createKeyMap, isnertBefore, patch } from "./utilities"
+import { forEach, createKeyMap, insertBefore, patch } from "./utilities"
 import { toHTML } from "./parsers"
 import { updateAttributes, getAttributes } from "./attributes"
 

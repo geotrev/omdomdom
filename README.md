@@ -23,7 +23,19 @@ $ npm i omdomdom
 Import its helpers:
 
 ```js
-import { render, diff, createNode } from "omdomdom"
+// named exports
+
+import { render, update, create } from "omdomdom"
+create(...)
+render(...)
+update(...)
+
+// or as a namespace
+
+import * as omDom from "omdomdom"
+omDom.create(...)
+omDom.render(...)
+omDom.update(...)
 ```
 
 **CDN**
@@ -52,30 +64,18 @@ The CDN will make `omDomDom` a global variable on the page.
 
 You can do two main things with OmDomDom: Render HTML to a page and patch it with updates.
 
-### createNode
+### create
 
-To get started, pass your view to `createNode`.
+To get started, pass your view to `create`.
 
 ```js
-const view = `
-  <div>
-    <p style="color: pink">Things I like doing:</p>
-    <ul>
-      <li>No budget</li>
-      <li>Using angular</li>
-      <li>Napping during work</li>
-    </ul>
-    <p>Booooo.</p>
-  </div>
-`
+const view = "<p style='color: pink'>I like hanging out.</p>"
 
 // Create virtual node
-const omNode = createNode(view)
+const omNode = create(view)
 ```
 
-Keeping the virtual node reference is necessary only if you intend to do updates later using [`diff`](#diff). Otherwise, you can set the variable to `null` to free up your browser memory.
-
-`createNode` will check if your value is a string, then convert it to HTML using [`DOMParser`](https://developer.mozilla.org/en-US/docs/Web/API/DOMParser). The advantage of this route is DOMParser provides some decent error output in the case of incorrect HTML.
+`create` will check if your value is a string, then convert it to HTML using [`DOMParser`](https://developer.mozilla.org/en-US/docs/Web/API/DOMParser). The advantage of this route is `DOMParser` provides some decent error output if your HTML is incorrect.
 
 You can optionally create the HTML yourself and provide that, if you prefer:
 
@@ -83,7 +83,7 @@ You can optionally create the HTML yourself and provide that, if you prefer:
 const wrapper = document.createElement("div")
 wrapper.innerHTML = view.trim()
 
-const omNode = createNode(wrapper)
+const omNode = create(wrapper)
 ```
 
 Either way, you will receive a virtual node tree structured like this:
@@ -122,15 +122,17 @@ Use `render` to insert your node somewhere on the page.
 render(omNode, document.getElementById("root"))
 ```
 
-### Diff
+### Update
 
-As mentioned in the `createNode` method details, using `diff` requires you to have your initial virtual node reference. Pass a new virtual node to compare and patch the DOM for the new changes to appear.
+`update` requires you to have your initial virtual node tree, as that's the tree containing the document-appended nodes. Pass a new virtual node tree to compare and patch the original tree, and subsequently update the DOM.
 
 ```js
-const nextView = /* altered DOM string */
-const nextNode = createNode(nextView)
-diff(nextNode, omNode)
+const nextView = "<p style='color: red'>I don't like hanging out.</p>"
+const nextNode = create(nextView)
+update(nextNode, omNode)
 ```
+
+Again: always perform updates against your initial omdomdom virtual node tree!
 
 ## Reconciliation
 

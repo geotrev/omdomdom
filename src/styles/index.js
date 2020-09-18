@@ -35,7 +35,7 @@ export const removeStyles = (element, styles) => {
  * @param {HTMLElement} element
  * @param {Object.<string, string>} styles
  */
-const updateStyles = (element, styleMap) => {
+const addStyles = (element, styleMap) => {
   for (let property in styleMap) {
     if (element.style[property] !== styleMap[property]) {
       element.style[property] = styleMap[property]
@@ -59,5 +59,5 @@ export const updateStyles = (element, styles) => {
 
   // Remove + update changes
   removeStyles(element, staleStyles)
-  updateStyles(element, styleMap)
+  addStyles(element, styleMap)
 }
