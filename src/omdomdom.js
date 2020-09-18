@@ -1,5 +1,6 @@
-import { forEach } from "./utilities"
-import { getAttributes } from "./attributes"
+import { forEach, createKeyMap, insertBefore, patch } from "./utilities"
+import { toHTML } from "./parsers"
+import { updateAttributes, getAttributes } from "./attributes"
 
 /**
  * Object representation of a DOM element.
@@ -14,6 +15,107 @@ import { getAttributes } from "./attributes"
  */
 
 /**
+ * Both template and vNode have arrays of virtual nodes. Diff them.
+ * @param {VirtualNode} template - new virtual node tree.
+ * @param {VirtualNode} vNode - existing virtual node tree.
+ */
+const updateChildren = (template, vNode) => {
+  const templateChildrenLength = template.children.length
+
+  if (!templateChildrenLength && !vNode.children.length) return
+
+  const [vNodeKeyMap, hasKeys] = createKeyMap(vNode.children)
+
+  // There were no keys found:
+
+  if (!hasKeys) {
+    // Remove extra nodes if template.children is smaller
+    let delta = vNode.children.length - templateChildrenLength
+    if (delta > 0) {
+      while (delta-- > 0) {
+        const child = vNode.children.pop()
+        vNode.node.removeChild(child.node)
+      }
+    }
+
+    return forEach(template.children, (templateChild, idx) => {
+      const vNodeChild = vNode.children[idx]
+
+      if (typeof vNodeChild !== "undefined") {
+        update(templateChild, vNodeChild)
+      } else {
+        vNode.node.appendChild(templateChild.node)
+        vNode.children.push(templateChild)
+      }
+    })
+  }
+
+  // There were keys found, resolve them:
+
+  let nextChildren = Array(templateChildrenLength)
+
+  // Match keys and update/move children in-place
+  forEach(template.children, (child, idx) => {
+    const childNodes = vNode.node.childNodes
+    const key = child.attributes.key
+
+    if (Object.prototype.hasOwnProperty.call(vNodeKeyMap, key)) {
+      const keyChild = vNodeKeyMap[key]
+
+      if (Array.prototype.indexOf.call(childNodes, keyChild.node) !== idx) {
+        insertBefore(vNode, keyChild, childNodes[idx])
+      }
+
+      nextChildren[idx] = keyChild
+
+      // Prevent duplicates, remove the entry and let it insert at
+      // its natural index in the `else` block.
+      delete vNodeKeyMap[key]
+      update(child, nextChildren[idx])
+    } else {
+      insertBefore(vNode, child, childNodes[idx])
+      nextChildren[idx] = child
+    }
+  })
+
+  vNode.children = nextChildren
+
+  // Remove any real nodes that are left over from the diff
+  let childNodesLength = vNode.node.childNodes.length
+  let delta = childNodesLength - templateChildrenLength
+  if (delta > 0) {
+    while (delta-- > 0) {
+      vNode.node.removeChild(vNode.node.childNodes[childNodesLength - 1])
+      childNodesLength--
+    }
+  }
+}
+
+/**
+ * Reconcile differences between two virtual DOM trees.
+ * @param {VirtualNode} template - new virtual node tree.
+ * @param {VirtualNode} vNode - existing virtual node tree.
+ * @param {Node} rootNode - the HTML element containing the current node context
+ */
+export const update = (template, vNode, rootNode = vNode.node.parentNode) => {
+  // Node nodes to compare, exit
+  if (!template && !vNode) return
+  const contentChanged = template.content && template.content !== vNode.content
+
+  // If the type or content changed, replace the node completely
+  if (template.type !== vNode.type || contentChanged) {
+    rootNode.replaceChild(template.node, vNode.node)
+    return patch(template, vNode)
+  }
+
+  // Update attributes, if any
+  updateAttributes(template, vNode)
+
+  // Diff child nodes recursively
+  updateChildren(template, vNode)
+}
+
+/**
  * Renders a node into the given root context. This happens one time,
  * when a component is first rendered.
  * All subsequent renders are the result of reconciliation.
@@ -25,38 +127,21 @@ export const render = (vNode, root) => {
 }
 
 /**
- * Convert stringified HTML into valid HTML, stripping all extra spaces.
- * @param {string} stringToRender
- */
-export const createHTML = (stringToRender) => {
-  /**
-   * Remove all extraneous whitespace:
-   * - From the beginning + end of the document fragment
-   * - If there's more than one space before a left tag bracket, replace them with one
-   * - If there's more than one space before a right tag bracket, replace them with one
-   */
-  const processedDOMString = stringToRender
-    .trim()
-    .replace(/\s+</g, "<")
-    .replace(/>\s+/g, ">")
-
-  const parser = new DOMParser()
-  const context = parser.parseFromString(processedDOMString, "text/html")
-
-  return context.body
-}
-
-/**
  * Creates a new virtual DOM from a root node.
  * @param {HTMLElement|ShadowRoot|HTMLBodyElement} node
  * @param {boolean} isSVGContext
  * @returns {VirtualNode}
  */
-export const createNode = (node, isSVGContext = false) => {
+export const create = (node, isSVGContext = false) => {
+  if (typeof node === "string") {
+    node = toHTML(node)
+  }
+
   const isRoot = node.tagName === "BODY"
   const childNodes = node.childNodes
   const numChildNodes = childNodes ? childNodes.length : 0
 
+  // toHTML returns a `body` tag as its root node, but we want the first child only
   if (isRoot) {
     if (numChildNodes > 1) {
       throw new Error(
@@ -67,11 +152,10 @@ export const createNode = (node, isSVGContext = false) => {
         "[omDomDom]: Your element should have at least one root node."
       )
     } else {
-      return createNode(childNodes[0])
+      return create(childNodes[0])
     }
   }
 
-  // Get basic node data
   const type =
     node.nodeType === 3
       ? "text"
@@ -89,7 +173,7 @@ export const createNode = (node, isSVGContext = false) => {
   // Recursively build children
   const children = Array(numChildNodes)
   forEach(childNodes, (child, idx) => {
-    children[idx] = createNode(child, isSVG)
+    children[idx] = create(child, isSVG)
   })
 
   return { type, attributes, children, content, node, isSVGContext: isSVG }
