@@ -1,10 +1,16 @@
 import { forEach } from "../utilities"
-import { updateStyles, removeStyles } from "../styles"
+import { InternalAttributes, Namespace, DomProperties } from "./records"
 
 /**
- * @type {string[]}
+ * Set a given attribute as a property, if it has a property equivalent
  */
-export const dynamicAttributes = ["checked", "selected", "value"]
+const setProperty = (node, prop, value) => {
+  if (value === null) {
+    node[prop] = ""
+  } else {
+    node[prop] = value
+  }
+}
 
 /**
  * Removes stale attributes from the element.
@@ -13,22 +19,18 @@ export const dynamicAttributes = ["checked", "selected", "value"]
  */
 const removeAttributes = (vNode, attributes) => {
   forEach(attributes, (attribute) => {
-    delete vNode.attributes[attribute]
-
-    if (attribute === "key") return
-
-    // If the attribute is `class` or `style`, unset the properties.
-    // else if the attribute is also a property, unset it
-    if (attribute === "class") {
-      vNode.node.className = ""
-    } else if (attribute === "style") {
-      removeStyles(vNode.node, Array.prototype.slice.call(vNode.node.style))
+    if (attribute === DomProperties.style) {
+      vNode.node.style.cssText = null
+    } else if (Object.prototype.hasOwnProperty.call(DomProperties, attribute)) {
+      setProperty(vNode.node, DomProperties[attribute], null)
     } else if (attribute in vNode.node) {
-      vNode.node[attribute] = ""
+      setProperty(vNode.node, DomProperties[attribute], null)
+      vNode.node.removeAttribute(attribute)
+    } else {
+      vNode.node.removeAttribute(attribute)
     }
 
-    // Clean up the DOM attribute, if it exists
-    vNode.node.removeAttribute(attribute)
+    delete vNode.attributes[attribute]
   })
 }
 
@@ -37,30 +39,41 @@ const removeAttributes = (vNode, attributes) => {
  * @param {VirtualNode} vNode
  * @param {Object.<string, string>} attributes
  */
-const addAttributes = (vNode, attributes) => {
+const setAttributes = (vNode, attributes) => {
   for (let attribute in attributes) {
     const value = attributes[attribute]
     vNode.attributes[attribute] = value
 
-    if (attribute === "key") {
+    if (attribute === InternalAttributes.KEY) {
       vNode.attributes[attribute] = value
       continue
     }
 
-    // Assign class and style as properties
-    // else unset the attribute and remove its property, if it exists
-    if (attribute === "class") {
-      vNode.node.className = value
-    } else if (attribute === "style") {
-      updateStyles(vNode.node, value)
-    } else {
-      // If the attribute is also a property, set it
-      if (attribute in vNode.node) {
-        vNode.node[attribute] =
-          !vNode.node[attribute] && vNode.node[attribute] !== 0 ? true : value
-      }
-      vNode.node.setAttribute(attribute, value || "")
+    if (attribute === DomProperties.style) {
+      vNode.node.style.cssText = attributes[attribute]
+      continue
     }
+
+    // Only set DomProperties as properties, and not attributes
+    if (Object.prototype.hasOwnProperty.call(DomProperties, attribute)) {
+      setProperty(vNode.node, DomProperties[attribute], value)
+      continue
+    }
+
+    // Set namespaced properties using setAttributeNS
+    if (attribute.startsWith(Namespace.xlink.prefix)) {
+      vNode.node.setAttributeNS(Namespace.xlink.resource, attribute, value)
+      continue
+    } else if (attribute.startsWith(Namespace.xml.prefix)) {
+      vNode.node.setAttributeNS(Namespace.xml.resource, attribute, value)
+      continue
+    }
+
+    // If the attribute is also a property, set it
+    if (attribute in vNode.node) {
+      setProperty(vNode.node, DomProperties[attribute], value)
+    }
+    vNode.node.setAttribute(attribute, value || "")
   }
 }
 
@@ -69,70 +82,82 @@ const addAttributes = (vNode, attributes) => {
  * @param {HTMLElement} element
  * @param {Object.<string, string>} attributes
  */
-const getDynamicAttributes = (element, attributes) => {
-  forEach(dynamicAttributes, (prop) => {
-    if (!element[prop]) return
-    attributes[prop] = element[prop]
-  })
+const getPropertyValues = (element, attributes) => {
+  for (let prop in DomProperties) {
+    const propertyName = DomProperties[prop]
+
+    if (prop === DomProperties.style) {
+      attributes[prop] = element[propertyName].cssText
+    } else if (element[propertyName]) {
+      attributes[prop] = element[propertyName]
+    }
+  }
 }
 
 /**
- * Gets non-dynamic node attributes to be applied.
+ * Gets non-property attributes.
  * @param {HTMLElement} element
  * @returns {Object.<string, string>}
  */
 const getBaseAttributes = (element) => {
-  let attributes = {}
-
-  Array.prototype.forEach.call(element.attributes, (attribute) => {
-    if (dynamicAttributes.indexOf(attribute.name) < 0) {
-      attributes[attribute.name] = attribute.value
-    }
-  })
-
-  return attributes
+  return Array.prototype.reduce.call(
+    element.attributes,
+    (attributes, attribute) => {
+      if (
+        !Object.prototype.hasOwnProperty.call(DomProperties, attribute.name)
+      ) {
+        attributes[attribute.name] = attribute.value
+      }
+      return attributes
+    },
+    {}
+  )
 }
 
 /**
- * Gets all virtual node attributes.
+ * Gets all attributes.
  * @param {HTMLElement} element
  * @returns {Object.<string, string>}
  */
 export const getAttributes = (element) => {
   const attributes = getBaseAttributes(element)
-  getDynamicAttributes(element, attributes)
+  getPropertyValues(element, attributes)
 
   return attributes
 }
 
 /**
- * Reconcile attributes from vNode to nextVNode
- * @param {VirtualNode} nextVNode
+ * Reconcile attributes from vNode to template
+ * @param {VirtualNode} template
  * @param {VirtualNode} vNode
  */
-export const updateAttributes = (nextVNode, vNode) => {
+export const updateAttributes = (template, vNode) => {
   let removedAttributes = []
   let changedAttributes = {}
 
   // Get stale attributes
   for (let attribute in vNode.attributes) {
     const oldValue = vNode.attributes[attribute]
-    const nextValue = nextVNode.attributes[attribute]
-    if (oldValue !== nextValue && typeof nextValue === "undefined") {
+    const nextValue = template.attributes[attribute]
+    if (oldValue === nextValue) continue
+
+    if (typeof nextValue === "undefined") {
       removedAttributes.push(attribute)
     }
   }
 
   // Get changed or new attributes
-  for (let attribute in nextVNode.attributes) {
+  for (let attribute in template.attributes) {
     const oldValue = vNode.attributes[attribute]
-    const nextValue = nextVNode.attributes[attribute]
-    if (oldValue !== nextValue && typeof nextValue !== "undefined") {
+    const nextValue = template.attributes[attribute]
+    if (oldValue === nextValue) continue
+
+    if (typeof nextValue !== "undefined") {
       changedAttributes[attribute] = nextValue
     }
   }
 
   // Add and remove attributes
   removeAttributes(vNode, removedAttributes)
-  addAttributes(vNode, changedAttributes)
+  setAttributes(vNode, changedAttributes)
 }

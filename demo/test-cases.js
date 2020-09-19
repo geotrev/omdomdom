@@ -61,7 +61,7 @@ const logNode = (node) => console.log("Node:", node)
 {
   const view = `
     <p data-chillin="out" class="hangin-out">
-      <button style="font-weight: bold" id="test3">Click to update</button>
+      <button style="font-weight: bold" id="test3" class="byebye">Click to update</button>
     </p>
   `
 
@@ -71,8 +71,8 @@ const logNode = (node) => console.log("Node:", node)
   let activeView = view
   document.querySelector("#test3").onclick = () => {
     const nextView = `
-      <p data-chillin="in" style="background: blue">
-        <button id="test3">Click to update</button>
+      <p data-chillin="in" class="hangin-out havin-fun" style="background: blue">
+        <button style="font-weight: bold; color: limegreen" id="test3">Click to update</button>
       </p>
     `
 
