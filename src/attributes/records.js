@@ -17,7 +17,7 @@ export const DomProperties = {
   selected: "selected",
   tabindex: "tabIndex",
   class: "className",
-  style: "style",
+  style: "cssText",
   id: "id",
   lang: "lang",
   dir: "dir",

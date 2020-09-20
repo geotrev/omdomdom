@@ -1,11 +1,19 @@
 import { forEach } from "../utilities"
 import { InternalAttributes, Namespace, DomProperties } from "./records"
 
+const STYLE_ATTRIBUTE = "style"
+
 /**
  * Set a given attribute as a property, if it has a property equivalent
  */
 const setProperty = (node, prop, value) => {
-  if (value === null) {
+  if (prop === DomProperties.style) {
+    if (value === null) {
+      node.style[prop] = ""
+    } else {
+      node.style[prop] = value
+    }
+  } else if (value === null) {
     node[prop] = ""
   } else {
     node[prop] = value
@@ -19,14 +27,12 @@ const setProperty = (node, prop, value) => {
  */
 const removeAttributes = (vNode, attributes) => {
   forEach(attributes, (attribute) => {
-    if (attribute === DomProperties.style) {
-      vNode.node.style.cssText = null
-    } else if (Object.prototype.hasOwnProperty.call(DomProperties, attribute)) {
+    if (Object.prototype.hasOwnProperty.call(DomProperties, attribute)) {
       setProperty(vNode.node, DomProperties[attribute], null)
-    } else if (attribute in vNode.node) {
-      setProperty(vNode.node, DomProperties[attribute], null)
-      vNode.node.removeAttribute(attribute)
     } else {
+      if (attribute in vNode.node) {
+        setProperty(vNode.node, attribute, null)
+      }
       vNode.node.removeAttribute(attribute)
     }
 
@@ -49,11 +55,6 @@ const setAttributes = (vNode, attributes) => {
       continue
     }
 
-    if (attribute === DomProperties.style) {
-      vNode.node.style.cssText = attributes[attribute]
-      continue
-    }
-
     // Only set DomProperties as properties, and not attributes
     if (Object.prototype.hasOwnProperty.call(DomProperties, attribute)) {
       setProperty(vNode.node, DomProperties[attribute], value)
@@ -69,9 +70,8 @@ const setAttributes = (vNode, attributes) => {
       continue
     }
 
-    // If the attribute is also a property, set it
     if (attribute in vNode.node) {
-      setProperty(vNode.node, DomProperties[attribute], value)
+      setProperty(vNode.node, attribute, value)
     }
     vNode.node.setAttribute(attribute, value || "")
   }
@@ -86,8 +86,8 @@ const getPropertyValues = (element, attributes) => {
   for (let prop in DomProperties) {
     const propertyName = DomProperties[prop]
 
-    if (prop === DomProperties.style) {
-      attributes[prop] = element[propertyName].cssText
+    if (prop === STYLE_ATTRIBUTE) {
+      attributes[prop] = element.style[propertyName]
     } else if (element[propertyName]) {
       attributes[prop] = element[propertyName]
     }
