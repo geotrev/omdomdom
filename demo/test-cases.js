@@ -55,13 +55,15 @@ const logNode = (node) => console.log("Node:", node)
   render(node, document.getElementById("test-root-2"))
 }
 /**
- * Diff: attributes, styles
+ * Update: attributes + styles
  */
 
 {
   const view = `
-    <p data-chillin="out" class="hangin-out">
-      <button style="font-weight: bold" id="test3" class="byebye">Click to update</button>
+    <p data-chillin="out" class="hangin-out" tabindex="0" draggable="true">
+      <button tabindex="0" style="font-weight: bold" id="test3" autofocus class="byebye">
+        <span tabindex="0">Click to update</span>
+      </button>
     </p>
   `
 
@@ -71,8 +73,10 @@ const logNode = (node) => console.log("Node:", node)
   let activeView = view
   document.querySelector("#test3").onclick = () => {
     const nextView = `
-      <p data-chillin="in" class="hangin-out havin-fun" style="background: blue">
-        <button style="font-weight: bold; color: limegreen" id="test3">Click to update</button>
+      <p data-chillin="in" class="hangin-out havin-fun" tabindex="-1" style="background: blue">
+        <button style="font-weight: bold; color: limegreen" autofocus="false" id="test3">
+          <span tabindex="1">Click to update</span>
+        </button>
       </p>
     `
 
@@ -84,7 +88,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: dynamic attributes: value, selected, checked
+ * Update: dynamic attributes: value, selected, checked
  */
 
 {
@@ -108,7 +112,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: single node to no node
+ * Update: single node to no node
  */
 
 {
@@ -135,7 +139,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: node type
+ * Update: node type
  */
 
 //  NOTE: This will break the event listener
@@ -166,7 +170,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes to no nodes
+ * Update: List of nodes to no nodes
  */
 
 {
@@ -195,7 +199,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes to one node
+ * Update: List of nodes to one node
  */
 
 {
@@ -226,7 +230,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes
+ * Update: List of nodes
  */
 
 {
@@ -258,7 +262,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes to one node with key
+ * Update: List of nodes to one node with key
  */
 
 {
@@ -291,7 +295,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes with one key
+ * Update: List of nodes with one key
  */
 
 {
@@ -324,7 +328,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes with multiple keys
+ * Update: List of nodes with multiple keys
  */
 
 {
@@ -357,7 +361,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes with all keys
+ * Update: List of nodes with all keys
  */
 
 {
@@ -390,7 +394,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes with some keys
+ * Update: List of nodes with some keys
  */
 
 {

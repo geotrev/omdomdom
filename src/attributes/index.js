@@ -1,24 +1,11 @@
-import { forEach } from "../utilities"
-import { InternalAttributes, Namespace, DomProperties } from "./records"
-
-const STYLE_ATTRIBUTE = "style"
-
-/**
- * Set a given attribute as a property, if it has a property equivalent
- */
-const setProperty = (node, prop, value) => {
-  if (prop === DomProperties.style) {
-    if (value === null) {
-      node.style[prop] = ""
-    } else {
-      node.style[prop] = value
-    }
-  } else if (value === null) {
-    node[prop] = ""
-  } else {
-    node[prop] = value
-  }
-}
+import { hasProperty, forEach } from "../utilities"
+import {
+  InternalAttributes,
+  setProperty,
+  Namespace,
+  DomProperties,
+  Types,
+} from "./records"
 
 /**
  * Removes stale attributes from the element.
@@ -27,11 +14,17 @@ const setProperty = (node, prop, value) => {
  */
 const removeAttributes = (vNode, attributes) => {
   forEach(attributes, (attribute) => {
-    if (Object.prototype.hasOwnProperty.call(DomProperties, attribute)) {
-      setProperty(vNode.node, DomProperties[attribute], null)
+    if (hasProperty(DomProperties, attribute)) {
+      const propertyRecord = DomProperties[attribute]
+      setProperty(
+        vNode.node,
+        propertyRecord.type,
+        propertyRecord.propName,
+        null
+      )
     } else {
       if (attribute in vNode.node) {
-        setProperty(vNode.node, attribute, null)
+        setProperty(vNode.node, Types.STRING, attribute, null)
       }
       vNode.node.removeAttribute(attribute)
     }
@@ -55,9 +48,14 @@ const setAttributes = (vNode, attributes) => {
       continue
     }
 
-    // Only set DomProperties as properties, and not attributes
-    if (Object.prototype.hasOwnProperty.call(DomProperties, attribute)) {
-      setProperty(vNode.node, DomProperties[attribute], value)
+    if (hasProperty(DomProperties, attribute)) {
+      const propertyRecord = DomProperties[attribute]
+      setProperty(
+        vNode.node,
+        propertyRecord.type,
+        propertyRecord.propName,
+        value
+      )
       continue
     }
 
@@ -71,25 +69,28 @@ const setAttributes = (vNode, attributes) => {
     }
 
     if (attribute in vNode.node) {
-      setProperty(vNode.node, attribute, value)
+      setProperty(vNode.node, Types.STRING, attribute, value)
     }
     vNode.node.setAttribute(attribute, value || "")
   }
 }
 
 /**
- * Gets dynamic property-based attributes to be applied.
+ * Checks property-based attributes. If the attribute exists,
+ * then we should set its property value.
  * @param {HTMLElement} element
  * @param {Object.<string, string>} attributes
  */
 const getPropertyValues = (element, attributes) => {
-  for (let prop in DomProperties) {
-    const propertyName = DomProperties[prop]
+  for (let attr in DomProperties) {
+    const propertyRecord = DomProperties[attr]
+    const propName = propertyRecord.propName
+    const attrValue = element.getAttribute(attr)
 
-    if (prop === STYLE_ATTRIBUTE) {
-      attributes[prop] = element.style[propertyName]
-    } else if (element[propertyName]) {
-      attributes[prop] = element[propertyName]
+    if (attr === DomProperties.style.attrName) {
+      attributes[attr] = element.style[propName]
+    } else if (typeof attrValue === "string") {
+      attributes[attr] = attrValue
     }
   }
 }
@@ -103,9 +104,7 @@ const getBaseAttributes = (element) => {
   return Array.prototype.reduce.call(
     element.attributes,
     (attributes, attribute) => {
-      if (
-        !Object.prototype.hasOwnProperty.call(DomProperties, attribute.name)
-      ) {
+      if (!hasProperty(DomProperties, attribute.name)) {
         attributes[attribute.name] = attribute.value
       }
       return attributes

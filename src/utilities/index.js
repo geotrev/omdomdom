@@ -4,7 +4,7 @@
  * @param {string} prop
  * @returns {boolean}
  */
-const hasProperty = (obj, prop) =>
+export const hasProperty = (obj, prop) =>
   Object.prototype.hasOwnProperty.call(obj, prop)
 
 /**
