@@ -86,11 +86,19 @@ const stringProps = [
   ["lang"],
 ]
 forEach(stringProps, ([attr, property]) => {
-  DomProperties[attr] = createRecord(attr, property, Types.STRING)
+  DomProperties[attr] = createRecord(attr, property || attr, Types.STRING)
 })
 
 // Set boolean records
-const booleanProps = ["autofocus", "draggable", "hidden", "inert"]
+const booleanProps = [
+  "autofocus",
+  "draggable",
+  "hidden",
+  "checked",
+  "multiple",
+  "muted",
+  "selected",
+]
 forEach(booleanProps, (attr) => {
   DomProperties[attr] = createRecord(attr, attr, Types.BOOL)
 })

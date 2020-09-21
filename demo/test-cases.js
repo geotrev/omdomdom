@@ -54,17 +54,40 @@ const logNode = (node) => console.log("Node:", node)
   const node = create(view)
   render(node, document.getElementById("test-root-2"))
 }
+
 /**
  * Update: attributes + styles
  */
 
 {
   const view = `
-    <p data-chillin="out" class="hangin-out" tabindex="0" draggable="true">
-      <button tabindex="0" style="font-weight: bold" id="test3" autofocus class="byebye">
-        <span tabindex="0">Click to update</span>
+    <div>
+      <div data-att="some data">Change data-att</div>
+      <div data-att="some data">Add/remove data-att</div>
+      <div class="hangin-out">Change class</div>
+      <div class="hangin-out">Add/remove class</div>
+      <div style="background: lime">Change style</div>
+      <div style="background: lime">Add/remove style</div>
+      <div tabindex="0">Change tabindex</div>
+      <div tabindex="0">Add/remove tabindex</div>
+      <div accesskey="why">Change accesskey</div>
+      <div accesskey="help">Add/remove accesskey</div>
+      <div title="hangin out">Change title</div>
+      <div title="hangin out">Add/remove title</div>
+      <div dir="ltr">Change dir</div>
+      <div dir="ltr">Add/remove dir</div>
+      <div id="id-test">Change id</div>
+      <div id="also-id-test">Add/remove</div>
+      <div lang="en">Change lang</div>
+      <div lang="en">Add/remove lang</div>
+      <div draggable="true">Change draggable</div>
+      <div draggable="true">Add/remove draggable</div>
+      <div autofocus>Add/remove autofocus</div>
+      <div hidden>Add/remove hidden</div>
+      <button id="test3">
+        Click to update
       </button>
-    </p>
+    </div>
   `
 
   const node = create(view)
@@ -73,11 +96,33 @@ const logNode = (node) => console.log("Node:", node)
   let activeView = view
   document.querySelector("#test3").onclick = () => {
     const nextView = `
-      <p data-chillin="in" class="hangin-out havin-fun" tabindex="-1" style="background: blue">
-        <button style="font-weight: bold; color: limegreen" autofocus="false" id="test3">
-          <span tabindex="1">Click to update</span>
+      <div>
+        <div data-att="changed a pinch">Change data</div>
+        <div>Add/remove data</div>
+        <div class="hangin-out havin-fun">Change class</div>
+        <div>Add/remove class</div>
+        <div style="background: blue; font-weight: bold">Change style</div>
+        <div>Add/remove style</div>
+        <div tabindex="-1">Change tabindex</div>
+        <div>Add/remove tabindex</div>
+        <div accesskey="no">Change accesskey</div>
+        <div>Add/remove accesskey</div>
+        <div title="not hangin">Change title</div>
+        <div>Add/remove title</div>
+        <div dir="rtl">Change dir</div>
+        <div>Add/remove dir</div>
+        <div id="id-tested">Change id</div>
+        <div>Add/remove</div>
+        <div lang="es">Change lang</div>
+        <div>Add/remove lang</div>
+        <div draggable="false">Change draggable</div>
+        <div>Add/remove draggable</div>
+        <div>Add/remove autofocus</div>
+        <div>Add/remove hidden</div>
+        <button id="test3">
+          Click to update
         </button>
-      </p>
+      </div>
     `
 
     activeView = activeView === view ? nextView : view
