@@ -140,11 +140,11 @@ Reconciliation works similar to React and others, by comparing an older (live) v
 
 ### Events
 
-Since the end result is real HTML, you should be able to use events like anywhere else. Although if you do so, and your interactive elements are in a sibling context, make sure they use keys.
+Since the end result is real HTML, you should be able to use events like anywhere else. Although if you do so, and your interactive elements are in a sibling context, make sure they use a `data-key` identifier.
 
 ### Keys
 
-In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations.
+In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations. The only difference is that you should use the `data-key` attribute, rather than just `key`.
 
 ### Performance
 
