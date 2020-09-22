@@ -15,63 +15,6 @@ const createRecord = (attrName, propName, type) => ({
   type,
 })
 
-/**
- * Set a given attribute as a property, if it has a property equivalent
- * @param {HTMLElement} node
- * @param {string|number|boolean} type
- * @param {string} prop
- * @param {*} value
- */
-const setProperty = (element, type, prop, value) => {
-  switch (type) {
-    case Types.STRING: {
-      if (prop === DomProperties.style.propName) {
-        if (value === null) {
-          element.style[prop] = ""
-        } else {
-          element.style[prop] = value
-        }
-      } else if (value === null) {
-        element[prop] = ""
-      } else {
-        element[prop] = value
-      }
-      break
-    }
-
-    case Types.INT: {
-      if (value === null) {
-        const attr = prop.toLowerCase()
-        // The attribute needs to be removed to reset the property,
-        // otherwise the value coerced + reflected onto the attribute.
-        element.removeAttribute(attr)
-      } else if (value === "0") {
-        element[prop] = 0
-      } else if (value === "-1") {
-        element[prop] = -1
-      } else {
-        const parsed = parseInt(value)
-        if (!isNaN(parsed)) {
-          element[prop] = parsed
-        }
-      }
-      break
-    }
-
-    case Types.BOOL: {
-      if (["", "true"].indexOf(value) < 0) {
-        element[prop] = false
-      } else {
-        element[prop] = true
-      }
-      break
-    }
-
-    default:
-      break
-  }
-}
-
 // Set string records
 const stringProps = [
   // Style is a special snowflake, and needs an extra property to set its text
@@ -118,7 +61,7 @@ const InternalAttributes = {
 }
 
 /**
- * These require setAttributeNS
+ * Attributes with these namespaces require `setAttributeNS`
  * @type {Object.<string, string>}
  */
 const Namespace = {
@@ -132,4 +75,4 @@ const Namespace = {
   },
 }
 
-export { Types, Namespace, InternalAttributes, DomProperties, setProperty }
+export { Types, Namespace, InternalAttributes, DomProperties }

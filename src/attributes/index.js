@@ -1,11 +1,6 @@
 import { hasProperty, forEach } from "../utilities"
-import {
-  InternalAttributes,
-  setProperty,
-  Namespace,
-  DomProperties,
-  Types,
-} from "./records"
+import { InternalAttributes, Namespace, DomProperties, Types } from "./records"
+import { setProperty } from "./set-property"
 
 /**
  * Removes stale attributes from the element.
