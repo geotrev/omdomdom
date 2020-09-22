@@ -19,14 +19,9 @@ const createRecord = (attrName, propName, type) => ({
 const stringProps = [
   // Style is a special snowflake, and needs an extra property to set its text
   // value. This is less confusing and achieves the same result with one reflow,
-  // compared to a new reflowf or each Element.style[name] that gets set.
+  // compared to a new reflow for each Element.style[styleProperty] setter.
   ["style", "cssText"],
   ["class", "className"],
-  ["accesskey", "accessKey"],
-  ["title"],
-  ["dir"],
-  ["id"],
-  ["lang"],
 ]
 forEach(stringProps, ([attr, property]) => {
   DomProperties[attr] = createRecord(attr, property || attr, Types.STRING)
