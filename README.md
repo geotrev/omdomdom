@@ -6,7 +6,7 @@ OmDomDom is a small virtual DOM implementation. Use it to:
 - Render those nodes to a page
 - Reconcile changes between virtual nodes and patch the DOM
 
-The bundle is very small at 2.4kb minified + gzipped. One reason for this small bundle size is that the library does very little work beyond taking your DOM string, rendering it, and/or resolving differences between two virtual node trees.
+The bundle is very small at 2.4kb minified + gzipped. One reason for this small bundle size is that the library does very little work. It has no magic under the hood, or magic implementations.
 
 Pull requests and issues welcome!
 
