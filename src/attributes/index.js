@@ -8,9 +8,9 @@ import { setProperty } from "./set-property"
  * @param {string[]} attributes
  */
 const removeAttributes = (vNode, attributes) => {
-  forEach(attributes, (attribute) => {
-    if (hasProperty(DomProperties, attribute)) {
-      const propertyRecord = DomProperties[attribute]
+  forEach(attributes, (attrName) => {
+    if (hasProperty(DomProperties, attrName)) {
+      const propertyRecord = DomProperties[attrName]
       setProperty(
         vNode.node,
         propertyRecord.type,
@@ -18,13 +18,13 @@ const removeAttributes = (vNode, attributes) => {
         null
       )
     } else {
-      if (attribute in vNode.node) {
-        setProperty(vNode.node, Types.STRING, attribute, null)
+      if (attrName in vNode.node) {
+        setProperty(vNode.node, Types.STRING, attrName, null)
       }
-      vNode.node.removeAttribute(attribute)
+      vNode.node.removeAttribute(attrName)
     }
 
-    delete vNode.attributes[attribute]
+    delete vNode.attributes[attrName]
   })
 }
 
@@ -34,17 +34,17 @@ const removeAttributes = (vNode, attributes) => {
  * @param {Object.<string, string>} attributes
  */
 const setAttributes = (vNode, attributes) => {
-  for (let attribute in attributes) {
-    const value = attributes[attribute]
-    vNode.attributes[attribute] = value
+  for (let attrName in attributes) {
+    const value = attributes[attrName]
+    vNode.attributes[attrName] = value
 
-    if (attribute === InternalAttributes.KEY) {
-      vNode.attributes[attribute] = value
+    if (attrName === InternalAttributes.KEY) {
+      vNode.attributes[attrName] = value
       continue
     }
 
-    if (hasProperty(DomProperties, attribute)) {
-      const propertyRecord = DomProperties[attribute]
+    if (hasProperty(DomProperties, attrName)) {
+      const propertyRecord = DomProperties[attrName]
       setProperty(
         vNode.node,
         propertyRecord.type,
@@ -55,18 +55,18 @@ const setAttributes = (vNode, attributes) => {
     }
 
     // Set namespaced properties using setAttributeNS
-    if (attribute.startsWith(Namespace.xlink.prefix)) {
-      vNode.node.setAttributeNS(Namespace.xlink.resource, attribute, value)
+    if (attrName.startsWith(Namespace.xlink.prefix)) {
+      vNode.node.setAttributeNS(Namespace.xlink.resource, attrName, value)
       continue
-    } else if (attribute.startsWith(Namespace.xml.prefix)) {
-      vNode.node.setAttributeNS(Namespace.xml.resource, attribute, value)
+    } else if (attrName.startsWith(Namespace.xml.prefix)) {
+      vNode.node.setAttributeNS(Namespace.xml.resource, attrName, value)
       continue
     }
 
-    if (attribute in vNode.node) {
-      setProperty(vNode.node, Types.STRING, attribute, value)
+    if (attrName in vNode.node) {
+      setProperty(vNode.node, Types.STRING, attrName, value)
     }
-    vNode.node.setAttribute(attribute, value || "")
+    vNode.node.setAttribute(attrName, value || "")
   }
 }
 
@@ -77,15 +77,15 @@ const setAttributes = (vNode, attributes) => {
  * @param {Object.<string, string>} attributes
  */
 const getPropertyValues = (element, attributes) => {
-  for (let attr in DomProperties) {
-    const propertyRecord = DomProperties[attr]
+  for (let attrName in DomProperties) {
+    const propertyRecord = DomProperties[attrName]
     const propName = propertyRecord.propName
-    const attrValue = element.getAttribute(attr)
+    const attrValue = element.getAttribute(attrName)
 
-    if (attr === DomProperties.style.attrName) {
-      attributes[attr] = element.style[propName]
+    if (attrName === DomProperties.style.attrName) {
+      attributes[attrName] = element.style[propName]
     } else if (typeof attrValue === "string") {
-      attributes[attr] = attrValue
+      attributes[attrName] = attrValue
     }
   }
 }
@@ -98,9 +98,9 @@ const getPropertyValues = (element, attributes) => {
 const getBaseAttributes = (element) => {
   return Array.prototype.reduce.call(
     element.attributes,
-    (attributes, attribute) => {
-      if (!hasProperty(DomProperties, attribute.name)) {
-        attributes[attribute.name] = attribute.value
+    (attributes, attrName) => {
+      if (!hasProperty(DomProperties, attrName.name)) {
+        attributes[attrName.name] = attrName.value
       }
       return attributes
     },
@@ -130,24 +130,24 @@ export const updateAttributes = (template, vNode) => {
   let changedAttributes = {}
 
   // Get stale attributes
-  for (let attribute in vNode.attributes) {
-    const oldValue = vNode.attributes[attribute]
-    const nextValue = template.attributes[attribute]
+  for (let attrName in vNode.attributes) {
+    const oldValue = vNode.attributes[attrName]
+    const nextValue = template.attributes[attrName]
     if (oldValue === nextValue) continue
 
     if (typeof nextValue === "undefined") {
-      removedAttributes.push(attribute)
+      removedAttributes.push(attrName)
     }
   }
 
   // Get changed or new attributes
-  for (let attribute in template.attributes) {
-    const oldValue = vNode.attributes[attribute]
-    const nextValue = template.attributes[attribute]
+  for (let attrName in template.attributes) {
+    const oldValue = vNode.attributes[attrName]
+    const nextValue = template.attributes[attrName]
     if (oldValue === nextValue) continue
 
     if (typeof nextValue !== "undefined") {
-      changedAttributes[attribute] = nextValue
+      changedAttributes[attrName] = nextValue
     }
   }
 
