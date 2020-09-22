@@ -1,3 +1,5 @@
+const DATA_KEY_ATTRIBUTE = "data-key"
+
 /**
  * Checks if the object property exists.
  * @param {Object.<string, any>} obj
@@ -51,8 +53,9 @@ export const createKeyMap = (children) => {
   const map = {}
   let hasKeys = false
   forEach(children, (child) => {
-    if (keyIsValid(map, child.attributes.key)) {
-      map[child.attributes.key] = child
+    const key = child.attributes[DATA_KEY_ATTRIBUTE]
+    if (keyIsValid(map, key)) {
+      map[key] = child
       if (!hasKeys) hasKeys = true
     }
   })

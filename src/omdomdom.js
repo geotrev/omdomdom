@@ -90,10 +90,6 @@ export const create = (node, isSVGContext = false) => {
   const attributes = node.nodeType === 1 ? getAttributes(node) : {}
   const content = numChildNodes > 0 ? null : node.textContent
 
-  if (Object.prototype.hasOwnProperty.call(attributes, "key")) {
-    node.removeAttribute("key")
-  }
-
   // Recursively build children
   const children = Array(numChildNodes)
   forEach(childNodes, (child, idx) => {

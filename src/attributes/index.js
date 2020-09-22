@@ -1,5 +1,5 @@
 import { hasProperty, forEach } from "../utilities"
-import { InternalAttributes, Namespace, DomProperties, Types } from "./records"
+import { Namespace, DomProperties, Types } from "./records"
 import { setProperty } from "./set-property"
 
 /**
@@ -38,11 +38,6 @@ const setAttributes = (vNode, attributes) => {
     const value = attributes[attrName]
     vNode.attributes[attrName] = value
 
-    if (attrName === InternalAttributes.KEY) {
-      vNode.attributes[attrName] = value
-      continue
-    }
-
     if (hasProperty(DomProperties, attrName)) {
       const propertyRecord = DomProperties[attrName]
       setProperty(
@@ -58,7 +53,9 @@ const setAttributes = (vNode, attributes) => {
     if (attrName.startsWith(Namespace.xlink.prefix)) {
       vNode.node.setAttributeNS(Namespace.xlink.resource, attrName, value)
       continue
-    } else if (attrName.startsWith(Namespace.xml.prefix)) {
+    }
+
+    if (attrName.startsWith(Namespace.xml.prefix)) {
       vNode.node.setAttributeNS(Namespace.xml.resource, attrName, value)
       continue
     }

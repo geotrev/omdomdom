@@ -1,3 +1,9 @@
+// Test CDN:
+// const render = omDomDom.render
+// const create = omDomDom.create
+// const update = omDomDom.update
+
+// Comment this out to test CDN:
 import { render, update, create } from "../src"
 
 // eslint-disable-next-line no-console
@@ -112,7 +118,7 @@ const logNode = (node) => console.log("Node:", node)
         <div dir="rtl">Change dir</div>
         <div>Add/remove dir</div>
         <div id="id-tested">Change id</div>
-        <div>Add/remove</div>
+        <div>Add/remove id</div>
         <div lang="es">Change lang</div>
         <div>Add/remove lang</div>
         <div draggable="false">Change draggable</div>
@@ -316,7 +322,7 @@ const logNode = (node) => console.log("Node:", node)
       <p>Totodile!</p>
       <p>Cyndaquil!</p>
       <p>Chikorita!</p>
-      <button key="chik" id="test13">Chikorita!</button>
+      <button data-key="chik" id="test13">Chikorita!</button>
       <p>Bulbasaur!</p>
     </div>
   `
@@ -328,7 +334,7 @@ const logNode = (node) => console.log("Node:", node)
   document.querySelector("#test13").onclick = () => {
     const nextView = `
       <div style="padding: 8px; background: red; color: white">
-        <button key="chik" id="test13">Chikorita!</button>
+        <button data-key="chik" id="test13">Chikorita!</button>
       </div>
     `
 
@@ -348,7 +354,7 @@ const logNode = (node) => console.log("Node:", node)
     <ul style="padding: 8px; background: red; color: white" id="test15">
       <li>Cyndaquil!</li>
       <li>Chikorita!</li>
-      <li key="toto">Totodile!</li>
+      <li data-key="toto">Totodile!</li>
     </ul>
   `
 
@@ -360,7 +366,7 @@ const logNode = (node) => console.log("Node:", node)
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test15">
         <li>Blaziken!</li>
-        <li key="toto">Feraligatr!</li>
+        <li data-key="toto">Feraligatr!</li>
         <li>Swampert!</li>
       </ul>
     `
@@ -379,8 +385,8 @@ const logNode = (node) => console.log("Node:", node)
 {
   const view = `
     <ul style="padding: 8px; background: red; color: white" id="test16">
-      <li key="toto">Totodile!</li>
-      <li key="chik">Chikorita!</li>
+      <li data-key="toto">Totodile!</li>
+      <li data-key="chik">Chikorita!</li>
       <li>Salamence!</li>
     </ul>
   `
@@ -392,9 +398,9 @@ const logNode = (node) => console.log("Node:", node)
   document.querySelector("#test16").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test16">
-        <li key="chik">Chikorita!</li>
-        <li key="cyndi">Cyndaquil!</li>
-        <li key="toto">Totodile!</li>
+        <li data-key="chik">Chikorita!</li>
+        <li data-key="cyndi">Cyndaquil!</li>
+        <li data-key="toto">Totodile!</li>
       </ul>
     `
 
@@ -412,9 +418,9 @@ const logNode = (node) => console.log("Node:", node)
 {
   const view = `
     <ul style="padding: 8px; background: red; color: white" id="test17">
-      <li key="squ">Squirtle!</li>
-      <li key="cha">Charmander!</li>
-      <li key="bul">Bulbasaur!</li>
+      <li data-key="squ">Squirtle!</li>
+      <li data-key="cha">Charmander!</li>
+      <li data-key="bul">Bulbasaur!</li>
     </ul>
   `
 
@@ -425,9 +431,9 @@ const logNode = (node) => console.log("Node:", node)
   document.querySelector("#test17").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test17">
-        <li key="bul">Bulbasaur!</li>
-        <li key="squ">Squirtle!</li>
-        <li key="cha">Charmander!</li>
+        <li data-key="bul">Bulbasaur!</li>
+        <li data-key="squ">Squirtle!</li>
+        <li data-key="cha">Charmander!</li>
       </ul>
     `
 
@@ -445,13 +451,13 @@ const logNode = (node) => console.log("Node:", node)
 {
   const view = `
     <ul style="padding: 8px; background: red; color: white" id="test18">
-      <li key="bulb">Bulbasaur</li>
-      <li key="squirt">Squirtle</li>
-      <li key="char">Charmander</li>
-      <li key="chi">Chikorita</li>
-      <li key="tree">Treecko</li>
-      <li key="mud">Mudkip</li>
-      <li key="tor">Torchic</li>
+      <li data-key="bulb">Bulbasaur</li>
+      <li data-key="squirt">Squirtle</li>
+      <li data-key="char">Charmander</li>
+      <li data-key="chi">Chikorita</li>
+      <li data-key="tree">Treecko</li>
+      <li data-key="mud">Mudkip</li>
+      <li data-key="tor">Torchic</li>
     </ul>
   `
 
@@ -462,15 +468,15 @@ const logNode = (node) => console.log("Node:", node)
   document.querySelector("#test18").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test18">
-        <li key="bulb">Bulbasaur</li>
-        <li key="squirt">Squirtle</li>
-        <li key="char">Charmander</li>
+        <li data-key="bulb">Bulbasaur</li>
+        <li data-key="squirt">Squirtle</li>
+        <li data-key="char">Charmander</li>
         <li>Totodile</li>
-        <li key="tree">Treecko</li>
+        <li data-key="tree">Treecko</li>
         <li>Cyndaquil</li>
-        <li key="mud">Mudkip</li>
-        <li key="chi">Chikorita</li>
-        <li key="tor">Torchic</li>
+        <li data-key="mud">Mudkip</li>
+        <li data-key="chi">Chikorita</li>
+        <li data-key="tor">Torchic</li>
       </ul>
     `
 

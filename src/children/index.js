@@ -1,5 +1,7 @@
 import { forEach, createKeyMap, insertBefore } from "../utilities"
 
+const DATA_KEY_ATTRIBUTE = "data-key"
+
 /**
  * Both template and vNode have arrays of virtual nodes. Diff them.
  * @param {VirtualNode} template - new virtual node tree.
@@ -44,7 +46,7 @@ export const updateChildren = (template, vNode, update) => {
   // Match keys and update/move children in-place
   forEach(template.children, (child, idx) => {
     const childNodes = vNode.node.childNodes
-    const key = child.attributes.key
+    const key = child.attributes[DATA_KEY_ATTRIBUTE]
 
     if (Object.prototype.hasOwnProperty.call(vNodeKeyMap, key)) {
       const keyChild = vNodeKeyMap[key]

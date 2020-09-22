@@ -48,14 +48,6 @@ forEach(integerProps, ([attr, property]) => {
 })
 
 /**
- * Attributes only relevant to the renderer, and don't need to be exposed.
- * @type {Object.<string, string>}
- */
-const InternalAttributes = {
-  KEY: "key",
-}
-
-/**
  * Attributes with these namespaces require `setAttributeNS`
  * @type {Object.<string, string>}
  */
@@ -70,4 +62,4 @@ const Namespace = {
   },
 }
 
-export { Types, Namespace, InternalAttributes, DomProperties }
+export { Types, Namespace, DomProperties }
