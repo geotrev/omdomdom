@@ -1,10 +1,10 @@
 [
   {
     "name": "omdomdom",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "sri": {
-      "bundle": "sha256-OoZYauBJbUNhIvx9DA9CFCoyITyJYiSVmhxMfNjm/vw=",
-      "bundleMin": "sha256-jVKhRoXbFh1SS3EQOVrwhrjwM3sXdz8gHKuC0sP7vfo="
+      "bundle": "sha256-Nw8oTDHEuRMTaMbq7ILBarBdY6TEpq1tchf+2vpthjk=",
+      "bundleMin": "sha256-3yCmalg41wr4YBRGpN5neDOxqGH6KC+7ewrgIWpVmZw="
     }
   }
 ]
