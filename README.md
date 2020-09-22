@@ -6,9 +6,9 @@ OmDomDom is a small virtual DOM implementation. Use it to:
 - Render those nodes to a page
 - Reconcile changes between virtual nodes and patch the DOM
 
-The bundle is very small at 2.4kb minified + gzipped.
+The bundle is very small at 2.4kb minified + gzipped. One reason for this small bundle size is that the framework does very little work beyond taking your DOM string, rendering it, and/or resolving differences between two virtual node trees.
 
-Issues and PRs welcome!
+Pull requests and issues welcome!
 
 ## Install
 
@@ -58,9 +58,9 @@ omDom.update(...)
 ></script>
 ```
 
-The CDN will make `omDomDom` a global variable on the page.
+The CDN will make `omDomDom` a property on `window`.
 
-## Usage
+## API
 
 You can do two main things with OmDomDom: Render HTML to a page and patch it with updates.
 
@@ -114,6 +114,8 @@ Either way, you will receive a virtual node tree structured like this:
 }
 ```
 
+_TIP: Use `data-key` to memoize elements in the DOM! This is similar to frameworks like React which use a `key` prop._
+
 ### render()
 
 Use `render` to insert your node somewhere on the page.
@@ -128,11 +130,10 @@ render(omNode, document.getElementById("root"))
 
 ```js
 const nextView = "<p style='color: red'>I don't like hanging out.</p>"
-const nextNode = create(nextView)
-update(nextNode, omNode)
+update(create(nextView), omNode)
 ```
 
-Again: always perform updates against your initial omdomdom virtual node tree!
+Do note that any virtual nodes created as the first argument to `update` are discarded. Again, the only virtual node tree you need to care about is the first one.
 
 ## Reconciliation
 
@@ -144,7 +145,7 @@ Since the end result is real HTML, you should be able to use events like anywher
 
 ### Keys
 
-In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations. The only difference is that you should use the `data-key` attribute, rather than just `key`.
+In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations. The only difference is that you should use the `data-key` attribute with OmDomDom.
 
 ### Performance
 
