@@ -6,7 +6,7 @@ OmDomDom is a small virtual DOM implementation. Use it to:
 - Render those nodes to a page
 - Reconcile changes between virtual nodes and patch the DOM
 
-The bundle is very small at 2.4kb minified + gzipped. One reason for this small bundle size is that the framework does very little work beyond taking your DOM string, rendering it, and/or resolving differences between two virtual node trees.
+The bundle is very small at 2.4kb minified + gzipped. One reason for this small bundle size is that the library does very little work beyond taking your DOM string, rendering it, and/or resolving differences between two virtual node trees.
 
 Pull requests and issues welcome!
 
@@ -114,7 +114,7 @@ Either way, you will receive a virtual node tree structured like this:
 }
 ```
 
-_TIP: Use `data-key` to memoize elements in the DOM! This is similar to frameworks like React which use a `key` prop._
+_TIP: Use `data-key` on your elements to memoize them between renders. This is similar to libraries like React which use a `key` prop._
 
 ### render()
 
