@@ -1,5 +1,7 @@
 # 👾 OmDomDom
 
+![CircleCI status (master)](https://badgen.net/circleci/github/geotrev/omdomdom/master) ![minified + gzip size](https://badgen.net/bundlephobia/minzip/omdomdom) ![npm version](https://badgen.net/npm/v/omdomdom) ![dependencies](https://badgen.net/david/dep/geotrev/omdomdom) ![devDependencies](https://badgen.net/david/dev/geotrev/omdomdom)
+
 OmDomDom is a small virtual DOM implementation. Use it to:
 
 - Create virtual nodes

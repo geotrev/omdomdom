@@ -3,6 +3,7 @@
 
 # logs
 npm-error.log*
+debug.log
 
 # build helpers
 build/
