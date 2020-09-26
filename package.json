@@ -7,6 +7,8 @@
   "browser": "lib/omdomdom.js",
   "type": "module",
   "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
     "watch": "rollup -c rollup.config.demo.js -w",
     "build": "BABEL_ENV=build rollup -c",
     "build:publish": "BABEL_ENV=publish rollup -c",
@@ -28,6 +30,7 @@
     "babel-jest": "^26.3.0",
     "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-jest": "^24.0.2",
     "jest": "^26.4.2",
     "jshashes": "^1.0.8",
     "prettier": "^2.0.5",

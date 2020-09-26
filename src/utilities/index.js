@@ -36,9 +36,11 @@ const keyIsValid = (map, key) => {
  * @param fn
  */
 export const forEach = (items, fn) => {
-  let idx = -1
   const length = items.length
+  let idx = -1
+
   if (!length) return
+
   while (++idx < length) {
     if (fn(items[idx], idx) === false) break
   }
@@ -52,6 +54,7 @@ export const forEach = (items, fn) => {
 export const createKeyMap = (children) => {
   const map = {}
   let hasKeys = false
+
   forEach(children, (child) => {
     const key = child.attributes[DATA_KEY_ATTRIBUTE]
     if (keyIsValid(map, key)) {
@@ -59,7 +62,8 @@ export const createKeyMap = (children) => {
       if (!hasKeys) hasKeys = true
     }
   })
-  return [map, hasKeys]
+
+  return hasKeys ? map : null
 }
 
 export const insertBefore = (parent, child, refNode) => {

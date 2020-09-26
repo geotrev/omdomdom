@@ -1,5 +1,6 @@
 .DS_store
 npm-error.log*
+debug.log
 
 dist/
 lib/

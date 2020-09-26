@@ -13,11 +13,11 @@ export const updateChildren = (template, vNode, update) => {
 
   if (!templateChildrenLength && !vNodeChildrenLength) return
 
-  const [vNodeKeyMap, hasKeys] = createKeyMap(vNode.children)
+  const vNodeKeyMap = createKeyMap(vNode.children)
 
   // There were no keys found:
 
-  if (!hasKeys) {
+  if (!vNodeKeyMap) {
     // Remove extra nodes if template.children is smaller
     let delta = vNodeChildrenLength - templateChildrenLength
     if (delta > 0) {
