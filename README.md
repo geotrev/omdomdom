@@ -8,7 +8,7 @@ OmDomDom is a small virtual DOM implementation. Use it to:
 - Render those nodes to a page
 - Reconcile changes between virtual nodes and patch the DOM
 
-The library is intentionally very minimal. Instead of requiring knowledge of new syntax for things like handlers, special attributes/properties, and the like, you can write pure HTML, and manipulate it using pure JavaScript.
+The library is intentionally very minimal. There isn't any special syntax for things like handlers, special attributes/properties, state management, or the like. Write your HTML and deliver data any way you want.
 
 Pull requests and issues welcome!
 
@@ -92,15 +92,15 @@ const omNode = create(wrapper)
 Either way, you will receive a virtual node tree structured like this:
 
 ```js
-{
+VirtualNode {
   // The tag name of the element.
-  // If the node is text, "text" is used.
-  // If the node is a comment, "comment" is used
+  // If the element is a text node, "text" is used.
+  // If the element is a comment node, "comment" is used.
   type: String,
 
   // An object whose key/value pairs are the attribute
   // name and value, respectively.
-  attributes: Object,
+  attributes: Object.<name, value>,
 
   // Is set to `true` if a node is an `svg`, which lets omDomDom
   // do special rendering operations for svg children.
@@ -110,7 +110,7 @@ Either way, you will receive a virtual node tree structured like this:
   content: String,
 
   // An array of virtual node children.
-  children: Array,
+  children: Array<VirtualNode>,
 
   // The real DOM element.
   node: Node
