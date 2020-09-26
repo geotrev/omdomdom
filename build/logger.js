@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 export function begin(msg) {
   console.log("****************************************")
   console.log(`Running Operation: ${msg}`)
