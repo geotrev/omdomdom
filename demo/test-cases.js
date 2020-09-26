@@ -1,3 +1,9 @@
+// Test CDN:
+// const render = omDomDom.render
+// const create = omDomDom.create
+// const update = omDomDom.update
+
+// Comment this out to test CDN:
 import { render, update, create } from "../src"
 
 // eslint-disable-next-line no-console
@@ -54,15 +60,40 @@ const logNode = (node) => console.log("Node:", node)
   const node = create(view)
   render(node, document.getElementById("test-root-2"))
 }
+
 /**
- * Diff: attributes, styles
+ * Update: attributes + styles
  */
 
 {
   const view = `
-    <p data-chillin="out" class="hangin-out">
-      <button style="font-weight: bold" id="test3">Click to update</button>
-    </p>
+    <div>
+      <div data-att="some data">Change data-att</div>
+      <div data-att="some data">Add/remove data-att</div>
+      <div class="hangin-out">Change class</div>
+      <div class="hangin-out">Add/remove class</div>
+      <div style="background: lime">Change style</div>
+      <div style="background: lime">Add/remove style</div>
+      <div tabindex="0">Change tabindex</div>
+      <div tabindex="0">Add/remove tabindex</div>
+      <div accesskey="why">Change accesskey</div>
+      <div accesskey="help">Add/remove accesskey</div>
+      <div title="hangin out">Change title</div>
+      <div title="hangin out">Add/remove title</div>
+      <div dir="ltr">Change dir</div>
+      <div dir="ltr">Add/remove dir</div>
+      <div id="id-test">Change id</div>
+      <div id="also-id-test">Add/remove</div>
+      <div lang="en">Change lang</div>
+      <div lang="en">Add/remove lang</div>
+      <div draggable="true">Change draggable</div>
+      <div draggable="true">Add/remove draggable</div>
+      <div autofocus>Add/remove autofocus</div>
+      <div hidden>Add/remove hidden</div>
+      <button id="test3">
+        Click to update
+      </button>
+    </div>
   `
 
   const node = create(view)
@@ -71,9 +102,33 @@ const logNode = (node) => console.log("Node:", node)
   let activeView = view
   document.querySelector("#test3").onclick = () => {
     const nextView = `
-      <p data-chillin="in" style="background: blue">
-        <button id="test3">Click to update</button>
-      </p>
+      <div>
+        <div data-att="changed a pinch">Change data</div>
+        <div>Add/remove data</div>
+        <div class="hangin-out havin-fun">Change class</div>
+        <div>Add/remove class</div>
+        <div style="background: blue; font-weight: bold">Change style</div>
+        <div>Add/remove style</div>
+        <div tabindex="-1">Change tabindex</div>
+        <div>Add/remove tabindex</div>
+        <div accesskey="no">Change accesskey</div>
+        <div>Add/remove accesskey</div>
+        <div title="not hangin">Change title</div>
+        <div>Add/remove title</div>
+        <div dir="rtl">Change dir</div>
+        <div>Add/remove dir</div>
+        <div id="id-tested">Change id</div>
+        <div>Add/remove id</div>
+        <div lang="es">Change lang</div>
+        <div>Add/remove lang</div>
+        <div draggable="false">Change draggable</div>
+        <div>Add/remove draggable</div>
+        <div>Add/remove autofocus</div>
+        <div>Add/remove hidden</div>
+        <button id="test3">
+          Click to update
+        </button>
+      </div>
     `
 
     activeView = activeView === view ? nextView : view
@@ -84,7 +139,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: dynamic attributes: value, selected, checked
+ * Update: dynamic attributes: value, selected, checked
  */
 
 {
@@ -108,7 +163,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: single node to no node
+ * Update: single node to no node
  */
 
 {
@@ -135,7 +190,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: node type
+ * Update: node type
  */
 
 //  NOTE: This will break the event listener
@@ -166,7 +221,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes to no nodes
+ * Update: List of nodes to no nodes
  */
 
 {
@@ -195,7 +250,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes to one node
+ * Update: List of nodes to one node
  */
 
 {
@@ -226,7 +281,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes
+ * Update: List of nodes
  */
 
 {
@@ -258,7 +313,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes to one node with key
+ * Update: List of nodes to one node with key
  */
 
 {
@@ -267,7 +322,7 @@ const logNode = (node) => console.log("Node:", node)
       <p>Totodile!</p>
       <p>Cyndaquil!</p>
       <p>Chikorita!</p>
-      <button key="chik" id="test13">Chikorita!</button>
+      <button data-key="chik" id="test13">Chikorita!</button>
       <p>Bulbasaur!</p>
     </div>
   `
@@ -279,7 +334,7 @@ const logNode = (node) => console.log("Node:", node)
   document.querySelector("#test13").onclick = () => {
     const nextView = `
       <div style="padding: 8px; background: red; color: white">
-        <button key="chik" id="test13">Chikorita!</button>
+        <button data-key="chik" id="test13">Chikorita!</button>
       </div>
     `
 
@@ -291,7 +346,7 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes with one key
+ * Update: List of nodes with one key
  */
 
 {
@@ -299,7 +354,7 @@ const logNode = (node) => console.log("Node:", node)
     <ul style="padding: 8px; background: red; color: white" id="test15">
       <li>Cyndaquil!</li>
       <li>Chikorita!</li>
-      <li key="toto">Totodile!</li>
+      <li data-key="toto">Totodile!</li>
     </ul>
   `
 
@@ -311,7 +366,7 @@ const logNode = (node) => console.log("Node:", node)
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test15">
         <li>Blaziken!</li>
-        <li key="toto">Feraligatr!</li>
+        <li data-key="toto">Feraligatr!</li>
         <li>Swampert!</li>
       </ul>
     `
@@ -324,14 +379,14 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes with multiple keys
+ * Update: List of nodes with multiple keys
  */
 
 {
   const view = `
     <ul style="padding: 8px; background: red; color: white" id="test16">
-      <li key="toto">Totodile!</li>
-      <li key="chik">Chikorita!</li>
+      <li data-key="toto">Totodile!</li>
+      <li data-key="chik">Chikorita!</li>
       <li>Salamence!</li>
     </ul>
   `
@@ -343,9 +398,9 @@ const logNode = (node) => console.log("Node:", node)
   document.querySelector("#test16").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test16">
-        <li key="chik">Chikorita!</li>
-        <li key="cyndi">Cyndaquil!</li>
-        <li key="toto">Totodile!</li>
+        <li data-key="chik">Chikorita!</li>
+        <li data-key="cyndi">Cyndaquil!</li>
+        <li data-key="toto">Totodile!</li>
       </ul>
     `
 
@@ -357,15 +412,15 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes with all keys
+ * Update: List of nodes with all keys
  */
 
 {
   const view = `
     <ul style="padding: 8px; background: red; color: white" id="test17">
-      <li key="squ">Squirtle!</li>
-      <li key="cha">Charmander!</li>
-      <li key="bul">Bulbasaur!</li>
+      <li data-key="squ">Squirtle!</li>
+      <li data-key="cha">Charmander!</li>
+      <li data-key="bul">Bulbasaur!</li>
     </ul>
   `
 
@@ -376,9 +431,9 @@ const logNode = (node) => console.log("Node:", node)
   document.querySelector("#test17").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test17">
-        <li key="bul">Bulbasaur!</li>
-        <li key="squ">Squirtle!</li>
-        <li key="cha">Charmander!</li>
+        <li data-key="bul">Bulbasaur!</li>
+        <li data-key="squ">Squirtle!</li>
+        <li data-key="cha">Charmander!</li>
       </ul>
     `
 
@@ -390,19 +445,19 @@ const logNode = (node) => console.log("Node:", node)
 }
 
 /**
- * Diff: List of nodes with some keys
+ * Update: List of nodes with some keys
  */
 
 {
   const view = `
     <ul style="padding: 8px; background: red; color: white" id="test18">
-      <li key="bulb">Bulbasaur</li>
-      <li key="squirt">Squirtle</li>
-      <li key="char">Charmander</li>
-      <li key="chi">Chikorita</li>
-      <li key="tree">Treecko</li>
-      <li key="mud">Mudkip</li>
-      <li key="tor">Torchic</li>
+      <li data-key="bulb">Bulbasaur</li>
+      <li data-key="squirt">Squirtle</li>
+      <li data-key="char">Charmander</li>
+      <li data-key="chi">Chikorita</li>
+      <li data-key="tree">Treecko</li>
+      <li data-key="mud">Mudkip</li>
+      <li data-key="tor">Torchic</li>
     </ul>
   `
 
@@ -413,15 +468,15 @@ const logNode = (node) => console.log("Node:", node)
   document.querySelector("#test18").onclick = () => {
     const nextView = `
       <ul style="padding: 8px; background: red; color: white" id="test18">
-        <li key="bulb">Bulbasaur</li>
-        <li key="squirt">Squirtle</li>
-        <li key="char">Charmander</li>
+        <li data-key="bulb">Bulbasaur</li>
+        <li data-key="squirt">Squirtle</li>
+        <li data-key="char">Charmander</li>
         <li>Totodile</li>
-        <li key="tree">Treecko</li>
+        <li data-key="tree">Treecko</li>
         <li>Cyndaquil</li>
-        <li key="mud">Mudkip</li>
-        <li key="chi">Chikorita</li>
-        <li key="tor">Torchic</li>
+        <li data-key="mud">Mudkip</li>
+        <li data-key="chi">Chikorita</li>
+        <li data-key="tor">Torchic</li>
       </ul>
     `
 

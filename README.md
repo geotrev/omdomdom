@@ -1,14 +1,16 @@
 # 👾 OmDomDom
 
+![CircleCI status (master)](https://badgen.net/circleci/github/geotrev/omdomdom/master) ![minified + gzip size](https://badgen.net/bundlephobia/minzip/omdomdom) ![npm version](https://badgen.net/npm/v/omdomdom) ![dependencies](https://badgen.net/david/dep/geotrev/omdomdom) ![devDependencies](https://badgen.net/david/dev/geotrev/omdomdom)
+
 OmDomDom is a small virtual DOM implementation. Use it to:
 
 - Create virtual nodes
 - Render those nodes to a page
 - Reconcile changes between virtual nodes and patch the DOM
 
-The bundle is very small at 2.4kb minified + gzipped.
+The bundle is very small at 2.4kb minified + gzipped. One reason for this small bundle size is that the library does very little work. It has no magic under the hood, or magic implementations.
 
-Issues and PRs welcome!
+Pull requests and issues welcome!
 
 ## Install
 
@@ -44,27 +46,27 @@ omDom.update(...)
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.9/dist/omdomdom.js"
-  integrity="sha256-OoZYauBJbUNhIvx9DA9CFCoyITyJYiSVmhxMfNjm/vw="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.10/dist/omdomdom.js"
+  integrity="sha256-Nw8oTDHEuRMTaMbq7ILBarBdY6TEpq1tchf+2vpthjk="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.9/dist/omdomdom.min.js"
-  integrity="sha256-jVKhRoXbFh1SS3EQOVrwhrjwM3sXdz8gHKuC0sP7vfo="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.10/dist/omdomdom.min.js"
+  integrity="sha256-3yCmalg41wr4YBRGpN5neDOxqGH6KC+7ewrgIWpVmZw="
   crossorigin="anonymous"
 ></script>
 ```
 
-The CDN will make `omDomDom` a global variable on the page.
+The CDN will make `omDomDom` a property on `window`.
 
-## Usage
+## API
 
 You can do two main things with OmDomDom: Render HTML to a page and patch it with updates.
 
-### create
+### create()
 
 To get started, pass your view to `create`.
 
@@ -114,7 +116,9 @@ Either way, you will receive a virtual node tree structured like this:
 }
 ```
 
-### Render
+_TIP: Use `data-key` on your elements to memoize them between renders. This is similar to libraries like React which use a `key` prop._
+
+### render()
 
 Use `render` to insert your node somewhere on the page.
 
@@ -122,17 +126,16 @@ Use `render` to insert your node somewhere on the page.
 render(omNode, document.getElementById("root"))
 ```
 
-### Update
+### update()
 
 `update` requires you to have your initial virtual node tree, as that's the tree containing the document-appended nodes. Pass a new virtual node tree to compare and patch the original tree, and subsequently update the DOM.
 
 ```js
 const nextView = "<p style='color: red'>I don't like hanging out.</p>"
-const nextNode = create(nextView)
-update(nextNode, omNode)
+update(create(nextView), omNode)
 ```
 
-Again: always perform updates against your initial omdomdom virtual node tree!
+Do note that any virtual nodes created as the first argument to `update` are discarded. Again, the only virtual node tree you need to care about is the first one.
 
 ## Reconciliation
 
@@ -140,11 +143,11 @@ Reconciliation works similar to React and others, by comparing an older (live) v
 
 ### Events
 
-Since the end result is real HTML, you should be able to use events like anywhere else. Although if you do so, and your interactive elements are in a sibling context, make sure they use keys.
+Since the end result is real HTML, you should be able to use events like anywhere else. Although if you do so, and your interactive elements are in a sibling context, make sure they use a `data-key` identifier.
 
 ### Keys
 
-In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations.
+In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations. The only difference is that you should use the `data-key` attribute with OmDomDom.
 
 ### Performance
 

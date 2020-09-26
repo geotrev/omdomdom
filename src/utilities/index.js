@@ -1,10 +1,12 @@
+const DATA_KEY_ATTRIBUTE = "data-key"
+
 /**
  * Checks if the object property exists.
  * @param {Object.<string, any>} obj
  * @param {string} prop
  * @returns {boolean}
  */
-const hasProperty = (obj, prop) =>
+export const hasProperty = (obj, prop) =>
   Object.prototype.hasOwnProperty.call(obj, prop)
 
 /**
@@ -34,9 +36,11 @@ const keyIsValid = (map, key) => {
  * @param fn
  */
 export const forEach = (items, fn) => {
-  let idx = -1
   const length = items.length
+  let idx = -1
+
   if (!length) return
+
   while (++idx < length) {
     if (fn(items[idx], idx) === false) break
   }
@@ -50,13 +54,16 @@ export const forEach = (items, fn) => {
 export const createKeyMap = (children) => {
   const map = {}
   let hasKeys = false
+
   forEach(children, (child) => {
-    if (keyIsValid(map, child.attributes.key)) {
-      map[child.attributes.key] = child
+    const key = child.attributes[DATA_KEY_ATTRIBUTE]
+    if (keyIsValid(map, key)) {
+      map[key] = child
       if (!hasKeys) hasKeys = true
     }
   })
-  return [map, hasKeys]
+
+  return hasKeys ? map : null
 }
 
 export const insertBefore = (parent, child, refNode) => {
