@@ -4,11 +4,11 @@
 
 OmDomDom is a small virtual DOM implementation. Use it to:
 
-- Create virtual nodes
+- Create virtual nodes from DOM strings
 - Render those nodes to a page
 - Reconcile changes between virtual nodes and patch the DOM
 
-The bundle is very small at 2.4kb minified + gzipped. One reason for this small bundle size is that the library does very little work. It has no magic under the hood, or magic implementations.
+The library is intentionally very minimal. Instead of requiring knowledge of new syntax for things like handlers, special attributes/properties, and the like, you can write pure HTML, and manipulate it using pure JavaScript.
 
 Pull requests and issues welcome!
 
@@ -22,18 +22,19 @@ Use either npm or CDN.
 $ npm i omdomdom
 ```
 
-Import its helpers:
+Then import its functions.
 
 ```js
-// named exports
-
 import { render, update, create } from "omdomdom"
+
 create(...)
 render(...)
 update(...)
+```
 
-// or as a namespace
+OmDomDom uses only named exports, but you can always namespace them using an import wildcard:
 
+```js
 import * as omDom from "omdomdom"
 omDom.create(...)
 omDom.render(...)
