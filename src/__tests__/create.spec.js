@@ -17,6 +17,7 @@ describe("create", () => {
   })
 
   it("sets attribute names and values", () => {
+    // Given
     const atts = {
       "data-key": "foo",
       class: "bar baz",
@@ -25,6 +26,7 @@ describe("create", () => {
     const vdom = create(
       `<div data-key='${atts["data-key"]}' class='${atts.class}' style='${atts.style}'></div>`
     )
+    // Then
     expect(Object.keys(vdom.attributes)).toHaveLength(3)
     for (let att in vdom.attributes) {
       expect(vdom.attributes[att]).toEqual(atts[att])
@@ -37,6 +39,7 @@ describe("create", () => {
   })
 
   it("sets children if childNodes exist", () => {
+    // Given
     const vdom = create(`
       <div>
         <span></span>
@@ -44,6 +47,7 @@ describe("create", () => {
         <span></span>
       </div>
     `)
+    // Then
     expect(vdom.children).toHaveLength(3)
     for (let child of vdom.children) {
       testNodeShape(child, "span")
@@ -51,20 +55,26 @@ describe("create", () => {
   })
 
   it("sets type to 'text' and content to textContent if the node is a text node", () => {
+    // Given
     const vdom = create("<div>text content</div>")
     const child = vdom.children[0]
+    // Then
     expect(child.type).toEqual("text")
     expect(child.content).toEqual("text content")
     expect(child.children).toEqual([])
   })
 
   it("sets content to null if childNodes exist", () => {
+    // Given
     const vdom = create("<div>text content</div>")
+    // Then
     expect(vdom.content).toEqual(null)
   })
 
   it("sets type to 'comment' if the node is a comment node", () => {
+    // Given
     const vdom = create("<div><!-- comment here --></div>")
+    // Then
     expect(vdom.children[0].type).toEqual("comment")
   })
 })
