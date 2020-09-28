@@ -4,11 +4,11 @@
 
 OmDomDom is a small virtual DOM implementation. Use it to:
 
-- Create virtual nodes
+- Create virtual nodes from DOM strings
 - Render those nodes to a page
 - Reconcile changes between virtual nodes and patch the DOM
 
-The bundle is very small at 2.4kb minified + gzipped. One reason for this small bundle size is that the library does very little work. It has no magic under the hood, or magic implementations.
+The library is intentionally very minimal. There isn't any special syntax for things like handlers, special attributes/properties, state management, or the like. Write your HTML and deliver data any way you want.
 
 Pull requests and issues welcome!
 
@@ -22,18 +22,19 @@ Use either npm or CDN.
 $ npm i omdomdom
 ```
 
-Import its helpers:
+Then import its functions.
 
 ```js
-// named exports
-
 import { render, update, create } from "omdomdom"
+
 create(...)
 render(...)
 update(...)
+```
 
-// or as a namespace
+OmDomDom uses only named exports, but you can always namespace them using an import wildcard:
 
+```js
 import * as omDom from "omdomdom"
 omDom.create(...)
 omDom.render(...)
@@ -91,15 +92,15 @@ const omNode = create(wrapper)
 Either way, you will receive a virtual node tree structured like this:
 
 ```js
-{
+VirtualNode {
   // The tag name of the element.
-  // If the node is text, "text" is used.
-  // If the node is a comment, "comment" is used
+  // If the element is a text node, "text" is used.
+  // If the element is a comment node, "comment" is used.
   type: String,
 
   // An object whose key/value pairs are the attribute
   // name and value, respectively.
-  attributes: Object,
+  attributes: Object.<name, value>,
 
   // Is set to `true` if a node is an `svg`, which lets omDomDom
   // do special rendering operations for svg children.
@@ -109,7 +110,7 @@ Either way, you will receive a virtual node tree structured like this:
   content: String,
 
   // An array of virtual node children.
-  children: Array,
+  children: Array<VirtualNode>,
 
   // The real DOM element.
   node: Node
