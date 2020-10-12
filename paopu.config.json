@@ -1,0 +1,8 @@
+{
+  "omdomdom": {
+    "module": false,
+    "resourceBasePath": ".",
+    "resources": ["dist/omdomdom.js", "dist/omdomdom.min.js"],
+    "targets": ["README.md", "demo/index.html"]
+  }
+}
