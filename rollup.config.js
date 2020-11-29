@@ -1,6 +1,6 @@
 import path from "path"
 import babel from "@rollup/plugin-babel"
-import resolve from "@rollup/plugin-node-resolve"
+import { nodeResolve } from "@rollup/plugin-node-resolve"
 import { terser } from "rollup-plugin-terser"
 import { banner } from "./build/banner"
 
@@ -10,7 +10,7 @@ const Formats = {
   UMD: "umd",
 }
 const input = path.resolve(__dirname, "src/index.js")
-const basePlugins = [resolve(), babel({ babelHelpers: "bundled" })]
+const basePlugins = [nodeResolve(), babel({ babelHelpers: "bundled" })]
 
 const terserPlugin = terser({
   output: {
