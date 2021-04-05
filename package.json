@@ -15,6 +15,7 @@
     "lint": "eslint . --ext .js -c .eslintrc.json --ignore-path .eslintignore",
     "git:update-origin": "git add . && git commit -m 'update metadata & cdn tags' && git push && git push --tags",
     "prepublishOnly": "paopu && npm run git:update-origin",
+    "preversion": "npm test",
     "postversion": "npm run build:publish"
   },
   "homepage": "https://github.com/geotrev/omdomdom",
