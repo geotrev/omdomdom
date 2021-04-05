@@ -15,7 +15,6 @@
   "extends": [
     "eslint:recommended",
     "prettier",
-    "prettier/babel",
     "plugin:jest/recommended"
   ],
   "globals": {
