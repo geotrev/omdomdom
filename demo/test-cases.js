@@ -1,7 +1,7 @@
 // Test CDN:
-// const render = omDomDom.render
-// const create = omDomDom.create
-// const update = omDomDom.update
+// const render = OmDomDom.render
+// const create = OmDomDom.create
+// const update = OmDomDom.update
 
 // Comment this out to test CDN:
 import { render, update, create } from "../src"

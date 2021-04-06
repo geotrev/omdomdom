@@ -116,7 +116,7 @@ describe("utilities", () => {
       createKeyMap(dupe)
       // Then
       expect(console.warn).toBeCalledWith(
-        "[omDomDom]: Children with duplicate keys detected. Children with duplicate keys will be skipped, resulting in dropped node references. Keys must be unique and non-indexed."
+        "[OmDomDom]: Children with duplicate keys detected. Children with duplicate keys will be skipped, resulting in dropped node references. Keys must be unique and non-indexed."
       )
     })
 
