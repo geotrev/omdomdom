@@ -47,34 +47,32 @@ omDom.update(...)
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.11/dist/omdomdom.js"
-  integrity="sha256-NRXdxlzrJtAh0Ui9eRR/BZyYujjPBw9kdYk3lDpicnw="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.12/dist/omdomdom.js"
+  integrity="sha256-O2bP3b/AkY5BjR9qzR3LuNWDTJHExYc8Xa5Gpie/IqQ="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.11/dist/omdomdom.min.js"
-  integrity="sha256-pk1ThI1+44Gkr3kOUQx5WFdEri63XqEVUju+98hJIuw="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.12/dist/omdomdom.min.js"
+  integrity="sha256-p+Wv3PIjUp0bWWgYMozbo9Dja73lSDjfCUZRq32Uvk4="
   crossorigin="anonymous"
 ></script>
 ```
 
-The CDN will make `omDomDom` a property on `window`.
+The CDN will make `OmDomDom` a property on `window`.
 
 ## API
 
-You can do two main things with OmDomDom: Render HTML to a page and patch it with updates.
+You can do three things with OmDomDom: Create a vdom instance, render its nodes to a page, and patch it with updates.
 
 ### create()
 
 To get started, pass your view to `create`.
 
 ```js
-const view = "<p style='color: pink'>I like hanging out.</p>"
-
-// Create virtual node
+const view = "<p style='color: pink'>This is the start of something great.</p>"
 const omNode = create(view)
 ```
 
@@ -102,7 +100,7 @@ VirtualNode {
   // name and value, respectively.
   attributes: Object.<name, value>,
 
-  // Is set to `true` if a node is an `svg`, which lets omDomDom
+  // Is set to `true` if a node is an `svg`, which lets OmDomDom
   // do special rendering operations for svg children.
   isSVGContext: Boolean,
 
@@ -117,7 +115,7 @@ VirtualNode {
 }
 ```
 
-_TIP: Use `data-key` on your elements to memoize them between renders. This is similar to libraries like React which use a `key` prop._
+_TIP: Use `data-key` on your elements to preserve them between renders. This is similar to libraries like React which use a `key` prop._
 
 ### render()
 
@@ -132,7 +130,7 @@ render(omNode, document.getElementById("root"))
 `update` requires you to have your initial virtual node tree, as that's the tree containing the document-appended nodes. Pass a new virtual node tree to compare and patch the original tree, and subsequently update the DOM.
 
 ```js
-const nextView = "<p style='color: red'>I don't like hanging out.</p>"
+const nextView = "<p style='color: red'>I'm new and fresh.</p>"
 update(create(nextView), omNode)
 ```
 
@@ -140,15 +138,17 @@ Do note that any virtual nodes created as the first argument to `update` are dis
 
 ## Reconciliation
 
-Reconciliation works similar to React and others, by comparing an older (live) virtual DOM tree to a new (template) one. The old tree is patched with changes from the template.
-
-### Events
-
-Since the end result is real HTML, you should be able to use events like anywhere else. Although if you do so, and your interactive elements are in a sibling context, make sure they use a `data-key` identifier.
+Reconciliation works similar to React and others, by comparing an older (live) virtual DOM tree to a new (template) one. The live tree is then patched with changes from the template.
 
 ### Keys
 
 In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations. The only difference is that you should use the `data-key` attribute with OmDomDom.
+
+### Events
+
+Since the end result is real HTML, you should be able to use events like anywhere else. Although if you do so, and your interactive elements are in a sibling context, make sure they use a `data-key` attribute to ensure the nodes are kept between updates.
+
+It's worth noting that you won't be able to use tagged templates with OmDomDom.
 
 ### Performance
 

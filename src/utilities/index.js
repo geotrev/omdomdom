@@ -21,7 +21,7 @@ const keyIsValid = (map, key) => {
   if (hasProperty(map, key)) {
     // eslint-disable-next-line no-console
     console.warn(
-      "[omDomDom]: Children with duplicate keys detected. Children with duplicate keys will be skipped, resulting in dropped node references. Keys must be unique and non-indexed."
+      "[OmDomDom]: Children with duplicate keys detected. Children with duplicate keys will be skipped, resulting in dropped node references. Keys must be unique and non-indexed."
     )
     return false
   }

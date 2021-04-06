@@ -22,13 +22,14 @@ const terserPlugin = terser({
       }
     },
   },
-  mangle: { reserved: ["omDomDom"] },
+  mangle: { reserved: ["OmDomDom"] },
 })
 
 const baseOutput = (format) => ({
   banner,
   format,
-  name: "omDomDom",
+  globals: "OmDomDom",
+  name: "OmDomDom",
   sourcemap: true,
 })
 

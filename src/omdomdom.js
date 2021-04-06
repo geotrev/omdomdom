@@ -69,11 +69,11 @@ export const create = (node, isSVGContext = false) => {
   if (isRoot) {
     if (numChildNodes > 1) {
       throw new Error(
-        "[omDomDom]: Your element should not have more than one root node."
+        "[OmDomDom]: Your element should not have more than one root node."
       )
     } else if (numChildNodes === 0) {
       throw new Error(
-        "[omDomDom]: Your element should have at least one root node."
+        "[OmDomDom]: Your element should have at least one root node."
       )
     } else {
       return create(childNodes[0])
