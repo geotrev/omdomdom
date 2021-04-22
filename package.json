@@ -1,10 +1,10 @@
 {
   "name": "omdomdom",
-  "version": "0.1.12",
-  "description": "",
-  "main": "lib/omdomdom.cjs.js",
-  "module": "lib/omdomdom.es.js",
-  "browser": "lib/omdomdom.js",
+  "version": "0.1.13",
+  "description": "A virtual DOM implementation that turns strings into HTML",
+  "main": "lib/omdomdom.cjs.min.js",
+  "module": "lib/omdomdom.es.min.js",
+  "browser": "dist/omdomdom.min.js",
   "type": "module",
   "scripts": {
     "test": "jest",
@@ -18,9 +18,6 @@
     "preversion": "npm test",
     "postversion": "npm run build:publish"
   },
-  "homepage": "https://github.com/geotrev/omdomdom",
-  "author": "George Treviranus <hello@geotrev.com>",
-  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",
@@ -64,5 +61,8 @@
   },
   "bugs": {
     "url": "https://github.com/geotrev/omdomdom/issues"
-  }
+  },
+  "homepage": "https://github.com/geotrev/omdomdom",
+  "author": "George Treviranus <geotrev@icloud.com>",
+  "license": "MIT"
 }

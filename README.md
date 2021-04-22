@@ -1,6 +1,12 @@
-# 👾 OmDomDom
-
-![CircleCI status (master)](https://badgen.net/circleci/github/geotrev/omdomdom/master) ![minified + gzip size](https://badgen.net/bundlephobia/minzip/omdomdom) ![npm version](https://badgen.net/npm/v/omdomdom) ![dependencies](https://badgen.net/david/dep/geotrev/omdomdom) ![devDependencies](https://badgen.net/david/dev/geotrev/omdomdom)
+<h2 align="center">👾 OmDomDom</h2>
+<br>
+<p align="center">
+  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://img.shields.io/npm/v/omdomdom.svg?sanitize=true" alt="Version"></a>
+  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://img.shields.io/npm/l/omdomdom.svg?sanitize=true" alt="License"></a>
+  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://badgen.net/circleci/github/geotrev/omdomdom/main" alt="Circle CI status (main)" /></a>
+  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://badgen.net/bundlephobia/minzip/omdomdom" alt="bundle size" /></a>
+  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://badgen.net/david/dev/geotrev/omdomdom" alt="devDependencies" /></a>
+</p>
 
 OmDomDom is a small virtual DOM implementation. Use it to:
 
@@ -8,7 +14,7 @@ OmDomDom is a small virtual DOM implementation. Use it to:
 - Render those nodes to a page
 - Reconcile changes between virtual nodes and patch the DOM
 
-The library is intentionally very minimal. There isn't any special syntax for things like handlers, special attributes/properties, state management, or the like. Write your HTML and deliver data any way you want.
+The library is intentionally very minimal. There isn't any special syntax for things like handlers, special attributes/properties, state management, or the like. Write your HTML and deliver virtual DOM any way you like.
 
 Pull requests and issues welcome!
 
@@ -47,16 +53,16 @@ omDom.update(...)
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.12/dist/omdomdom.js"
-  integrity="sha256-O2bP3b/AkY5BjR9qzR3LuNWDTJHExYc8Xa5Gpie/IqQ="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.13/dist/omdomdom.js"
+  integrity="sha256-cXnjABuFPxuetQGlSNKTQdd2aHMBDL5V/ENBHOC7V4c="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.12/dist/omdomdom.min.js"
-  integrity="sha256-p+Wv3PIjUp0bWWgYMozbo9Dja73lSDjfCUZRq32Uvk4="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.13/dist/omdomdom.min.js"
+  integrity="sha256-5O/m3zkhiKE+EAspr6OIbRAw1JOiV1LkTFL6dC/d0F8="
   crossorigin="anonymous"
 ></script>
 ```

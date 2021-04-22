@@ -28,7 +28,6 @@ const terserPlugin = terser({
 const baseOutput = (format) => ({
   banner,
   format,
-  globals: "OmDomDom",
   name: "OmDomDom",
   sourcemap: true,
 })
