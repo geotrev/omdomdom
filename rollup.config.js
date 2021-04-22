@@ -2,7 +2,18 @@ import path from "path"
 import babel from "@rollup/plugin-babel"
 import { nodeResolve } from "@rollup/plugin-node-resolve"
 import { terser } from "rollup-plugin-terser"
-import { banner } from "./build/banner"
+
+const year = new Date().getFullYear()
+
+const banner = async () => {
+  const { default: pkg } = await import("./package.json")
+
+  return `/*!
+  * @license MIT (https://github.com/geotrev/omdomdom/blob/master/LICENSE)
+  * omdomdom v${pkg.version} (${pkg.homepage})
+  * Copyright ${year} ${pkg.author}
+  */`
+}
 
 const Formats = {
   CJS: "cjs",
