@@ -53,16 +53,16 @@ omDom.update(...)
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.12/dist/omdomdom.js"
-  integrity="sha256-O2bP3b/AkY5BjR9qzR3LuNWDTJHExYc8Xa5Gpie/IqQ="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.13/dist/omdomdom.js"
+  integrity="sha256-cXnjABuFPxuetQGlSNKTQdd2aHMBDL5V/ENBHOC7V4c="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.12/dist/omdomdom.min.js"
-  integrity="sha256-p+Wv3PIjUp0bWWgYMozbo9Dja73lSDjfCUZRq32Uvk4="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.13/dist/omdomdom.min.js"
+  integrity="sha256-5O/m3zkhiKE+EAspr6OIbRAw1JOiV1LkTFL6dC/d0F8="
   crossorigin="anonymous"
 ></script>
 ```
