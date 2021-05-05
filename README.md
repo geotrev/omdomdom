@@ -121,8 +121,6 @@ VirtualNode {
 }
 ```
 
-_TIP: Use `data-key` on your elements to preserve them between renders. This is similar to libraries like React which use a `key` prop._
-
 ### render()
 
 Use `render` to insert your node somewhere on the page.
@@ -148,13 +146,17 @@ Reconciliation works similar to React and others, by comparing an older (live) v
 
 ### Keys
 
-In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations. The only difference is that you should use the `data-key` attribute with OmDomDom.
+Use the `data-key` attribute on an element of it's in a list of elements. This ensures the node is preserved between renders, maintaining any event listeners, even if the number of sibling elements changes between updates.
+
+The value for the attribute only needs to be unique among its sibling nodes.
+
+In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations.
 
 ### Events
 
-Since the end result is real HTML, you should be able to use events like anywhere else. Although if you do so, and your interactive elements are in a sibling context, make sure they use a `data-key` attribute to ensure the nodes are kept between updates.
+Since the end result is real HTML, you should be able to use events like anywhere else.
 
-It's worth noting that you won't be able to use tagged templates with OmDomDom.
+It's worth noting that you won't be able to use tagged templates with OmDomDom. Nodes therefore need to be attached via vanilla JavaScript.
 
 ### Performance
 
