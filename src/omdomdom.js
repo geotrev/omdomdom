@@ -21,9 +21,12 @@ import { updateChildren } from "./children"
  * @param {VirtualNode} vNode - existing virtual node tree.
  * @param {Node} rootNode - the HTML element containing the current node context
  */
-export const update = (template, vNode, rootNode = vNode.node.parentNode) => {
-  // Node nodes to compare, exit
-  if (!template && !vNode) return
+export const update = (template, vNode, rootNode) => {
+  // This came happen if a null result is given for either
+  // template or vNode. Impossible to compare - return.
+  if (!template || !vNode) return
+
+  rootNode = rootNode || vNode.node.parentNode
   const contentChanged = template.content && template.content !== vNode.content
 
   // If the type or content changed, replace the node completely
