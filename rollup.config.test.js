@@ -3,9 +3,9 @@ import { nodeResolve } from "@rollup/plugin-node-resolve"
 import serve from "rollup-plugin-serve"
 import livereload from "rollup-plugin-livereload"
 
-const DEMO_PATH = path.resolve(__dirname, "demo")
-const SOURCE_PATH = path.resolve(DEMO_PATH, "test-cases.js")
-const OUTPUT_PATH = path.resolve(DEMO_PATH, "bundle.js")
+const TEST_ROOT = path.resolve(__dirname, "test")
+const SOURCE_PATH = path.resolve(TEST_ROOT, "test-cases.js")
+const OUTPUT_PATH = path.resolve(TEST_ROOT, "bundle.js")
 
 export default {
   input: SOURCE_PATH,
@@ -15,10 +15,10 @@ export default {
   },
   plugins: [
     nodeResolve(),
-    livereload({ watch: DEMO_PATH }),
+    livereload({ watch: TEST_ROOT }),
     serve({
       open: true,
-      contentBase: DEMO_PATH,
+      contentBase: TEST_ROOT,
       historyApiFallback: true,
       host: "localhost",
       port: 3000,

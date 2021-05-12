@@ -75,7 +75,7 @@ export const insertBefore = (parent, child, refNode) => {
  * @param {VirtualNode} template
  * @param {VirtualNode} vNode
  */
-export const patch = (template, vNode) => {
+export const assignVNode = (template, vNode) => {
   for (let property in template) {
     vNode[property] = template[property]
   }

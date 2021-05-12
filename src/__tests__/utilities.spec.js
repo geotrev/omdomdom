@@ -3,7 +3,7 @@ import {
   forEach,
   createKeyMap,
   insertBefore,
-  patch,
+  assignVNode,
 } from "../utilities"
 
 describe("utilities", () => {
@@ -154,13 +154,13 @@ describe("utilities", () => {
     })
   })
 
-  describe("patch", () => {
+  describe("assignVNode", () => {
     it("assigns all the entries of an object to a new object", () => {
       // Given
       const memo = { foo: "bar", baz: "qux" }
       const template = { foo: "qux", baz: "foo" }
       // When
-      patch(template, memo)
+      assignVNode(template, memo)
       // Then
       expect(memo).toEqual(template)
     })
