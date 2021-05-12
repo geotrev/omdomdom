@@ -140,11 +140,13 @@ Reconciliation works similar to React and others, by comparing an older (live) v
 
 ### Keys
 
-Use the `data-key` attribute on an element of it's in a list of elements. This ensures the node is preserved between renders, maintaining any event listeners, even if the number of sibling elements changes between patches.
+If you have elements in dynamically generated lists or where there's many siblings, use the `data-key` attribute to memoize the node between patches.
+
+```html
+<button data-key='123'>Click me</button>
+```
 
 The value for the attribute only needs to be unique among its sibling nodes.
-
-In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations.
 
 ### Performance
 
