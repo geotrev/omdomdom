@@ -1,4 +1,5 @@
 <h2 align="center">👾 OmDomDom</h2>
+<p align="center">Create, render, and patch virtual DOMs</p>
 <br>
 <p align="center">
   <a href="https://www.npmjs.com/package/omdomdom"><img src="https://img.shields.io/npm/v/omdomdom.svg?sanitize=true" alt="Version"></a>
@@ -8,19 +9,11 @@
   <a href="https://www.npmjs.com/package/omdomdom"><img src="https://badgen.net/david/dev/geotrev/omdomdom" alt="devDependencies" /></a>
 </p>
 
-OmDomDom is a small virtual DOM implementation. Use it to:
-
-- Create virtual nodes from DOM strings
-- Render those nodes to a page
-- Reconcile changes between virtual nodes and patch the DOM
-
-The library is intentionally very minimal. There isn't any special syntax for things like handlers, special attributes/properties, state management, or the like. Write your HTML and deliver virtual DOM any way you like.
+OmDomDOm is intentionally very minimal. It doesn't utilize tagged template literals and therefore is binding-free.
 
 Pull requests and issues welcome!
 
 ## Install
-
-Use either npm or CDN.
 
 **NPM**
 
@@ -28,23 +21,14 @@ Use either npm or CDN.
 $ npm i omdomdom
 ```
 
-Then import its functions.
+Then import & use its exports:
 
 ```js
-import { render, update, create } from "omdomdom"
+import { render, patch, create } from "omdomdom"
 
 create(...)
 render(...)
-update(...)
-```
-
-OmDomDom uses only named exports, but you can always namespace them using an import wildcard:
-
-```js
-import * as omDom from "omdomdom"
-omDom.create(...)
-omDom.render(...)
-omDom.update(...)
+patch(...)
 ```
 
 **CDN**
@@ -53,94 +37,102 @@ omDom.update(...)
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.13/dist/omdomdom.js"
-  integrity="sha256-cXnjABuFPxuetQGlSNKTQdd2aHMBDL5V/ENBHOC7V4c="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.2.0/dist/omdomdom.js"
+  integrity="sha256-7OYtAVYz4bz79aRMaa50MiiW6qK1fXuS+P5+FHnIJiM="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.1.13/dist/omdomdom.min.js"
-  integrity="sha256-5O/m3zkhiKE+EAspr6OIbRAw1JOiV1LkTFL6dC/d0F8="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.2.0/dist/omdomdom.min.js"
+  integrity="sha256-Q71rVq7PI4b4D9jVP/6UbPmHZPu/hJ/guDKjlw6QH/k="
   crossorigin="anonymous"
 ></script>
 ```
 
-The CDN will make `OmDomDom` a property on `window`.
+The CDN will set `window.OmDomDom` on your page.
 
-## API
+## Virtual Node Structure
 
-You can do three things with OmDomDom: Create a vdom instance, render its nodes to a page, and patch it with updates.
-
-### create()
-
-To get started, pass your view to `create`.
-
-```js
-const view = "<p style='color: pink'>This is the start of something great.</p>"
-const omNode = create(view)
-```
-
-`create` will check if your value is a string, then convert it to HTML using [`DOMParser`](https://developer.mozilla.org/en-US/docs/Web/API/DOMParser). The advantage of this route is `DOMParser` provides some decent error output if your HTML is incorrect.
-
-You can optionally create the HTML yourself and provide that, if you prefer:
-
-```js
-const wrapper = document.createElement("div")
-wrapper.innerHTML = view.trim()
-
-const omNode = create(wrapper)
-```
-
-Either way, you will receive a virtual node tree structured like this:
+If you're familiar with other virtual DOM implementations, then this will look familiar. :)
 
 ```js
 VirtualNode {
-  // The tag name of the element.
-  // If the element is a text node, "text" is used.
-  // If the element is a comment node, "comment" is used.
+  // One of three value types are used:
+  // - The tag name of the element
+  // - "text" if text node
+  // - "comment" if comment node
   type: String,
 
   // An object whose key/value pairs are the attribute
-  // name and value, respectively.
-  attributes: Object.<name, value>,
+  // name and value, respectively
+  attributes: Object.<attribute: string, value: string>,
 
-  // Is set to `true` if a node is an `svg`, which lets OmDomDom
-  // do special rendering operations for svg children.
+  // Is set to `true` if a node is an `svg`, which tells
+  // OmDomDom to treat it, and its children, as such
   isSVGContext: Boolean,
 
-  // The content of a "text" or "comment" node.
+  // The content of a "text" or "comment" node
   content: String,
 
-  // An array of virtual node children.
+  // An array of virtual node children
   children: Array<VirtualNode>,
 
-  // The real DOM element.
+  // The real DOM node
   node: Node
 }
 ```
 
-_TIP: Use `data-key` on your elements to preserve them between renders. This is similar to libraries like React which use a `key` prop._
+## API
 
-### render()
+### `create(string|node)`
 
-Use `render` to insert your node somewhere on the page.
+The function takes one argument: an html string or a real DOM node. Either way, it will be converted into a virtual node.
 
-```js
-render(omNode, document.getElementById("root"))
-```
-
-### update()
-
-`update` requires you to have your initial virtual node tree, as that's the tree containing the document-appended nodes. Pass a new virtual node tree to compare and patch the original tree, and subsequently update the DOM.
+#### Option 1: HTML String
 
 ```js
-const nextView = "<p style='color: red'>I'm new and fresh.</p>"
-update(create(nextView), omNode)
+const html = "<p style='color: pink'>I'm pink!</p>"
+const vNode = create(html)
 ```
 
-Do note that any virtual nodes created as the first argument to `update` are discarded. Again, the only virtual node tree you need to care about is the first one.
+If the value is indeed a string, then it will be passed to [`DOMParser`](https://developer.mozilla.org/en-US/docs/Web/API/DOMParser).
+
+#### Option 2: Node
+
+This is a more performant option if you have high confidence in the structure of your HTML string.
+
+```js
+const html = "<p style='color: pink'>I'm pink!</p>"
+const wrapper = document.createElement("div")
+wrapper.innerHTML = html
+
+const vNode = create(wrapper)
+```
+
+The main downside to this option is you lose the helpful error messaging DOMParser provides from option 1. But, again, if you have a simple element to render, then it
+
+### `render(vNode, targetNode)`
+
+Inserts your node somewhere on the page.
+
+```js
+render(vNode, document.getElementById("root"))
+```
+
+Under the hood, all `render` does is use `targetNode.appendChild(vNode.node)`.
+
+### `patch(nextVNode, oldVnode)`
+
+Updates your original (old) virtual node with changes from the next one.
+
+```js
+const nextHtml = "<p style='color: red'>I'm new and fresh.</p>"
+patch(create(nextHtml), vNode)
+```
+
+Do note that any virtual nodes created as the first argument to `patch` are discarded. Again, the only virtual node tree you need to care about is the old one.
 
 ## Reconciliation
 
@@ -148,13 +140,11 @@ Reconciliation works similar to React and others, by comparing an older (live) v
 
 ### Keys
 
-In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations. The only difference is that you should use the `data-key` attribute with OmDomDom.
+Use the `data-key` attribute on an element of it's in a list of elements. This ensures the node is preserved between renders, maintaining any event listeners, even if the number of sibling elements changes between patches.
 
-### Events
+The value for the attribute only needs to be unique among its sibling nodes.
 
-Since the end result is real HTML, you should be able to use events like anywhere else. Although if you do so, and your interactive elements are in a sibling context, make sure they use a `data-key` attribute to ensure the nodes are kept between updates.
-
-It's worth noting that you won't be able to use tagged templates with OmDomDom.
+In just about every way, keys behave in OmDomDom similar to the likes of other virtual DOM implementations.
 
 ### Performance
 

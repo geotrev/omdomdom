@@ -1,6 +1,6 @@
 {
   "name": "omdomdom",
-  "version": "0.1.13",
+  "version": "0.2.0",
   "description": "A virtual DOM implementation that turns strings into HTML",
   "main": "lib/omdomdom.cjs.min.js",
   "module": "lib/omdomdom.es.min.js",
@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "watch": "rollup -c rollup.config.demo.js -w",
+    "watch": "rollup -c rollup.config.test.js -w",
     "build": "BABEL_ENV=build rollup -c",
     "build:publish": "BABEL_ENV=publish rollup -c",
     "lint": "eslint . --ext .js -c .eslintrc.json --ignore-path .eslintignore",

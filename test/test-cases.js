@@ -1,10 +1,10 @@
 // Test CDN:
 // const render = OmDomDom.render
 // const create = OmDomDom.create
-// const update = OmDomDom.update
+// const patch = OmDomDom.patch
 
 // Comment this out to test CDN:
-import { render, update, create } from "../src"
+import { render, patch, create } from "../src"
 
 // eslint-disable-next-line no-console
 const logNode = (node) => console.log("Node:", node)
@@ -133,7 +133,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }
@@ -184,7 +184,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }
@@ -215,7 +215,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }
@@ -244,7 +244,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }
@@ -275,7 +275,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }
@@ -307,7 +307,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }
@@ -340,7 +340,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }
@@ -373,7 +373,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }
@@ -406,7 +406,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }
@@ -439,7 +439,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }
@@ -482,7 +482,7 @@ const logNode = (node) => console.log("Node:", node)
 
     activeView = activeView === view ? nextView : view
     const nextNode = create(activeView)
-    update(nextNode, node)
+    patch(nextNode, node)
     logNode(node)
   }
 }

@@ -1,16 +1,36 @@
 /* eslint-disable jest/expect-expect */
 
-import { create, render, update } from "../"
+import { create, render, patch } from "../"
 
-describe("update", () => {
+describe("patch", () => {
   beforeEach(() => (document.body.innerHTML = ""))
 
-  describe("patch", () => {
+  describe("null params", () => {
+    it("does not patch if template isn't given", () => {
+      // Given
+      const vdom = create("<div></div>")
+      // When
+      patch(null, vdom)
+      // Then
+      expect(vdom.type).toEqual("div")
+    })
+
+    it("does not patch if virtual node isn't given", () => {
+      // Given
+      const vdom = null
+      // When
+      patch(create("<div></div>"), vdom)
+      // Then
+      expect(vdom).toBeNull()
+    })
+  })
+
+  describe("assignVNode", () => {
     it("patches vnode `type` if it changed", () => {
       // Given
       const vdom = create("<div></div>")
       // When
-      update(create("<span></span>"), vdom)
+      patch(create("<span></span>"), vdom)
       // Then
       expect(vdom.type).toEqual("span")
     })
@@ -20,7 +40,7 @@ describe("update", () => {
       const vdom = create("<div></div>")
       const template = create("<span></span>")
       // When
-      update(template, vdom)
+      patch(template, vdom)
       // Then
       expect(vdom.node).toEqual(template.node)
     })
@@ -29,7 +49,7 @@ describe("update", () => {
       // Given
       const vdom = create("<div>old</div>")
       // When
-      update(create("<div>new</div>"), vdom)
+      patch(create("<div>new</div>"), vdom)
       // Then
       expect(vdom.children[0].content).toEqual("new")
     })
@@ -39,7 +59,7 @@ describe("update", () => {
       const vdom = create("<div>old</div>")
       const template = create("<span>new</span>")
       // When
-      update(template, vdom)
+      patch(template, vdom)
       // Then
       expect(vdom.children[0].node).toEqual(template.children[0].node)
     })
@@ -50,7 +70,7 @@ describe("update", () => {
       // Given
       const vdom = create('<div data-foo="foo bar"></div>')
       // When
-      update(create('<div data-foo="foo bar baz"></div>'), vdom)
+      patch(create('<div data-foo="foo bar baz"></div>'), vdom)
       // Then
       expect(vdom.attributes["data-foo"]).toEqual("foo bar baz")
       expect(vdom.node.getAttribute("data-foo")).toEqual("foo bar baz")
@@ -60,7 +80,7 @@ describe("update", () => {
       // Given
       const vdom = create("<div></div>")
       // When
-      update(create("<div data-foo></div>"), vdom)
+      patch(create("<div data-foo></div>"), vdom)
       // Then
       expect(vdom.attributes).toHaveProperty("data-foo")
       expect(vdom.node.hasAttribute("data-foo")).toBe(true)
@@ -70,7 +90,7 @@ describe("update", () => {
       // Given
       const vdom = create("<div data-foo></div>")
       // When
-      update(create("<div></div>"), vdom)
+      patch(create("<div></div>"), vdom)
       // Then
       expect(vdom.attributes).not.toHaveProperty("data-foo")
       expect(vdom.node.hasAttribute("data-foo")).toBe(false)
@@ -81,7 +101,7 @@ describe("update", () => {
         // Given
         const vdom = create('<div class="foo"></div>')
         // When
-        update(create('<div class="bar"></div>'), vdom)
+        patch(create('<div class="bar"></div>'), vdom)
         // Then
         expect(vdom.attributes.class).toEqual("bar")
         expect(vdom.node.className).toEqual("bar")
@@ -92,7 +112,7 @@ describe("update", () => {
         // Given
         const vdom = create('<div style="color: blue;"></div>')
         // When
-        update(create('<div style="color: red;"></div>'), vdom)
+        patch(create('<div style="color: red;"></div>'), vdom)
         // Then
         expect(vdom.attributes.style).toEqual("color: red;")
         expect(vdom.node.style.cssText).toEqual("color: red;")
@@ -103,7 +123,7 @@ describe("update", () => {
         // Given
         const vdom = create('<div tabindex="-1"></div>')
         // When
-        update(create('<div tabindex="3"></div>'), vdom)
+        patch(create('<div tabindex="3"></div>'), vdom)
         // Then
         expect(vdom.attributes.tabindex).toEqual("3")
         expect(vdom.node.tabIndex).toEqual(3)
@@ -114,7 +134,7 @@ describe("update", () => {
         // Given
         const vdom = create('<div tabindex="0"></div>')
         // When
-        update(create("<div></div>"), vdom)
+        patch(create("<div></div>"), vdom)
         // Then
         expect(vdom.attributes.tabindex).toBe(undefined)
         expect(vdom.node.tabIndex).toEqual(-1)
@@ -125,7 +145,7 @@ describe("update", () => {
         // Given
         const vdom = create(`<div autofocus></div>`)
         // When
-        update(create("<div></div>"), vdom)
+        patch(create("<div></div>"), vdom)
         // Then
         expect(vdom.attributes.autofocus).toEqual(undefined)
         expect(vdom.node.autofocus).toEqual(false)
@@ -136,7 +156,7 @@ describe("update", () => {
         // Given
         const vdom = create(`<div draggable></div>`)
         // When
-        update(create("<div></div>"), vdom)
+        patch(create("<div></div>"), vdom)
         // Then
         expect(vdom.attributes.draggable).toEqual(undefined)
         expect(vdom.node.draggable).toEqual(false)
@@ -147,7 +167,7 @@ describe("update", () => {
         // Given
         const vdom = create(`<div hidden></div>`)
         // When
-        update(create("<div></div>"), vdom)
+        patch(create("<div></div>"), vdom)
         // Then
         expect(vdom.attributes.hidden).toEqual(undefined)
         expect(vdom.node.hidden).toEqual(false)
@@ -158,7 +178,7 @@ describe("update", () => {
         // Given
         const vdom = create(`<div checked></div>`)
         // When
-        update(create("<div></div>"), vdom)
+        patch(create("<div></div>"), vdom)
         // Then
         expect(vdom.attributes.checked).toEqual(undefined)
         expect(vdom.node.checked).toEqual(false)
@@ -169,7 +189,7 @@ describe("update", () => {
         // Given
         const vdom = create(`<div multiple></div>`)
         // When
-        update(create("<div></div>"), vdom)
+        patch(create("<div></div>"), vdom)
         // Then
         expect(vdom.attributes.multiple).toEqual(undefined)
         expect(vdom.node.multiple).toEqual(false)
@@ -180,7 +200,7 @@ describe("update", () => {
         // Given
         const vdom = create(`<div muted></div>`)
         // When
-        update(create("<div></div>"), vdom)
+        patch(create("<div></div>"), vdom)
         // Then
         expect(vdom.attributes.muted).toEqual(undefined)
         expect(vdom.node.muted).toEqual(false)
@@ -191,7 +211,7 @@ describe("update", () => {
         // Given
         const vdom = create(`<div selected></div>`)
         // When
-        update(create("<div></div>"), vdom)
+        patch(create("<div></div>"), vdom)
         // Then
         expect(vdom.attributes.selected).toEqual(undefined)
         expect(vdom.node.selected).toEqual(false)
@@ -218,7 +238,7 @@ describe("update", () => {
         </div>
       `)
       // When
-      update(template, vdom)
+      patch(template, vdom)
       // Then
       for (const child of vdom.children) {
         expect(child.attributes.class).toEqual(child.node.className)
@@ -243,7 +263,7 @@ describe("update", () => {
         </div>
       `)
       // When
-      update(template, vdom)
+      patch(template, vdom)
       // Then
       expect(vdom.children).toHaveLength(3)
       expect(vdom.node.childNodes).toHaveLength(3)
@@ -269,7 +289,7 @@ describe("update", () => {
         </div>
       `)
       // When
-      update(template, vdom)
+      patch(template, vdom)
       // Then
       expect(vdom.children).toHaveLength(2)
       expect(vdom.node.childNodes).toHaveLength(2)
@@ -304,7 +324,7 @@ describe("update", () => {
         </div>
       `)
       // When
-      update(template, vdom)
+      patch(template, vdom)
       // Then
       Array.apply(null, vdom.node.childNodes).forEach((child) => {
         const key = child.getAttribute("data-key")
@@ -334,7 +354,7 @@ describe("update", () => {
         </div>
       `)
       // When
-      update(template, vdom)
+      patch(template, vdom)
       // Then
       const newNode = document.querySelector("div").childNodes[1]
       expect(newNode).not.toEqual(oldNode)

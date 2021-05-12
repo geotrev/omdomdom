@@ -1,4 +1,4 @@
-import { forEach, patch } from "./utilities"
+import { forEach, assignVNode } from "./utilities"
 import { toHTML } from "./parsers"
 import { updateAttributes, getAttributes } from "./attributes"
 import { updateChildren } from "./children"
@@ -21,22 +21,25 @@ import { updateChildren } from "./children"
  * @param {VirtualNode} vNode - existing virtual node tree.
  * @param {Node} rootNode - the HTML element containing the current node context
  */
-export const update = (template, vNode, rootNode = vNode.node.parentNode) => {
-  // Node nodes to compare, exit
-  if (!template && !vNode) return
+export const patch = (template, vNode, rootNode) => {
+  // This came happen if a null result is given for either
+  // template or vNode. Impossible to compare - return.
+  if (!template || !vNode) return
+
+  rootNode = rootNode || vNode.node.parentNode
   const contentChanged = template.content && template.content !== vNode.content
 
   // If the type or content changed, replace the node completely
   if (template.type !== vNode.type || contentChanged) {
     rootNode.replaceChild(template.node, vNode.node)
-    return patch(template, vNode)
+    return assignVNode(template, vNode)
   }
 
   // Update attributes, if any
   updateAttributes(template, vNode)
 
   // Diff child nodes recursively
-  updateChildren(template, vNode, update)
+  updateChildren(template, vNode, patch)
 }
 
 /**
