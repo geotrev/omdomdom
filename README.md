@@ -21,7 +21,7 @@ Pull requests and issues welcome!
 $ npm i omdomdom
 ```
 
-Then import & use its exports:
+Then import:
 
 ```js
 import { render, patch, create } from "omdomdom"
@@ -37,16 +37,16 @@ patch(...)
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.2.0/dist/omdomdom.js"
-  integrity="sha256-7OYtAVYz4bz79aRMaa50MiiW6qK1fXuS+P5+FHnIJiM="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.2.1/dist/omdomdom.js"
+  integrity="sha256-0NKRNWXlyGHJqE2rt9TL0ZfUKZOTpl9yDaV2IDrVOtU="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.2.0/dist/omdomdom.min.js"
-  integrity="sha256-Q71rVq7PI4b4D9jVP/6UbPmHZPu/hJ/guDKjlw6QH/k="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.2.1/dist/omdomdom.min.js"
+  integrity="sha256-z2QunatqIwvTpeWq5IoXEI+thliEu0jLGUKIikVuv4I="
   crossorigin="anonymous"
 ></script>
 ```
@@ -143,7 +143,7 @@ Reconciliation works similar to React and others, by comparing an older (live) v
 If you have elements in dynamically generated lists or where there's many siblings, use the `data-key` attribute to memoize the node between patches.
 
 ```html
-<button data-key='123'>Click me</button>
+<button data-key="123">Click me</button>
 ```
 
 The value for the attribute only needs to be unique among its sibling nodes.
