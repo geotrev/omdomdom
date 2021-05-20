@@ -8,11 +8,11 @@ debug.log
 # build helpers
 build/
 
-# tests
+# unit tests
 src/__tests__/
 
-# demo
-demo/
+# live tests
+test/
 
 # configs
 .browserslistrc

@@ -1,7 +1,7 @@
 import { forEach, assignVNode } from "./utilities"
 import { toHTML } from "./parsers"
 import { updateAttributes, getAttributes } from "./attributes"
-import { updateChildren } from "./children"
+import { patchChildren } from "./children"
 
 /**
  * Object representation of a DOM element.
@@ -39,7 +39,7 @@ export const patch = (template, vNode, rootNode) => {
   updateAttributes(template, vNode)
 
   // Diff child nodes recursively
-  updateChildren(template, vNode, patch)
+  patchChildren(template, vNode, patch)
 }
 
 /**
