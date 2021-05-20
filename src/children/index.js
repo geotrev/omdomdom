@@ -16,7 +16,7 @@ export function patchChildren(template, vNode, patch) {
   const vNodeKeyMap = createKeyMap(vNode.children)
   let nextChildren = Array(templateChildrenLength)
 
-  if (vNodeKeyMap) {
+  if (vNodeKeyMap !== undefined) {
     forEach(template.children, (templateChild, idx) => {
       const childNodes = vNode.node.childNodes
       const key = templateChild.attributes[DATA_KEY_ATTRIBUTE]
@@ -30,8 +30,7 @@ export function patchChildren(template, vNode, patch) {
 
         nextChildren[idx] = keyedChild
 
-        // Prevent duplicates, remove the entry and let it insert at
-        // its natural index in the `else` block.
+        // Remove entry to prevent dupes
         delete vNodeKeyMap[key]
         patch(templateChild, nextChildren[idx])
       } else {
