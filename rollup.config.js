@@ -33,13 +33,13 @@ const terserPlugin = terser({
       }
     },
   },
-  mangle: { reserved: ["OmDomDom"] },
+  mangle: { reserved: ["omdomdom"] },
 })
 
 const baseOutput = (format) => ({
   banner,
   format,
-  name: "OmDomDom",
+  name: "omdomdom",
   sourcemap: true,
 })
 
