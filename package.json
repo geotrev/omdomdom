@@ -2,9 +2,9 @@
   "name": "omdomdom",
   "version": "0.2.2",
   "description": "A virtual DOM implementation that turns strings into HTML",
-  "main": "lib/omdomdom.cjs.min.js",
-  "module": "lib/omdomdom.es.min.js",
-  "browser": "dist/omdomdom.min.js",
+  "main": "lib/omdomdom.cjs.js",
+  "module": "lib/omdomdom.es.js",
+  "browser": "dist/omdomdom.js",
   "type": "module",
   "scripts": {
     "test": "jest",
