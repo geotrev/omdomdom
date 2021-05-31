@@ -53,7 +53,7 @@
   "files": [
     "lib/*.{js,map}",
     "dist/*.{js,map}",
-    "src/*.js"
+    "src/**/*.js"
   ],
   "repository": {
     "type": "git",
