@@ -13,7 +13,7 @@
     "build": "BABEL_ENV=build rollup -c",
     "build:publish": "BABEL_ENV=publish rollup -c",
     "lint": "eslint . --ext .js -c .eslintrc.json --ignore-path .eslintignore",
-    "git:update-origin": "git add . && git commit -m 'update metadata & cdn tags' && git push && git push --tags",
+    "git:update-origin": "git add . && git commit -m '[npm publish] update metadata & cdn tags' && git push && git push --tags",
     "prepublishOnly": "paopu && npm run git:update-origin",
     "preversion": "npm test",
     "postversion": "npm run build:publish"
