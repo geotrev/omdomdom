@@ -49,21 +49,23 @@ export const forEach = (items, fn) => {
 /**
  * Generates a <key: vNode> map of a virtual node list.
  * @param {VirtualNode[]} children
- * @returns {Object.<string, VirtualNode>}
+ * @returns {Object.<string, VirtualNode>|undefined}
  */
 export const createKeyMap = (children) => {
   const map = {}
-  let hasKeys = false
 
   forEach(children, (child) => {
     const key = child.attributes[DATA_KEY_ATTRIBUTE]
     if (keyIsValid(map, key)) {
       map[key] = child
-      if (!hasKeys) hasKeys = true
     }
   })
 
-  return hasKeys ? map : null
+  // Cheap way to check if the map contains keys,
+  // and if so, returns the map on the first iteration.
+  for (const _ in map) {
+    return map
+  }
 }
 
 export const insertBefore = (parent, child, refNode) => {

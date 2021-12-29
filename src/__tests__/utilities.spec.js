@@ -76,7 +76,7 @@ describe("utilities", () => {
     ]
 
     it("returns null if no keys were detected", () => {
-      expect(createKeyMap(withNoKeys)).toBeNull()
+      expect(createKeyMap(withNoKeys)).toBeUndefined()
     })
 
     it("returns the map object if keys were detected", () => {

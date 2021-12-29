@@ -1,10 +1,10 @@
 {
   "name": "omdomdom",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "A virtual DOM implementation that turns strings into HTML",
-  "main": "lib/omdomdom.cjs.min.js",
-  "module": "lib/omdomdom.es.min.js",
-  "browser": "dist/omdomdom.min.js",
+  "main": "lib/omdomdom.cjs.js",
+  "module": "lib/omdomdom.es.js",
+  "browser": "dist/omdomdom.js",
   "type": "module",
   "scripts": {
     "test": "jest",
@@ -13,7 +13,7 @@
     "build": "BABEL_ENV=build rollup -c",
     "build:publish": "BABEL_ENV=publish rollup -c",
     "lint": "eslint . --ext .js -c .eslintrc.json --ignore-path .eslintignore",
-    "git:update-origin": "git add . && git commit -m 'update metadata & cdn tags' && git push && git push --tags",
+    "git:update-origin": "git add . && git commit -m '[npm publish] update metadata & cdn tags' && git push && git push --tags",
     "prepublishOnly": "paopu && npm run git:update-origin",
     "preversion": "npm test",
     "postversion": "npm run build:publish"
@@ -53,7 +53,7 @@
   "files": [
     "lib/*.{js,map}",
     "dist/*.{js,map}",
-    "src/*.js"
+    "src/**/*.js"
   ],
   "repository": {
     "type": "git",
