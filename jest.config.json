@@ -4,5 +4,6 @@
   "testMatch": ["<rootDir>/src/__tests__/*.spec.js"],
   "testURL": "http://localhost/",
   "modulePaths": ["src/"],
+  "testEnvironment": "jsdom",
   "verbose": true
 }
