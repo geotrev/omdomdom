@@ -1,0 +1,6 @@
+edge >= 81
+firefox >= 54
+chrome >= 51
+safari >= 12
+ios >= 11
+not ie <= 11

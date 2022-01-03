@@ -3,9 +3,10 @@ import { nodeResolve } from "@rollup/plugin-node-resolve"
 import serve from "rollup-plugin-serve"
 import livereload from "rollup-plugin-livereload"
 
-const TEST_ROOT = path.resolve(__dirname, "test")
-const SOURCE_PATH = path.resolve(TEST_ROOT, "test-cases.js")
-const OUTPUT_PATH = path.resolve(TEST_ROOT, "bundle.js")
+const currentDir = process.cwd()
+const TEST_ROOT = path.resolve(currentDir, "test")
+const SOURCE_PATH = TEST_ROOT + "/test-cases.js"
+const OUTPUT_PATH = TEST_ROOT + "/bundle.js"
 
 export default {
   input: SOURCE_PATH,
