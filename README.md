@@ -38,7 +38,7 @@ patch(...)
 <script
   type="text/javascript"
   src="https://cdn.jsdelivr.net/npm/omdomdom@0.2.3/dist/omdomdom.js"
-  integrity="sha256-HBLiViWpBlIc3sW3GXN1ZDGOqzCCZSzP4COMH2ToKrk="
+  integrity="sha256-gxTlEzcw/jLOIGWUZiPjoDayTXtSbQ0OYHXUuHkm6ag="
   crossorigin="anonymous"
 ></script>
 
@@ -46,7 +46,7 @@ patch(...)
 <script
   type="text/javascript"
   src="https://cdn.jsdelivr.net/npm/omdomdom@0.2.3/dist/omdomdom.min.js"
-  integrity="sha256-hQMZhQOXCXn6iVdmSzECnZ/C+NszStwrZSkKBpBCsZw="
+  integrity="sha256-XTDMUzNarjcHvaBN6PjRXw56FBHJgbvABOVQAiS0CKM="
   crossorigin="anonymous"
 ></script>
 ```

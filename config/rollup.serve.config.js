@@ -3,17 +3,26 @@ import { nodeResolve } from "@rollup/plugin-node-resolve"
 import serve from "rollup-plugin-serve"
 import livereload from "rollup-plugin-livereload"
 
+const { CDN } = process.env
+const isCdnMode = CDN === "true"
 const currentDir = process.cwd()
 const TEST_ROOT = path.resolve(currentDir, "test")
 const SOURCE_PATH = TEST_ROOT + "/test-cases.js"
 const OUTPUT_PATH = TEST_ROOT + "/bundle.js"
+const OMDOMDOM_EXTERNAL_ID = path.resolve(currentDir, "src/index.js")
 
 export default {
   input: SOURCE_PATH,
   output: {
     file: OUTPUT_PATH,
     format: "iife",
+    globals: isCdnMode
+      ? {
+          [OMDOMDOM_EXTERNAL_ID]: "Omdomdom",
+        }
+      : {},
   },
+  external: isCdnMode ? [OMDOMDOM_EXTERNAL_ID] : [],
   plugins: [
     nodeResolve(),
     livereload({ watch: TEST_ROOT }),

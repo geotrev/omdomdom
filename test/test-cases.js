@@ -1,10 +1,4 @@
-// Test CDN:
-// const render = omdomdom.render
-// const create = omdomdom.create
-// const patch = omdomdom.patch
-
-// Comment this out to test CDN:
-import { render, patch, create } from "../src"
+import { render, patch, create } from "../src/index.js"
 
 // eslint-disable-next-line no-console
 const logNode = (node) => console.log("Node:", node)
