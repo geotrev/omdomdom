@@ -13,7 +13,7 @@
     "watch": "rollup -c rollup.config.test.js -w",
     "build": "BABEL_ENV=build rollup -c",
     "build:publish": "BABEL_ENV=publish rollup -c",
-    "pre-commit:lint": "eslint -c .eslintrc.json",
+    "eslint:check": "eslint -c .eslintrc.json",
     "prettier:check": "prettier --config .prettierrc.json --check",
     "prettier:write": "prettier --write",
     "git:update-origin": "git add . && git commit -m '[npm publish] update metadata & cdn tags' && git push && git push --tags",
