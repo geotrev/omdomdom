@@ -7,12 +7,15 @@
   "browser": "dist/omdomdom.js",
   "type": "module",
   "scripts": {
+    "prepare": "husky install",
     "test": "jest",
     "test:watch": "jest --watch",
     "watch": "rollup -c rollup.config.test.js -w",
     "build": "BABEL_ENV=build rollup -c",
     "build:publish": "BABEL_ENV=publish rollup -c",
-    "lint": "eslint . --ext .js -c .eslintrc.json --ignore-path .eslintignore",
+    "pre-commit:lint": "eslint -c .eslintrc.json",
+    "prettier:check": "prettier --config .prettierrc.json --check",
+    "prettier:write": "prettier --write",
     "git:update-origin": "git add . && git commit -m '[npm publish] update metadata & cdn tags' && git push && git push --tags",
     "prepublishOnly": "paopu && npm run git:update-origin",
     "preversion": "npm test",
@@ -27,8 +30,10 @@
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^25.3.3",
+    "husky": "^7.0.4",
     "jest": "^27.4.5",
     "jshashes": "^1.0.8",
+    "lint-staged": "^12.1.5",
     "paopu": "0.0.12",
     "prettier": "^2.5.1",
     "rollup": "^2.62.0",
@@ -63,5 +68,14 @@
   },
   "homepage": "https://github.com/geotrev/omdomdom",
   "author": "George Treviranus <geotrev@icloud.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "lint-staged": {
+    "src/**/*.js": [
+      "npm run prettier:check",
+      "npm run eslint:check"
+    ],
+    "*.json": [
+      "npm run prettier:write"
+    ]
+  }
 }
