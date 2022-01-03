@@ -1,15 +1,15 @@
-<h2 align="center">👾 OmDomDom</h2>
-<p align="center">Create, render, and patch virtual DOMs</p>
+<h2 align="center">👾 Omdomdom</h2>
+<p align="center">Create, render, and patch virtual nodes</p>
 <br>
 <p align="center">
   <a href="https://www.npmjs.com/package/omdomdom"><img src="https://img.shields.io/npm/v/omdomdom.svg?sanitize=true" alt="Version"></a>
   <a href="https://www.npmjs.com/package/omdomdom"><img src="https://img.shields.io/npm/l/omdomdom.svg?sanitize=true" alt="License"></a>
   <a href="https://www.npmjs.com/package/omdomdom"><img src="https://badgen.net/circleci/github/geotrev/omdomdom/main" alt="Circle CI status (main)" /></a>
   <a href="https://www.npmjs.com/package/omdomdom"><img src="https://badgen.net/bundlephobia/minzip/omdomdom" alt="bundle size" /></a>
-  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://badgen.net/david/dev/geotrev/omdomdom" alt="devDependencies" /></a>
+  <a href="https://www.libraries.io/npm/omdomdom"><img src="https://img.shields.io/librariesio/release/npm/omdomdom" alt="dependency status" /></a>
 </p>
 
-OmDomDOm is intentionally very minimal. It doesn't utilize tagged template literals and therefore is binding-free.
+Omdomdom is intentionally very minimal. Its primary function is to produce HTML nodes from strings.
 
 Pull requests and issues welcome!
 
@@ -37,21 +37,21 @@ patch(...)
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.2.3/dist/omdomdom.js"
-  integrity="sha256-HBLiViWpBlIc3sW3GXN1ZDGOqzCCZSzP4COMH2ToKrk="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.3.0/dist/omdomdom.js"
+  integrity="sha256-BpjOyF5QNlVmvIoAucFkb4hr+8+5r0qctp12U3J9cmM="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.2.3/dist/omdomdom.min.js"
-  integrity="sha256-hQMZhQOXCXn6iVdmSzECnZ/C+NszStwrZSkKBpBCsZw="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.3.0/dist/omdomdom.min.js"
+  integrity="sha256-3nljHoQODiym3VbusqWmLtNJpCerzfNgoqH3RM/Vi34="
   crossorigin="anonymous"
 ></script>
 ```
 
-The CDN will set `window.OmDomDom` on your page.
+The CDN will set `window.Omdomdom` on your page.
 
 ## Virtual Node Structure
 
@@ -70,7 +70,7 @@ VirtualNode {
   attributes: Object.<attribute: string, value: string>,
 
   // Is set to `true` if a node is an `svg`, which tells
-  // OmDomDom to treat it, and its children, as such
+  // Omdomdom to treat it, and its children, as such
   isSVGContext: Boolean,
 
   // The content of a "text" or "comment" node
@@ -154,4 +154,4 @@ If you think it can be improved, please contribute. :)
 
 ## Support
 
-OmDomDom works in all modern browsers and IE11. It requires no polyfills/dependencies.
+Omdomdom works in all modern browsers and IE11. It requires no polyfills/dependencies.
