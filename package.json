@@ -15,7 +15,8 @@
     "build": "rollup -c config/rollup.build.config.js",
     "eslint:check": "eslint -c .eslintrc.json",
     "prettier:check": "prettier --config .prettierrc.json --check",
-    "prettier:write": "prettier --config .prettierrc.json --write"
+    "prettier:write": "prettier --config .prettierrc.json --write",
+    "release": "release-it"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
