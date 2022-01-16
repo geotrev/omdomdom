@@ -4,7 +4,7 @@
   "description": "A virtual DOM implementation that turns strings into HTML",
   "main": "lib/omdomdom.cjs.js",
   "module": "lib/omdomdom.es.js",
-  "browser": "dist/omdomdom.js",
+  "browser": "dist/omdomdom.min.js",
   "type": "module",
   "scripts": {
     "prepare": "husky install",
@@ -15,11 +15,7 @@
     "build": "rollup -c config/rollup.build.config.js",
     "eslint:check": "eslint -c .eslintrc.json",
     "prettier:check": "prettier --config .prettierrc.json --check",
-    "prettier:write": "prettier --write",
-    "git:update-origin": "git add . && git commit -m '[npm publish] update metadata & cdn tags' && git push && git push --tags",
-    "prepublishOnly": "paopu && npm run git:update-origin",
-    "preversion": "npm test",
-    "postversion": "npm run build"
+    "prettier:write": "prettier --config .prettierrc.json --write"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
@@ -28,6 +24,7 @@
     "@rollup/plugin-node-resolve": "^13.1.2",
     "@rollup/plugin-replace": "^3.0.1",
     "babel-eslint": "^10.1.0",
+    "commithelper": "^1.2.0",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^25.3.3",
@@ -37,6 +34,7 @@
     "lint-staged": "^12.1.5",
     "paopu": "0.0.12",
     "prettier": "^2.5.1",
+    "release-it": "^14.12.3",
     "rollup": "^2.62.0",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-postcss": "^4.0.2",
@@ -78,5 +76,35 @@
     "*.json": [
       "npm run prettier:write"
     ]
+  },
+  "commithelper": {
+    "types": [
+      "feat",
+      "fix",
+      "chore",
+      "docs",
+      "style",
+      "refactor",
+      "perf",
+      "test"
+    ]
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release v${version}"
+    },
+    "github": {
+      "release": true
+    },
+    "hooks": {
+      "before:init": "npm test",
+      "after:bump": "rm -rf lib dist && npm run build && paopu"
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular",
+        "infile": "CHANGELOG.md"
+      }
+    }
   }
 }
