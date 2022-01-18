@@ -68,7 +68,7 @@
     "url": "https://github.com/geotrev/omdomdom/issues"
   },
   "homepage": "https://github.com/geotrev/omdomdom",
-  "author": "George Treviranus <geotrev@icloud.com>",
+  "author": "George Treviranus <geowtrev@gmail.com>",
   "license": "MIT",
   "lint-staged": {
     "src/**/*.js": [
