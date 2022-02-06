@@ -2,10 +2,10 @@
 <p align="center">Create, render, and patch virtual nodes</p>
 <br>
 <p align="center">
-  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://img.shields.io/npm/v/omdomdom.svg?sanitize=true" alt="Version"></a>
-  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://img.shields.io/npm/l/omdomdom.svg?sanitize=true" alt="License"></a>
-  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://badgen.net/circleci/github/geotrev/omdomdom/main" alt="Circle CI status (main)" /></a>
-  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://badgen.net/bundlephobia/minzip/omdomdom" alt="bundle size" /></a>
+  <a href="https://www.npmjs.com/package/omdomdom"><img src="https://img.shields.io/npm/v/omdomdom.svg?sanitize=true&style=flat-square" alt="Version"></a>
+  <a href="https://github.com/geotrev/omdomdom/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/omdomdom.svg?sanitize=true&style=flat-square" alt="License"></a>
+  <a href="https://github.com/geotrev/omdomdom/actions/workflows/test.yml?query=branch%3Amain"><img src="https://badgen.net/github/checks/geotrev/omdomdom/main?style=flat-square" alt="CI status" /></a>
+  <a href="https://bundlephobia.com/package/omdomdom"><img src="https://badgen.net/bundlephobia/minzip/omdomdom?style=flat-square" alt="bundle size" /></a>
   <a href="https://www.libraries.io/npm/omdomdom"><img src="https://img.shields.io/librariesio/release/npm/omdomdom" alt="dependency status" /></a>
 </p>
 
