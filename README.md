@@ -111,7 +111,7 @@ wrapper.innerHTML = html
 const vNode = create(wrapper)
 ```
 
-The main downside to this option is you lose the helpful error messaging DOMParser provides from option 1. But, again, if you have a simple element to render, then it
+The main downside to this option is you lose the helpful error messaging DOMParser provides from option 1. This is usually best for simpler nodes.
 
 ### `render(vNode, targetNode)`
 
