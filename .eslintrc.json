@@ -6,21 +6,17 @@
     "es6": true,
     "jest/globals": true
   },
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2021,
     "sourceType": "module"
   },
   "plugins": ["jest"],
   "extends": [
     "eslint:recommended",
-    "prettier",
+    "plugin:prettier/recommended",
     "plugin:jest/recommended"
   ],
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
-  },
   "settings": {
     "import/resolver": {
       "node": {
