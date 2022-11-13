@@ -1,79 +1,64 @@
+import { VNode, PropertyAwareElement } from "../types"
 import { hasProperty, forEach } from "../utilities"
 import { Namespace, DomProperties, Types } from "./records"
 import { setProperty } from "./set-property"
 
-/**
- * Removes stale attributes from the element.
- * @param {HTMLElement} vNode
- * @param {string[]} attributes
- */
-const removeAttributes = (vNode, attributes) => {
-  forEach(attributes, (attrName) => {
+type AttributeMap = Record<string, any>
+type AttributeList = string[]
+
+const removeAttributes = (vNode: VNode, attributes: AttributeList): void => {
+  forEach(attributes, (attrName: string) => {
+    const node = vNode.node as PropertyAwareElement
+
     if (hasProperty(DomProperties, attrName)) {
       const propertyRecord = DomProperties[attrName]
-      setProperty(
-        vNode.node,
-        propertyRecord.type,
-        propertyRecord.propName,
-        null
-      )
+      setProperty(node, propertyRecord.type, propertyRecord.propName, null)
     } else {
       if (attrName in vNode.node) {
-        setProperty(vNode.node, Types.STRING, attrName, null)
+        setProperty(node, Types.STRING, attrName, null)
       }
-      vNode.node.removeAttribute(attrName)
+      node.removeAttribute(attrName)
     }
 
     delete vNode.attributes[attrName]
   })
 }
 
-/**
- * Adds attributes to the element.
- * @param {VirtualNode} vNode
- * @param {Object.<string, string>} attributes
- */
-const setAttributes = (vNode, attributes) => {
+const setAttributes = (vNode: VNode, attributes: AttributeMap) => {
   for (let attrName in attributes) {
     const value = attributes[attrName]
     vNode.attributes[attrName] = value
 
+    const node = vNode.node as PropertyAwareElement
+
     if (hasProperty(DomProperties, attrName)) {
       const propertyRecord = DomProperties[attrName]
-      setProperty(
-        vNode.node,
-        propertyRecord.type,
-        propertyRecord.propName,
-        value
-      )
+      setProperty(node, propertyRecord.type, propertyRecord.propName, value)
       continue
     }
 
     // Set namespaced properties using setAttributeNS
     if (attrName.startsWith(Namespace.xlink.prefix)) {
-      vNode.node.setAttributeNS(Namespace.xlink.resource, attrName, value)
+      node.setAttributeNS(Namespace.xlink.resource, attrName, value)
       continue
     }
 
     if (attrName.startsWith(Namespace.xml.prefix)) {
-      vNode.node.setAttributeNS(Namespace.xml.resource, attrName, value)
+      node.setAttributeNS(Namespace.xml.resource, attrName, value)
       continue
     }
 
-    if (attrName in vNode.node) {
-      setProperty(vNode.node, Types.STRING, attrName, value)
+    if (attrName in node) {
+      setProperty(node, Types.STRING, attrName, value)
     }
-    vNode.node.setAttribute(attrName, value || "")
+    node.setAttribute(attrName, value || "")
   }
 }
 
-/**
- * Checks property-based attributes. If the attribute exists,
- * then we should set its property value.
- * @param {HTMLElement} element
- * @param {Object.<string, string>} attributes
- */
-const getPropertyValues = (element, attributes) => {
+const getPropertyValues = (
+  element: PropertyAwareElement,
+  attributes: AttributeMap
+) => {
   for (let attrName in DomProperties) {
     const propertyRecord = DomProperties[attrName]
     const propName = propertyRecord.propName
@@ -87,19 +72,23 @@ const getPropertyValues = (element, attributes) => {
   }
 }
 
-/**
- * Gets non-property attributes.
- * @param {HTMLElement} element
- * @returns {Object.<string, string>}
- */
-const getBaseAttributes = (element) => {
-  return Array.prototype.reduce.call(
-    element.attributes,
-    (attributes, attrName) => {
-      if (!hasProperty(DomProperties, attrName.name)) {
-        attributes[attrName.name] = attrName.value
+const getBaseAttributes = (element: HTMLElement): AttributeMap => {
+  const elementAttrs: { name: string; value: string }[] = [
+    ...element.attributes,
+  ].map((attr) => ({
+    name: attr.name,
+    value: attr.value,
+  }))
+
+  return elementAttrs.reduce(
+    (
+      acc: AttributeMap,
+      attr: { name: string; value: string }
+    ): AttributeMap => {
+      if (!hasProperty(DomProperties, attr.name)) {
+        acc[attr.name] = attr.value
       }
-      return attributes
+      return acc
     },
     {}
   )
@@ -110,8 +99,8 @@ const getBaseAttributes = (element) => {
  * @param {HTMLElement} element
  * @returns {Object.<string, string>}
  */
-export const getAttributes = (element) => {
-  const attributes = getBaseAttributes(element)
+export const getAttributes = (element: PropertyAwareElement) => {
+  const attributes: AttributeMap = getBaseAttributes(element)
   getPropertyValues(element, attributes)
 
   return attributes
@@ -122,9 +111,9 @@ export const getAttributes = (element) => {
  * @param {VirtualNode} template
  * @param {VirtualNode} vNode
  */
-export const updateAttributes = (template, vNode) => {
-  let removedAttributes = []
-  let changedAttributes = {}
+export const updateAttributes = (template: VNode, vNode: VNode): void => {
+  let removedAttributes: AttributeList = []
+  let changedAttributes: AttributeMap = {}
 
   // Get stale attributes
   for (let attrName in vNode.attributes) {

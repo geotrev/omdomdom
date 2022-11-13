@@ -1,4 +1,4 @@
-import { create } from "../"
+import { create } from ".."
 
 function testNodeShape(vnode, tag = "div") {
   expect(vnode).toHaveProperty("type", tag)

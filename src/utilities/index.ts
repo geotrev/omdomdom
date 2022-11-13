@@ -1,9 +1,23 @@
-import { VNode, VNodeChildren, VNodeChildToKeyMap } from "src/types"
+import { VNode, VNodeChildren, VNodeChildToKeyMap } from "../types"
 
-const DATA_KEY_ATTRIBUTE = "data-key"
+export const DATA_KEY_ATTRIBUTE: string = "data-key"
 
 export const hasProperty = (obj: object, prop: string): boolean =>
   Object.prototype.hasOwnProperty.call(obj, prop)
+
+export const forEach = (
+  items: any[] | NodeList | VNodeChildren,
+  fn: Function
+): void => {
+  const length = items.length
+  let idx = -1
+
+  if (!length) return
+
+  while (++idx < length) {
+    if (fn(items[idx], idx) === false) break
+  }
+}
 
 const keyIsValid = (map: object, key: string) => {
   if (!key) return false
@@ -17,20 +31,6 @@ const keyIsValid = (map: object, key: string) => {
   }
 
   return true
-}
-
-export const forEach = (
-  items: [] | NodeList | VNodeChildren,
-  fn: Function
-): void => {
-  const length = items.length
-  let idx = -1
-
-  if (!length) return
-
-  while (++idx < length) {
-    if (fn(items[idx], idx) === false) break
-  }
 }
 
 export const createKeyMap = (

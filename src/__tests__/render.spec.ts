@@ -1,4 +1,4 @@
-import { render, create } from "../"
+import { render, create } from ".."
 
 describe("render", () => {
   it("renders the root vdom node into a target element", () => {

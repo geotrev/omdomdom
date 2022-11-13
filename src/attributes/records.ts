@@ -1,19 +1,33 @@
 import { forEach } from "../utilities"
 
-const Types = { STRING: "string", INT: "number", BOOL: "boolean" }
-const DomProperties = {}
+type AttributeRecord = {
+  attrName: string
+  propName: string
+  type: "string" | "number" | "boolean"
+}
 
-/**
- * Creates a new record for DomProperties
- * @param {string} attrName
- * @param {string} propName
- * @param {string} type
- */
-const createRecord = (attrName, propName, type) => ({
+export type RecordType = AttributeRecord["type"]
+export type RecordPropName = AttributeRecord["propName"]
+export type RecordAttrName = AttributeRecord["attrName"]
+
+type AttributePropTuple = [string, string]
+
+const createRecord = (
+  attrName: RecordAttrName,
+  propName: RecordPropName,
+  type: RecordType
+): AttributeRecord => ({
   attrName,
   propName,
   type,
 })
+
+const Types: Record<string, RecordType> = {
+  STRING: "string",
+  INT: "number",
+  BOOL: "boolean",
+}
+const DomProperties: Record<string, AttributeRecord> = {}
 
 // Set string records
 const stringProps = [
@@ -23,7 +37,7 @@ const stringProps = [
   ["style", "cssText"],
   ["class", "className"],
 ]
-forEach(stringProps, ([attr, property]) => {
+forEach(stringProps, ([attr, property]: AttributePropTuple) => {
   DomProperties[attr] = createRecord(attr, property || attr, Types.STRING)
 })
 
@@ -37,13 +51,13 @@ const booleanProps = [
   "muted",
   "selected",
 ]
-forEach(booleanProps, (attr) => {
+forEach(booleanProps, (attr: RecordAttrName) => {
   DomProperties[attr] = createRecord(attr, attr, Types.BOOL)
 })
 
 // Set Integer records
 const integerProps = [["tabindex", "tabIndex"]]
-forEach(integerProps, ([attr, property]) => {
+forEach(integerProps, ([attr, property]: AttributePropTuple) => {
   DomProperties[attr] = createRecord(attr, property, Types.INT)
 })
 

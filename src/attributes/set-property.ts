@@ -1,13 +1,12 @@
-import { Types, DomProperties } from "./records"
+import { PropertyAwareElement } from "../types"
+import { Types, DomProperties, RecordType, RecordPropName } from "./records"
 
-/**
- * Set a given attribute as a property, if it has a property equivalent
- * @param {HTMLElement} node
- * @param {string|number|boolean} type
- * @param {string} prop
- * @param {*} value
- */
-export const setProperty = (element, type, prop, value) => {
+export const setProperty = (
+  element: PropertyAwareElement,
+  type: RecordType,
+  prop: RecordPropName,
+  value: any
+): void => {
   switch (type) {
     case Types.STRING: {
       if (prop === DomProperties.style.propName) {
@@ -28,7 +27,7 @@ export const setProperty = (element, type, prop, value) => {
       if (value === null) {
         const attr = prop.toLowerCase()
         // The attribute needs to be removed to reset the property,
-        // otherwise the value coerced + reflected onto the attribute.
+        // otherwise the value is coerced + reflected into the attribute.
         element.removeAttribute(attr)
       } else if (value === "0") {
         element[prop] = 0

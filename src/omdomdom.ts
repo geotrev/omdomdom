@@ -2,27 +2,32 @@ import { forEach, assignVNode } from "./utilities"
 import { toHTML } from "./parsers"
 import { updateAttributes, getAttributes } from "./attributes"
 import { patchChildren } from "./children"
-import { VNodeDOMNode, VNode, VNodeElementType } from "./types"
+import { VNode, VNodeElementType, PropertyAwareElement } from "./types"
 
 export const patch = (
-  template: VNode,
-  vNode: VNode,
-  rootNode: HTMLElement
+  template?: VNode,
+  vNode?: VNode,
+  rootNode?: HTMLElement
 ): void => {
-  // This came happen if a null result is given for either
-  // template or vNode. Impossible to compare - return.
+  // This can happen if a node doesn't exist at index N when diffing child nodes.
+  // Nothing to compare, exit.
   if (!template || !vNode) return
 
-  rootNode = rootNode || (vNode.node as HTMLElement).parentNode
+  const parentNode: ParentNode | null = rootNode || vNode.node.parentNode
+
+  if (!parentNode) {
+    throw new Error(
+      `[Omdomdom]: Parent node doesn't exist for either patchArgs[2] or patchArgs[1].node. The DOM might have changed unexpectedly.`
+    )
+  }
+
   const contentChanged = template.content && template.content !== vNode.content
 
-  // If the type or content changed, replace the node completely
+  // If the type or content changed, replace the node completely.
   if (template.type !== vNode.type || contentChanged) {
-    rootNode.replaceChild(
-      template.node as HTMLElement,
-      vNode.node as HTMLElement
-    )
-    return assignVNode(template, vNode)
+    parentNode.replaceChild(template.node, vNode.node)
+    assignVNode(template, vNode)
+    return
   }
 
   // Update attributes, if any
@@ -37,7 +42,7 @@ export const render = (vNode: VNode, root: HTMLElement): void => {
 }
 
 export const create = (
-  node: VNodeDOMNode,
+  node: HTMLElement | Text | Comment | string,
   isSVGContext: boolean | undefined = false
 ): VNode => {
   if (typeof node === "string") {
@@ -59,7 +64,7 @@ export const create = (
         "[OmDomDom]: Your element should have at least one root node."
       )
     } else {
-      return create(childNodes[0] as VNodeDOMNode)
+      return create(childNodes[0] as HTMLElement)
     }
   }
 
@@ -71,12 +76,12 @@ export const create = (
       : (node as Element).tagName.toLowerCase()
   const isSVG = isSVGContext || type === "svg"
   const attributes =
-    node.nodeType === 1 ? getAttributes(node as HTMLElement) : {}
+    node.nodeType === 1 ? getAttributes(node as PropertyAwareElement) : {}
   const content = numChildNodes > 0 ? null : node.textContent
 
   // Recursively build children
   const children = Array(numChildNodes)
-  forEach(childNodes, (child: VNodeDOMNode, idx: number) => {
+  forEach(childNodes, (child: HTMLElement | Text | Comment, idx: number) => {
     children[idx] = create(child, isSVG)
   })
 

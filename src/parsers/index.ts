@@ -1,8 +1,7 @@
 /**
- * Convert stringified HTML into valid HTML, stripping all extra spaces.
- * @param {string} htmlString
+ * Generates a real document from a string, then returns the body element.
  */
-export const toHTML = (htmlString) => {
+export function toHTML(htmlString: string): HTMLElement {
   /**
    * Remove all extraneous whitespace:
    * - From the beginning + end of the document fragment

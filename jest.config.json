@@ -1,8 +1,10 @@
 {
   "clearMocks": true,
   "restoreMocks": true,
-  "testMatch": ["<rootDir>/src/__tests__/*.spec.js"],
-  "testURL": "http://localhost/",
+  "testMatch": ["<rootDir>/src/__tests__/*.spec.ts"],
+  "testEnvironmentOptions": {
+    "testURL": "http://localhost/"
+  },
   "modulePaths": ["src/"],
   "testEnvironment": "jsdom",
   "verbose": true

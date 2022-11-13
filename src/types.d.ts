@@ -1,5 +1,3 @@
-export type VNodeDOMNode = HTMLElement | Comment | Text
-
 export type VNodeElementType =
   | "comment"
   | "text"
@@ -18,10 +16,15 @@ export interface VNode {
   attributes: VNodeAttributeMap
   content: VNodeContent
   children: VNodeChildren
-  node: VNodeDOMNode
+  node: HTMLElement | Text | Comment
   isSVGContext: boolean
 }
 
 // Internal types
 
 export type VNodeChildToKeyMap = Record<string, VNode>
+
+export type PropertyAwareElement = {
+  style: { [x: string]: string | number | boolean }
+} & Record<string, any> &
+  HTMLElement
