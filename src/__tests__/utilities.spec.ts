@@ -1,3 +1,4 @@
+import { VNode, VNodeKeyToChildMap } from "../types"
 import {
   hasProperty,
   forEach,
@@ -5,6 +6,18 @@ import {
   insertBefore,
   assignVNode,
 } from "../utilities"
+
+function getVNodeFixture(nodeOpts: Record<string, any> = {}): VNode {
+  const {
+    type = "div",
+    attributes = {},
+    content = "",
+    children = [],
+    node = document.createElement("div"),
+    isSVGContext = false,
+  } = nodeOpts
+  return { type, attributes, content, children, node: node, isSVGContext }
+}
 
 describe("utilities", () => {
   describe("hasProperty", () => {
@@ -23,9 +36,9 @@ describe("utilities", () => {
     it("iterates over an array", () => {
       // Given
       let items = [1, 2, 3]
-      let originals = []
+      let originals: number[] = []
       // When
-      forEach(items, (item, idx) => {
+      forEach(items, (item: number, idx: number) => {
         originals[idx] = item
         return (items[idx] = items[idx] * 2)
       })
@@ -42,7 +55,7 @@ describe("utilities", () => {
       let maxIdx = items.length - 1
       let earlyReturnIdx
       // When
-      forEach(items, (item, idx) => {
+      forEach(items, (item: number, idx: number) => {
         // This should never be reached.
         if (item === unreachableItem) {
           earlyReturnIdx = idx
@@ -61,18 +74,18 @@ describe("utilities", () => {
   })
 
   describe("createKeyMap", () => {
-    const withKeys = [
-      { attributes: { "data-key": "one" } },
-      { attributes: { "data-key": "two" } },
-      { attributes: { "data-key": "three" } },
-      { attributes: {} },
-      { attributes: { "data-key": "five" } },
+    const withKeys: VNode[] = [
+      getVNodeFixture({ attributes: { "data-key": "one" } }),
+      getVNodeFixture({ attributes: { "data-key": "two" } }),
+      getVNodeFixture({ attributes: { "data-key": "three" } }),
+      getVNodeFixture(),
+      getVNodeFixture({ attributes: { "data-key": "five" } }),
     ]
 
-    const withNoKeys = [
-      { attributes: {} },
-      { attributes: {} },
-      { attributes: {} },
+    const withNoKeys: VNode[] = [
+      getVNodeFixture(),
+      getVNodeFixture(),
+      getVNodeFixture(),
     ]
 
     it("returns null if no keys were detected", () => {
@@ -81,7 +94,9 @@ describe("utilities", () => {
 
     it("returns the map object if keys were detected", () => {
       // Given
-      const map = createKeyMap(withKeys)
+      const map: VNodeKeyToChildMap = createKeyMap(
+        withKeys
+      ) as VNodeKeyToChildMap
       const keys = Object.keys(map)
       const values = Object.values(map)
       // Then
@@ -91,7 +106,9 @@ describe("utilities", () => {
 
     it("creates an object whose property/value is obj.attributes['data-key'] and the object", () => {
       // Given
-      const map = createKeyMap(withKeys)
+      const map: VNodeKeyToChildMap = createKeyMap(
+        withKeys
+      ) as VNodeKeyToChildMap
       const keys = Object.keys(map)
       const values = Object.values(map)
       // Then
@@ -106,11 +123,9 @@ describe("utilities", () => {
 
     it("prints warning if a duplicate key is encountered", () => {
       // Given
-      const dupe = [
+      const dupe: VNode[] = [
         ...withKeys,
-        {
-          attributes: { "data-key": "two" },
-        },
+        getVNodeFixture({ attributes: { "data-key": "two" } }),
       ]
       // When
       createKeyMap(dupe)
@@ -122,18 +137,20 @@ describe("utilities", () => {
 
     it("doesn't assign to the map if duplicate keys are encountered", () => {
       // Given
-      const dupe = [
+      const dupe: VNode[] = [
         ...withKeys,
-        {
-          foo: true,
+        getVNodeFixture({
+          type: "span",
           attributes: { "data-key": "two" },
-        },
+          node: document.createElement("span"),
+        }),
       ]
-      const map = createKeyMap(dupe)
+      const map = createKeyMap(dupe) as VNodeKeyToChildMap
       // Then
-      expect(map.two.foo).toBeUndefined()
+      expect(map.two.type).toEqual("div")
     })
 
+    // @ts-ignore
     console.warn.mockClear()
     /* eslint-enable no-console */
   })
@@ -142,9 +159,13 @@ describe("utilities", () => {
     it("inserts child vnode.node at a specified index of parent vnode.node", () => {
       // Given
       document.body.innerHTML = "<div><p></p><h3></h3></div>"
-      const parent = { node: document.body.querySelector(":scope > div") }
-      const child = { node: document.createElement("span") }
-      const ref = document.querySelector("h3")
+      const parent = getVNodeFixture({
+        node: document.body.querySelector(":scope > div"),
+      })
+      const child = getVNodeFixture({ node: document.createElement("span") })
+      const ref: HTMLHeadingElement = document.querySelector(
+        "h3"
+      ) as HTMLHeadingElement
       // When
       insertBefore(parent, child, ref)
       // Then
@@ -157,8 +178,11 @@ describe("utilities", () => {
   describe("assignVNode", () => {
     it("assigns all the entries of an object to a new object", () => {
       // Given
-      const memo = { foo: "bar", baz: "qux" }
-      const template = { foo: "qux", baz: "foo" }
+      const memo = getVNodeFixture()
+      const template = getVNodeFixture({
+        type: "span",
+        node: document.createElement("span"),
+      })
       // When
       assignVNode(template, memo)
       // Then

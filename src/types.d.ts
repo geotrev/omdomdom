@@ -22,7 +22,7 @@ export interface VNode {
 
 // Internal types
 
-export type VNodeChildToKeyMap = Record<string, VNode>
+export type VNodeKeyToChildMap = Record<string, VNode>
 
 export type PropertyAwareElement = {
   style: { [x: string]: string | number | boolean }

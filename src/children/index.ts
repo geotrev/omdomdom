@@ -1,4 +1,4 @@
-import { VNode, VNodeChildren, VNodeChildToKeyMap } from "src/types"
+import { VNode, VNodeChildren, VNodeKeyToChildMap } from "../types"
 import {
   forEach,
   createKeyMap,
@@ -21,7 +21,7 @@ export function patchChildren(
 
   if (!templateChildrenLength && !vNodeChildrenLength) return
 
-  const vNodeKeyMap: VNodeChildToKeyMap | undefined = createKeyMap(
+  const vNodeKeyMap: VNodeKeyToChildMap | undefined = createKeyMap(
     vNode.children
   )
   let nextChildren: VNodeChildren = Array(templateChildrenLength)

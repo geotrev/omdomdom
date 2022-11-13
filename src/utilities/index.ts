@@ -1,4 +1,4 @@
-import { VNode, VNodeChildren, VNodeChildToKeyMap } from "../types"
+import { VNode, VNodeChildren, VNodeKeyToChildMap } from "../types"
 
 export const DATA_KEY_ATTRIBUTE: string = "data-key"
 
@@ -35,8 +35,8 @@ const keyIsValid = (map: object, key: string) => {
 
 export const createKeyMap = (
   children: VNodeChildren
-): VNodeChildToKeyMap | undefined => {
-  const map: VNodeChildToKeyMap = {}
+): VNodeKeyToChildMap | undefined => {
+  const map: VNodeKeyToChildMap = {}
 
   forEach(children, (child: VNode) => {
     const key = child.attributes[DATA_KEY_ATTRIBUTE]

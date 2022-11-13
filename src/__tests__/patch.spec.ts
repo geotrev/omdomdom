@@ -1,6 +1,7 @@
 /* eslint-disable jest/expect-expect */
 
-import { create, render, patch } from ".."
+import { create, render, patch, VNode } from ".."
+import { VNodeKeyToChildMap } from "../types"
 
 describe("patch", () => {
   afterEach(() => (document.body.innerHTML = ""))
@@ -149,89 +150,87 @@ describe("patch", () => {
 
       it("updates autofocus", () => {
         // Given
-        const vdom = create(`<div autofocus></div>`)
+        const vdom = create(`<div></div>`)
         // When
-        patch(create("<div></div>"), vdom)
+        patch(create("<div autofocus></div>"), vdom)
         // Then
-        expect(vdom.attributes.autofocus).toEqual(undefined)
-        expect((vdom.node as HTMLElement).autofocus).toEqual(false)
-        expect((vdom.node as HTMLElement).getAttribute("autofocus")).toEqual("")
+        expect(vdom.attributes.autofocus).toEqual("")
+        expect((vdom.node as HTMLElement).autofocus).toEqual(true)
+        expect((vdom.node as HTMLElement).getAttribute("autofocus")).toBeNull()
       })
 
       it("updates draggable", () => {
         // Given
-        const vdom = create(`<div draggable></div>`)
+        const vdom = create(`<div></div>`)
         // When
-        patch(create("<div></div>"), vdom)
+        patch(create("<div draggable></div>"), vdom)
         // Then
-        expect(vdom.attributes.draggable).toEqual(undefined)
-        expect((vdom.node as HTMLElement).draggable).toEqual(false)
+        expect(vdom.attributes.draggable).toEqual("")
+        expect((vdom.node as HTMLElement).draggable).toEqual(true)
         expect((vdom.node as HTMLElement).getAttribute("draggable")).toEqual(
-          "false"
+          "true"
         )
       })
 
       it("updates hidden", () => {
         // Given
-        const vdom = create(`<div hidden></div>`)
+        const vdom = create(`<div></div>`)
         // When
-        patch(create("<div></div>"), vdom)
+        patch(create("<div hidden></div>"), vdom)
         // Then
-        expect(vdom.attributes.hidden).toEqual(undefined)
-        expect((vdom.node as HTMLElement).hidden).toEqual(false)
-        expect((vdom.node as HTMLElement).getAttribute("hidden")).toBeNull()
+        expect(vdom.attributes.hidden).toEqual("")
+        expect((vdom.node as HTMLElement).hidden).toEqual(true)
+        expect((vdom.node as HTMLElement).getAttribute("hidden")).toEqual("")
       })
 
       it("updates checked", () => {
         // Given
-        const vdom = create(`<input type="radio" checked />`)
+        const vdom = create("<input />")
         // When
-        patch(create("<div></div>"), vdom)
+        patch(create(`<input type="radio" checked />`), vdom)
         // Then
-        expect(vdom.attributes.checked).toEqual(undefined)
-        expect((vdom.node as HTMLInputElement).checked).toEqual(false)
-        expect((vdom.node as HTMLInputElement).getAttribute("checked")).toEqual(
-          ""
-        )
+        expect(vdom.attributes.checked).toEqual("")
+        expect((vdom.node as HTMLInputElement).checked).toEqual(true)
+        expect(
+          (vdom.node as HTMLInputElement).getAttribute("checked")
+        ).toBeNull()
       })
 
       it("updates multiple", () => {
         // Given
-        const vdom = create(`<input type="file" multiple />`)
+        const vdom = create(`<select></select>`)
         // When
-        patch(create("<div></div>"), vdom)
+        patch(create(`<select multiple=""></select>`), vdom)
         // Then
-        expect(vdom.attributes.multiple).toEqual(undefined)
-        expect((vdom.node as HTMLInputElement).multiple).toEqual(false)
+        expect(vdom.attributes.multiple).toEqual("")
+        expect((vdom.node as HTMLSelectElement).multiple).toEqual(true)
         expect(
-          (vdom.node as HTMLInputElement).getAttribute("multiple")
+          (vdom.node as HTMLSelectElement).getAttribute("multiple")
         ).toEqual("")
       })
 
       it("updates muted", () => {
         // Given
-        const vdom = create(`<video muted></video>`)
+        const vdom = create(`<video></video>`)
         // When
-        patch(create("<video></video>"), vdom)
+        patch(create("<video muted></video>"), vdom)
         // Then
-        expect(vdom.attributes.muted).toEqual(undefined)
-        expect((vdom.node as HTMLVideoElement).muted).toEqual(false)
-        expect((vdom.node as HTMLVideoElement).getAttribute("muted")).toEqual(
-          ""
-        )
+        expect(vdom.attributes.muted).toEqual("")
+        expect((vdom.node as HTMLVideoElement).muted).toEqual(true)
+        expect((vdom.node as HTMLVideoElement).getAttribute("muted")).toBeNull()
       })
 
       it("updates selected", () => {
         // Given
-        const vdom = create(`<option selected></option>`)
+        const vdom = create(`<option></option>`)
         // When
-        patch(create("<option></option>"), vdom)
+        patch(create("<option selected></option>"), vdom)
         // Then
-        expect(vdom.attributes.selected).toEqual(undefined)
-        expect((vdom.node as HTMLOptionElement).selected).toEqual(false)
+        expect(vdom.attributes.selected).toEqual("")
+        expect((vdom.node as HTMLOptionElement).selected).toEqual(true)
         expect(
           (vdom.node as HTMLOptionElement).getAttribute("selected")
-        ).toEqual("")
+        ).toBeNull()
       })
     })
   })
@@ -329,11 +328,17 @@ describe("patch", () => {
         </div>
       `)
       render(vdom, document.body)
-      const map = Array.apply(null, document.querySelectorAll("p")).reduce(
-        (dict, node) => {
-          return { ...dict, [node.getAttribute("data-key")]: node }
+      const pList: HTMLParagraphElement[] = vdom.children.map(
+        (child) => child.node as HTMLParagraphElement
+      )
+      const map: Record<string, HTMLParagraphElement> = pList.reduce(
+        (
+          acc: Record<string, HTMLParagraphElement>,
+          node: HTMLParagraphElement
+        ): Record<string, HTMLParagraphElement> => {
+          return { ...acc, [node.getAttribute("data-key") as string]: node }
         },
-        {}
+        {} as Record<string, HTMLParagraphElement>
       )
       const template = create(`
         <div>
@@ -346,8 +351,13 @@ describe("patch", () => {
       // When
       patch(template, vdom)
       // Then
-      Array.apply(null, vdom.node.childNodes).forEach((child) => {
-        const key = child.getAttribute("data-key")
+      const childList: Array<HTMLElement | Text | Comment> = vdom.children.map(
+        (child) => child.node
+      )
+      childList.forEach((child: HTMLElement | Text | Comment) => {
+        const key: string = (child as HTMLElement).getAttribute(
+          "data-key"
+        ) as string
         const preUpdateChildRef = map[key]
         expect(preUpdateChildRef).toEqual(child)
       })
@@ -364,7 +374,9 @@ describe("patch", () => {
         </div>
       `)
       render(vdom, document.body)
-      const oldDiv: HTMLDivElement = document.createElement("div")
+      const oldDiv: HTMLDivElement = document.querySelector(
+        "div"
+      ) as HTMLDivElement
       const oldNode = oldDiv.childNodes[3]
       const template = create(`
         <div>
@@ -377,7 +389,9 @@ describe("patch", () => {
       // When
       patch(template, vdom)
       // Then
-      const newDiv: HTMLDivElement = document.createElement("div")
+      const newDiv: HTMLDivElement = document.querySelector(
+        "div"
+      ) as HTMLDivElement
       const newNode = newDiv.childNodes[1]
       expect(newNode).not.toEqual(oldNode)
     })

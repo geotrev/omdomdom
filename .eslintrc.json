@@ -20,7 +20,7 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [".js"],
+        "extensions": [".js", ".ts"],
         "paths": ["src/"],
         "moduleDirectory": ["node_modules/"]
       }

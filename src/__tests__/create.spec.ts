@@ -1,6 +1,6 @@
-import { create } from ".."
+import { create, VNode } from ".."
 
-function testNodeShape(vnode, tag = "div") {
+function testNodeShape(vnode: VNode, tag: string = "div"): void {
   expect(vnode).toHaveProperty("type", tag)
   expect(vnode).toHaveProperty("attributes", { style: "" })
   expect(vnode).toHaveProperty("children", [])
@@ -18,12 +18,12 @@ describe("create", () => {
 
   it("sets attribute names and values", () => {
     // Given
-    const atts = {
+    const atts: Record<string, string> = {
       "data-key": "foo",
       class: "bar baz",
       style: "color: blue; font-size: 16px;",
     }
-    const vdom = create(
+    const vdom: VNode = create(
       `<div data-key='${atts["data-key"]}' class='${atts.class}' style='${atts.style}'></div>`
     )
     // Then
