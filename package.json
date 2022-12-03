@@ -37,7 +37,7 @@
     "jest-environment-jsdom": "^29.3.1",
     "jshashes": "^1.0.8",
     "lint-staged": "^13.0.4",
-    "paopu": "^0.1.0",
+    "paopu": "^0.1.1",
     "prettier": "^2.8.0",
     "release-it": "^15.5.1",
     "rollup": "^2.79.1",
