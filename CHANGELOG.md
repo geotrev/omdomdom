@@ -1,3 +1,7 @@
+
+
+## [0.3.1](https://github.com/geotrev/omdomdom/compare/v0.3.0...v0.3.1) (2022-12-03)
+
 # [0.3.0](https://github.com/geotrev/omdomdom/compare/v0.2.3...v0.3.0) (2022-01-03)
 
 # [0.3.0](https://github.com/geotrev/omdomdom/compare/v0.3.0...v0.3.1) (2022-01-03)

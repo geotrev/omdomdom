@@ -1,6 +1,6 @@
 {
   "name": "omdomdom",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A virtual DOM implementation that turns strings into HTML",
   "main": "lib/omdomdom.cjs.js",
   "module": "lib/omdomdom.es.js",
