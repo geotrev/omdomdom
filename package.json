@@ -28,7 +28,7 @@
     "@rollup/plugin-replace": "^5.0.1",
     "babel-eslint": "^10.1.0",
     "commithelper": "^1.2.0",
-    "dotenv-cli": "^6.0.0",
+    "dotenv-cli": "^7.0.0",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "^27.1.6",
