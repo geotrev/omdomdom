@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-node_modules/lint-staged/bin/lint-staged.js
+npx --no -- commitlint --edit ${1}
