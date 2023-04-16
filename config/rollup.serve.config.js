@@ -5,11 +5,11 @@ import livereload from "rollup-plugin-livereload"
 
 const { CDN } = process.env
 const isCdnMode = CDN === "true"
-const currentDir = process.cwd()
-const TEST_ROOT = path.resolve(currentDir, "test")
+const dirname = path.resolve()
+const TEST_ROOT = path.resolve(dirname, "test")
 const SOURCE_PATH = TEST_ROOT + "/test-cases.js"
 const OUTPUT_PATH = TEST_ROOT + "/bundle.js"
-const OMDOMDOM_EXTERNAL_ID = path.resolve(currentDir, "src/index.js")
+const OMDOMDOM_EXTERNAL_ID = path.resolve(dirname, "src/index.js")
 
 export default {
   input: SOURCE_PATH,

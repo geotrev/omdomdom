@@ -1,13 +1,17 @@
+import fs from "fs"
 import path from "path"
 import babel from "@rollup/plugin-babel"
 import { nodeResolve } from "@rollup/plugin-node-resolve"
-import { terser } from "rollup-plugin-terser"
+import terser from "@rollup/plugin-terser"
 
-const currentDir = process.cwd()
+const loadJSON = (path) =>
+  JSON.parse(fs.readFileSync(new URL(path, import.meta.url)))
+
+const dirname = path.resolve()
 const year = new Date().getFullYear()
 
 const banner = async () => {
-  const { default: pkg } = await import("../package.json")
+  const pkg = loadJSON("../package.json")
 
   return `/*!
   * @license MIT (https://github.com/geotrev/omdomdom/blob/master/LICENSE)
@@ -21,7 +25,7 @@ const Formats = {
   ES: "es",
   UMD: "umd",
 }
-const input = path.resolve(currentDir, "src/index.js")
+const input = path.resolve(dirname, "src/index.js")
 const basePlugins = [
   nodeResolve(),
   babel({
@@ -31,17 +35,7 @@ const basePlugins = [
   }),
 ]
 
-const terserPlugin = terser({
-  output: {
-    comments: (_, comment) => {
-      const { value, type } = comment
-
-      if (type === "comment2") {
-        return /@preserve|@license|@cc_on/i.test(value)
-      }
-    },
-  },
-})
+const terserPlugin = terser()
 
 const baseOutput = (format) => ({
   banner,
@@ -55,22 +49,22 @@ const outputs = [Formats.ES, Formats.CJS].reduce(
     ...configs,
     {
       ...baseOutput(format),
-      file: path.resolve(currentDir, `lib/omdomdom.${format}.js`),
+      file: path.resolve(dirname, `lib/omdomdom.${format}.js`),
     },
     {
       ...baseOutput(format),
-      file: path.resolve(currentDir, `lib/omdomdom.${format}.min.js`),
+      file: path.resolve(dirname, `lib/omdomdom.${format}.min.js`),
       plugins: [terserPlugin],
     },
   ],
   [
     {
       ...baseOutput(Formats.UMD),
-      file: path.resolve(currentDir, "dist/omdomdom.js"),
+      file: path.resolve(dirname, "dist/omdomdom.js"),
     },
     {
       ...baseOutput(Formats.UMD),
-      file: path.resolve(currentDir, "dist/omdomdom.min.js"),
+      file: path.resolve(dirname, "dist/omdomdom.min.js"),
       plugins: [terserPlugin],
     },
   ]
