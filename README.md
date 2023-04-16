@@ -37,16 +37,16 @@ patch(...)
 <!-- The unminified bundle for development -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.3.1/dist/omdomdom.js"
-  integrity="sha256-8Sm3KCPUXYkghjBEuzmFL/NzeIWisIypzdVW91m6GCE="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.3.2/dist/omdomdom.js"
+  integrity="sha256-9W7FYYl47/+SRAOFrQZliYxvJnjGHwUySXLBKqNrNfI="
   crossorigin="anonymous"
 ></script>
 
 <!-- Minified/uglified bundle for production -->
 <script
   type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/omdomdom@0.3.1/dist/omdomdom.min.js"
-  integrity="sha256-6cVdebbylWXDyORK8JDb9I1ZZ2KFo6Bdxc7Ex+GPeOw="
+  src="https://cdn.jsdelivr.net/npm/omdomdom@0.3.2/dist/omdomdom.min.js"
+  integrity="sha256-TxN00Fm3M/2YL8zxyAY2lnR8obKHtJs55yOHSCLbX1k="
   crossorigin="anonymous"
 ></script>
 ```
