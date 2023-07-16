@@ -9,7 +9,7 @@ debug.log
 build/
 
 # unit tests
-src/__tests__/
+src/
 
 # live tests
 test/
