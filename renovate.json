@@ -5,5 +5,13 @@
   ],
   "rebaseStalePrs": true,
   "ignorePaths": ["**/node_modules/**"],
-  "schedule": ["every 3 months on the first day of the month"]
+  "schedule": ["every 3 months on the first day of the month"],
+  "packageRules": [
+    {
+      "matchFiles": ["package.json"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "non-major shared dependencies",
+      "groupSlug": "shared-minor-patch"
+    },
+  ]
 }
