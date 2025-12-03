@@ -45,7 +45,7 @@
     "rollup": "^3.20.3",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-serve": "^2.0.2"
+    "rollup-plugin-serve": "^3.0.0"
   },
   "engines": {
     "node": ">=14.7.0",
